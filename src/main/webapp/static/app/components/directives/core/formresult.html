@@ -1,0 +1,11 @@
+<div class="formresult" ng-show="formresult">
+	<div class="request-success" ng-show="formresult.success == 1">
+		<i class="fa fa-check"></i>
+		操作成功
+	</div>
+	<div class="request-error" ng-show="formresult.success == 0">
+		<i class="fa fa-times"></i>
+		操作失败
+	</div>
+	<div class="warn" ng-show="formresult.message">{{ formresult.message }}</div>
+</div>

@@ -1,0 +1,63 @@
+<h2>用户编辑</h2>
+<hr/>
+<div>
+	<form id="usermgr-list-form">
+		<input type="hidden" name="id" ng-model="user.id" />
+		<table class="form-table">
+			<tr>
+				<td class="td-r">登录名：</td>
+				<td class="td-l">
+					<input name="loginName" 
+						ng-model="user.loginName"
+						ng-disabled="user.id != null"
+						placeholder="请输入登录名"/>
+				</td>
+			</tr>
+			<tr>
+				<td class="td-r">用户类型</td>
+				<td class="td-l">
+					<input name="userType" 
+						disabled="disabled" value="{{user.userType == '2' ? '报表管理员' : '上报用户'}}"/>
+				</td>
+			</tr>
+			<tr>
+				<td class="td-r">姓名：</td>
+				<td class="td-l">
+					<input name="userName" ng-model="user.userName" placeholder="请输入用户名"
+					/>
+				</td>
+			</tr>
+			<tr>
+				<td class="td-r">性别：</td>
+				<td class="td-l">
+					男：<input type="radio" ng-model="user.sex" ng-checked="user.sex == 1" name="sex" value="1" />
+					女：<input type="radio" ng-model="user.sex" ng-checked="user.sex == 2" name="sex" value="2" />
+				</td>
+			</tr>
+			<tr>
+				<td class="td-r">出生日期：</td>
+				<td class="td-l"><input name="birthday" datepicker ng-model="user.birthday" /></td>
+			</tr>
+			<tr>
+				<td class="td-r">所属机构：</td>
+				<td class="td-l"><input name="orgCode" ng-model="user.orgCode" /></td>
+			</tr>
+			<tr>
+				<td class="td-r">所属科室：</td>
+				<td class="td-l"><input name="department" ng-model="user.department" /></td>
+			</tr>
+			<tr>
+				<td class="td-r">备注：</td>
+				<td class="td-l"><input name="comment" ng-model="user.comment" /></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td>
+					<div class="btn btn-lblue" ng-show="!isrequest" ng-click="saveUser();">提交</div>
+					<div class="btn btn-info" ng-show="isrequest">处理中...</div>
+				</td>
+			</tr>
+		</table>
+	</form>
+	<div formresult></div>
+</div>

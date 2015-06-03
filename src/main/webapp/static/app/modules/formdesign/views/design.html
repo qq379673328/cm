@@ -1,0 +1,48 @@
+<div class="formdesign">
+	<form id="saveform" method="post">
+		<div class="design-control-place"></div>
+		<div class="design-control">
+			<ul>
+				<li>表单控件</li>
+				<li><a href="javascript:void(0);" ng-click="exec('text');" class="btn btn-info">文本框</a></li>
+				<li><a href="javascript:void(0);" ng-click="exec('quicktext');" class="btn btn-small btn-success">快</a></li>
+				<li><a href="javascript:void(0);" ng-click="exec('textarea');" class="btn btn-info">多行文本框</a></li>
+				<li><a href="javascript:void(0);" ng-click="exec('quicktextarea');" class="btn btn-small btn-success">快</a></li>
+				<li><a href="javascript:void(0);" ng-click="exec('select');" class="btn btn-info">下拉菜单</a></li>
+				<li><a href="javascript:void(0);" ng-click="exec('radios');" class="btn btn-info">单选框</a></li>
+				<li><a href="javascript:void(0);" ng-click="exec('checkboxs');" class="btn btn-info">复选框</a></li>
+			</ul>
+		</div>
+		<div>
+			<button class="btn btn-danger" ng-disabled="issaving" ng-click="save();">
+				<span ng-show="!issaving">保存</span>
+				<span ng-show="issaving">保存中...</span>
+			</button>
+			<button class="btn btn-success" ng-click="preview()">预览</button>
+			<span class="tips-wrap">
+				<i class="fa fa-question-circle fa-2x" 
+					ng-mouseenter="helpinfoshow = true" 
+					ng-mouseleave="helpinfoshow = false"></i>
+				<div class="tips hidden" style="width: 600px;" ng-show="helpinfoshow">
+					注意：<br />
+						&nbsp;&nbsp;1、请勿删除控件两边的"{|-"、"-|}"符号,删除控件请使用控件的删除按钮。避免出现未知错误。<br />
+						&nbsp;&nbsp;2、文本框的最大输入长度为50个字符，多行文本框的最大输入长度为200个字符。<br />
+						&nbsp;&nbsp;3、可从word中直接拷贝所需内容。<br />
+						&nbsp;&nbsp;4、最终展示效果请以预览效果为准。<br />
+						&nbsp;&nbsp;5、无控件描述的数据项在导出时在不在第一sheet页显示，并且在第二sheet页显示为”未定义”。<br />
+						&nbsp;&nbsp;6、表单数据列表查看时默认显示前四个填写控件描述的数据项。<br />
+						&nbsp;&nbsp;7、表单更新时会删除原始表单以及原始表单已上报的数据。<br />
+						&nbsp;&nbsp;8、当设计页面过长导致工具按钮栏不显示时，请按”CTRL”按钮使工具条显示。<br />
+					<br/>
+				</div>
+			</span>
+		</div>
+		<h1 class="formdesign-title">标题 <input ng-model="title"/></h1>
+	</form>
+	<!-- 加载编辑器的容器 -->
+	<div id="formdesigncontainer" class="design-content"></div>
+	<div class="design-zone" ng-show="isDesignZoneActive">
+		<button class="btn btn-danger btn-small" ng-click="isDesignZoneActive = false; designZone = null;">X</button>
+		<div class="formdesign-preview view formcontent formdesign" ng-bind-html="designZone | trustHtml" ></div>
+	</div>
+</div>

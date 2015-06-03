@@ -1,0 +1,301 @@
+/*
+KISSY CSS Reset
+理念：清除和重置是紧密不可分的
+特色：1.适应中文 2.基于最新主流浏览器
+维护：玉伯(lifesinger@gmail.com), 正淳(ragecarrier@gmail.com)
+*/
+
+/* 清除内外边距 */
+body, h1, h2, h3, h4, h5, h6, hr, p, blockquote, /* structural elements 结构元素 */
+dl, dt, dd, ul, ol, li, /* list elements 列表元素 */
+pre, /* text formatting elements 文本格式元素 */
+fieldset, lengend, button, input, textarea, /* form elements 表单元素 */
+th, td { /* table elements 表格元素 */
+    margin: 0;
+    padding: 0;
+}
+
+/* 设置默认字体 */
+body,
+button, input, select, textarea { /* for ie */
+    /*font: 12px/1 Tahoma, Helvetica, Arial, "宋体", sans-serif;*/
+    font:12px/1  "Microsoft YaHei",微软雅黑,Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif; /* 用 ascii 字符表示，使得在任何编码下都无问题 */
+}
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  font-family: inherit;
+  font-weight: bold;
+  color: inherit;
+  text-rendering: optimizelegibility;
+}
+h1 { font-size: 18px; /* 18px / 12px = 1.5 */ }
+h2 {
+  font-size: 24px;
+  line-height: 36px;
+}
+h3 { font-size: 14px; }
+h4, h5, h6 { font-size: 100%; }
+
+address, cite, dfn, em, var { font-style: normal; } /* 将斜体扶正 */
+code, kbd, pre, samp, tt { font-family: "Courier New", Courier, monospace; } /* 统一等宽字体 */
+small { font-size: 12px; } /* 小于 12px 的中文很难阅读，让 small 正常化 */
+
+/* 重置列表元素 */
+ul, ol { list-style: none; }
+
+/* 重置文本格式元素 */
+a { text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+abbr[title], acronym[title] { /* 注：1.ie6 不支持 abbr; 2.这里用了属性选择符，ie6 下无效果 */
+    border-bottom: 1px dotted;
+    cursor: help;
+}
+
+q:before, q:after { content: ''; }
+
+/* 重置表单元素 */
+legend { color: #000; } /* for ie6 */
+fieldset, img { border: none; } /* img 搭车：让链接里的 img 无边框 */
+/* 注：optgroup 无法扶正 */
+button, input, select, textarea {
+    font-size: 100%; /* 使得表单元素在 ie 下能继承字体大小 */
+}
+
+/* 重置表格元素 */
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+/* 重置 hr */
+hr {
+    border: none;
+    height: 1px;
+}
+
+/* 让非ie浏览器默认也显示垂直滚动条，防止因滚动条引起的闪烁 */
+html {overflow-y: scroll;}
+/****************/
+.hide{display: none;}
+a{
+	color: #474F58;
+}
+a:hover{
+	text-decoration: none;
+}
+input{
+	padding: 2px 3px;
+	border: 1px solid #b8ced7;
+}
+select{
+	border: 1px solid #b8ced7;
+}
+body{
+	color: #2B2F34;
+}
+/**************/
+.btn{
+	display: inline-block;
+}
+
+/****************/
+.main{}
+.main .top{
+	height: 90px;
+	width: 100%;
+	background-color: #066C91;
+}
+.main .top .photo{
+	width: 50px;
+	height: 50px;
+}
+.main .top div{
+	float: right;
+	height: 90px;
+	width: 50px;
+	color: #fff;
+	margin-right: 10px;
+	margin-top: 20px;
+}
+.main .top span{
+	line-height: 20px;
+	height: 20px;
+}
+.main .menus{
+	width: 186px;
+	float: left;
+	position: absolute;
+	font-weight: bold;
+	font-size: 14px;
+	text-align: center;
+	line-height: 45px;
+	border-right: 1px solid #B7D5DF;
+}
+.main .menus .index{
+	height: 31px;
+	line-height: 31px;
+	background-color: #3B95C8;
+	color: #990000;
+	border-top: 1px solid #5AB8EF;
+	cursor: pointer;
+	text-align: left;
+	padding-left: 40px;
+}
+.main .menus .lv1{
+	height: 31px;
+	line-height: 31px;
+	background-color: #D4E7F0;
+	color: #333;
+	border-bottom: 1px solid #B9CAD3;
+	text-align: left;
+	padding-left: 40px;
+}
+.main .menus .lv2{
+	height: 31px;
+	line-height: 31px;
+	background-color: #F3FAFD;
+	color: #333;
+	cursor: pointer;
+}
+.main .menus .lv2:hover{
+	background-color: #CDE8F9;
+}
+.main .menus .select{
+	background: url("../images/menu-select.png");
+	color: #990000;
+}
+.main .right{
+	width: 100%;
+	float: right;
+	position: absolute;
+}
+.main .right .body{
+	margin-left: 186px;
+}
+.main .body .navigation{
+	height: 31px;
+	line-height: 31px;
+	background-color: #EDF6FA;
+	font-weight: bold;
+	padding-left: 10px;
+	border-bottom: 1px solid #D7E4EA;
+}
+.main .body .navigation a:hover{
+	text-decoration: underline;
+}
+.main .body .content{
+	padding: 5px 10px;
+}
+
+.searchzone{
+	border: 1px solid #B7B7B7;
+	padding-bottom: 10px;
+}
+.searchzone .title{
+	height: 40px;
+	line-height: 40px;
+	border-bottom: 1px solid #B7B7B7;
+	padding-left: 10px;
+	background-color: #F3F2F2;
+	font-weight: bold;
+}
+.searchzone .line{
+	width: 95%;
+	margin: 0 auto;
+	border-bottom: 1px dotted #B7B7B7;
+	line-height: 31px;
+	height: 31px;
+}
+.searchzone .border-none{
+	border: none;
+}
+.searchzone .line .desc{
+	font-weight: bold;
+	float: left;
+}
+.searchzone .line .vals{
+	color: #21639C;
+	cursor: pointer;
+	float: left;
+	margin-right: 100px;
+}
+.searchzone .line .vals a{
+	color: #21639C;
+	margin-right: 5px;
+}
+
+.mytable{
+	
+}
+.mytable .title{
+	background-color: #8AA5CC;
+	border: 1px solid #627FA8;
+	height: 35px;
+	line-height: 35px;
+	padding: 3px 20px;
+	margin-top: 10px;
+	color: #fff;
+}
+.mytable .title .highlight{
+	color: #F8D0AA;
+}
+.mytable .title a{
+	float: right;
+	margin-right: 10px;
+}
+.mytable .title .common{
+	font-weight: bold;
+	font-size: 14px;
+	color: #fff;
+}
+.mytable .title .spe{
+	color: #9E2424;
+	font-weight: bold;
+	font-size: 14px;
+}
+.mytable table{
+	width: 100%;
+}
+.mytable table thead{}
+.mytable table thead tr{
+	background-color: #D5D3D3;
+	height: 30px;
+	line-height: 30px;
+	text-align: center;
+	font-weight: bold;
+}
+.mytable table thead tr th{}
+.mytable table tbody{}
+.mytable table tbody tr{
+	height: 30px;
+	line-height: 30px;
+	text-align: center;
+}
+.mytable table tbody tr:nth-child(odd){
+	
+}
+.mytable table tbody tr:nth-child(even){
+	background-color: #EDECEC;
+}
+.mytable table tbody tr td{}
+.card{
+	display: inline-block;
+	width: 50px;
+	text-align: center;
+	margin: 5px 10px;
+}
+.commonfun{
+	width: 400px;
+}
+.pubinfo{
+	position: absolute;
+	top: 37px;
+	right: 10px;
+}
+.pubinfo .scroll{
+	width: 400px;
+	height: 80px;
+	border-bottom: 2px solid #eee;
+	margin-top: 5px;
+}

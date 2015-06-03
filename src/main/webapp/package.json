@@ -1,0 +1,19 @@
+{
+  "name": "formdesign",
+  "version": "0.0.0",
+  "description": "表单设计",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "cn.com.sinosoft",
+  "license": "BSD-2-Clause",
+  "devDependencies": {
+    "gulp": "~3.8.10",
+    "gulp-jshint": "~1.9.2",
+    "gulp-concat": "~2.5.2",
+    "gulp-uglify": "~1.1.0",
+    "gulp-rename": "~1.2.0",
+    "gulp-clean": "~0.3.1"
+  }
+}
