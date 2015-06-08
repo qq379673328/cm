@@ -2,6 +2,6 @@
 <!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-reverse-engineering-3.0.dtd" >
 
 <hibernate-reverse-engineering>
-	<table-filter match-name="t_formdesign_form" match-catalog="formdesign"></table-filter>
-	<table-filter match-name="t_formdesign_formdata" match-catalog="formdesign"></table-filter>
+	<table-filter match-name="t_attachment" match-catalog="formdesign"></table-filter>
+	<table-filter match-name="t_contract" match-catalog="formdesign"></table-filter>
 </hibernate-reverse-engineering>
