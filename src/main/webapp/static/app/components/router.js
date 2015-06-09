@@ -7,7 +7,7 @@ app.config([ '$routeProvider', function($routeProvider) {
 		templateUrl : fdRouterViewsBasepath + 'index/views/index.html',
 		controller : 'IndexCtrl'
 	}).when('/custommgr', {//客户管理
-		templateUrl : fdRouterViewsBasepath + 'custommgr/views/custommgr.html',
+		templateUrl : fdRouterViewsBasepath + 'custom/views/custommgr.html',
 		controller : 'CustomMgrCtrl'
 	}).otherwise({
 		redirectTo : '/'

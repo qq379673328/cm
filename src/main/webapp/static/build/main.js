@@ -2,7 +2,7 @@
 var app = angular
 		.module(
 				'app',
-				[ 'ngRoute', 'datepicker', 'ngTable', 'core'],
+				[ 'ngRoute', 'ngTable'],
 				function($httpProvider) {
 					$httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
 					/**
@@ -49,50 +49,34 @@ var app = angular
 
 				});
 
-app.controller('MainCtrl', function($scope, $routeParams, BaseInfoService) {
-	BaseInfoService.getUserInfo(function(userInfo){
-		$scope.user = userInfo;
-	});
+app.controller('MainCtrl', function($scope, $location) {
+	$scope.to = function(url){
+		$location.path(url);
+	};
 });
 
+app.controller('IndexCtrl', function($scope, $routeParams) {
+	
+});
 
+app.controller('CustomMgrCtrl', function($scope, $routeParams) {
+	
+});
 var fdRouterViewsBasepath = "static/app/modules/";
 
 //路由
 app.config([ '$routeProvider', function($routeProvider) {
 	$routeProvider
 	.when('/', {//首页
-		templateUrl : fdRouterViewsBasepath + 'formdesign/views/list.html',
-		controller : 'FormDesignListCtrl'
-	}).when('/formdesign', {//表单管理-列表页面
-		templateUrl : fdRouterViewsBasepath + 'formdesign/views/list.html',
-		controller : 'FormDesignListCtrl'
-	}).when('/formdesignedit/:id', {//表单设计-编辑页面
-		templateUrl : fdRouterViewsBasepath + 'formdesign/views/design.html',
-		controller : 'FormDesignCtrl'
-	}).when('/formdesignedit', {//表单设计-添加页面
-		templateUrl : fdRouterViewsBasepath + 'formdesign/views/design.html',
-		controller : 'FormDesignCtrl'
-	}).when('/formdatalist/:formid', {//表单数据管理-列表页面
-		templateUrl : fdRouterViewsBasepath + 'formdesign/views/formdatalist.html',
-		controller : 'FormDataListCtrl'
-	}).when('/usermgr/list', {//用户管理-列表页面
-		templateUrl : fdRouterViewsBasepath + 'usermgr/views/usermgr_list.html',
-		controller : 'UserMgrListCtrl'
-	}).when('/usermgr/editUser/:id', {//用户管理-编辑用户
-		templateUrl : fdRouterViewsBasepath + 'usermgr/views/usermgr_edituser.html',
-		controller : 'UserMgrEditUserCtrl'
-	}).when('/usermgr/addUser', {//用户管理-新增用户
-		templateUrl : fdRouterViewsBasepath + 'usermgr/views/usermgr_edituser.html',
-		controller : 'UserMgrEditUserCtrl'
-	}).when('/formreport/list', {//表单上报-列表页面
-		templateUrl : fdRouterViewsBasepath + 'formreport/views/formreport_list.html',
-		controller : 'FormReportListCtrl'
+		templateUrl : fdRouterViewsBasepath + 'index/views/index.html',
+		controller : 'IndexCtrl'
+	}).when('/custommgr', {//客户管理
+		templateUrl : fdRouterViewsBasepath + 'custommgr/views/custommgr.html',
+		controller : 'CustomMgrCtrl'
 	}).otherwise({
 		redirectTo : '/'
 	});
 } ]);
-
 //html过滤
 app.filter('trustHtml', function ($sce) {
     return function (input) {
@@ -170,174 +154,7 @@ angular.module('datepicker', []).directive('datepicker',[function(){
         }
     };
 }]);
-angular.module('page', []).directive('fpage',[function(){
-    return {
-        restrict: 'EA',
-        templateUrl: "static/app/components/directives/fdpage/page.html",
-        replace: true,
-        scope: {
-            conf: '='
-        },
-        link: function(scope, element, attrs){
-            // 变更当前页
-            scope.changeCurrentPage = function(item){
-                if(item == '...'){
-                    return;
-                }else{
-                    scope.conf.currentPage = item;
-                }
-            };
-            // 定义分页的长度必须为奇数 (default:9)
-            scope.conf.pagesLength = parseInt(scope.conf.pagesLength) ? parseInt(scope.conf.pagesLength) : 9 ;
-            if(scope.conf.pagesLength % 2 === 0){
-                // 如果不是奇数的时候处理一下
-                scope.conf.pagesLength = scope.conf.pagesLength -1;
-            }
-            // conf.erPageOptions
-            if(!scope.conf.perPageOptions){
-                scope.conf.perPageOptions = [10, 15, 20, 30, 50];
-            }
-            // pageList数组
-            function getPagination(){
-                // conf.currentPage
-                scope.conf.currentPage = parseInt(scope.conf.currentPage) ? parseInt(scope.conf.currentPage) : 1;
-                // conf.totalItems
-                if(!scope.conf.totalItems){
-                	scope.conf.totalItems = 0;
-                }
-                scope.conf.totalItems = parseInt(scope.conf.totalItems);
-                // conf.itemsPerPage (default:15)
-                // 先判断一下本地存储中有没有这个值
-                if(scope.conf.rememberPerPage){
-                    if(!parseInt(localStorage[scope.conf.rememberPerPage])){
-                        localStorage[scope.conf.rememberPerPage] = parseInt(scope.conf.itemsPerPage) ? parseInt(scope.conf.itemsPerPage) : 15;
-                    }
-                    scope.conf.itemsPerPage = parseInt(localStorage[scope.conf.rememberPerPage]);
-                }else{
-                    scope.conf.itemsPerPage = parseInt(scope.conf.itemsPerPage) ? parseInt(scope.conf.itemsPerPage) : 15;
-                }
-                // numberOfPages
-                scope.conf.numberOfPages = Math.ceil(scope.conf.totalItems/scope.conf.itemsPerPage);
-                // judge currentPage > scope.numberOfPages
-                if(scope.conf.currentPage < 1){
-                    scope.conf.currentPage = 1;
-                }
-                if(scope.conf.currentPage > scope.conf.numberOfPages){
-                    scope.conf.currentPage = scope.conf.numberOfPages;
-                }
-                // jumpPageNum
-                scope.jumpPageNum = scope.conf.currentPage;
-                // 如果itemsPerPage在不在perPageOptions数组中，就把itemsPerPage加入这个数组中
-                var perPageOptionsLength = scope.conf.perPageOptions.length;
-                // 定义状态
-                var perPageOptionsStatus;
-                for(var i = 0; i < perPageOptionsLength; i++){
-                    if(scope.conf.perPageOptions[i] == scope.conf.itemsPerPage){
-                        perPageOptionsStatus = true;
-                    }
-                }
-                // 如果itemsPerPage在不在perPageOptions数组中，就把itemsPerPage加入这个数组中
-                if(!perPageOptionsStatus){
-                    scope.conf.perPageOptions.push(scope.conf.itemsPerPage);
-                }
-                // 对选项进行sort
-                scope.conf.perPageOptions.sort(function(a, b){return a-b});
-                scope.pageList = [];
-                if(scope.conf.numberOfPages <= scope.conf.pagesLength){
-                    // 判断总页数如果小于等于分页的长度，若小于则直接显示
-                    for(i =1; i <= scope.conf.numberOfPages; i++){
-                        scope.pageList.push(i);
-                    }
-                }else{
-                    // 总页数大于分页长度（此时分为三种情况：1.左边没有...2.右边没有...3.左右都有...）
-                    // 计算中心偏移量
-                    var offset = (scope.conf.pagesLength - 1)/2;
-                    if(scope.conf.currentPage <= offset){
-                        // 左边没有...
-                        for(i =1; i <= offset +1; i++){
-                            scope.pageList.push(i);
-                        }
-                        scope.pageList.push('...');
-                        scope.pageList.push(scope.conf.numberOfPages);
-                    }else if(scope.conf.currentPage > scope.conf.numberOfPages - offset){
-                        scope.pageList.push(1);
-                        scope.pageList.push('...');
-                        for(i = offset + 1; i >= 1; i--){
-                            scope.pageList.push(scope.conf.numberOfPages - i);
-                        }
-                        scope.pageList.push(scope.conf.numberOfPages);
-                    }else{
-                        // 最后一种情况，两边都有...
-                        scope.pageList.push(1);
-                        scope.pageList.push('...');
-
-                        for(i = Math.ceil(offset/2) ; i >= 1; i--){
-                            scope.pageList.push(scope.conf.currentPage - i);
-                        }
-                        scope.pageList.push(scope.conf.currentPage);
-                        for(i = 1; i <= offset/2; i++){
-                            scope.pageList.push(scope.conf.currentPage + i);
-                        }
-                        scope.pageList.push('...');
-                        scope.pageList.push(scope.conf.numberOfPages);
-                    }
-                }
-                if(scope.conf.onChange){
-                    scope.conf.onChange();
-                }
-                scope.$parent.conf = scope.conf;
-            }
-            // prevPage
-            scope.prevPage = function(){
-                if(scope.conf.currentPage > 1){
-                    scope.conf.currentPage -= 1;
-                }
-            };
-            // nextPage
-            scope.nextPage = function(){
-                if(scope.conf.currentPage < scope.conf.numberOfPages){
-                    scope.conf.currentPage += 1;
-                }
-            };
-            // 跳转页
-            scope.jumpToPage = function(){
-                scope.jumpPageNum = scope.jumpPageNum.replace(/[^0-9]/g,'');
-                if(scope.jumpPageNum !== ''){
-                    scope.conf.currentPage = scope.jumpPageNum;
-                }
-            };
-            // 修改每页显示的条数
-            scope.changeItemsPerPage = function(){
-                // 清除本地存储的值方便重新设置
-                if(scope.conf.rememberPerPage){
-                    localStorage.removeItem(scope.conf.rememberPerPage);
-                }
-            };
-            
-            scope.$watch(function(){
-                var newValue = scope.conf.currentPage + ' ' + scope.conf.totalItems + ' ';
-                // 如果直接watch perPage变化的时候，因为记住功能的原因，所以一开始可能调用两次。
-                //所以用了如下方式处理
-                if(scope.conf.rememberPerPage){
-                    // 由于记住的时候需要特别处理一下，不然可能造成反复请求
-                    // 之所以不监控localStorage[scope.conf.rememberPerPage]是因为在删除的时候会undefind
-                    // 然后又一次请求
-                    if(localStorage[scope.conf.rememberPerPage]){
-                        newValue += localStorage[scope.conf.rememberPerPage];
-                    }else{
-                        newValue += scope.conf.itemsPerPage;
-                    }
-                }else{
-                    newValue += scope.conf.itemsPerPage;
-                }
-                return newValue;
-
-            }, getPagination);
-            
-        }
-    };
-}]);
-angular.module('core', []).factory('BaseInfoService', [ '$http', function($http) {
+app.factory('BaseInfoService', [ '$http', function($http) {
 	var userInfo = null;
 	
 	return {
@@ -353,47 +170,6 @@ angular.module('core', []).factory('BaseInfoService', [ '$http', function($http)
 		}
 	};
 }]);
-//表单上报-列表
-app.controller('FormReportListCtrl',function($scope, $routeParams, $http, ngTableParams) {
-	//分页查询
-	var initpage = 1,
-		initrows = 10;
-	$scope.initParams = function(){
-		$scope.queryParams = {
-				page: initpage,
-				rows: initrows,
-				isreload: true
-		};
-	};
-	$scope.initParams();
-	/*重新加载*/
-	$scope.reload = function(){
-		$scope.initParams();
-		$scope.tableParams.reload();
-	};
-	$scope.tableParams = new ngTableParams({
-		page: initpage,
-		count: initrows
-	}, {
-		total: 0,
-		getData: function($defer, params) {
-			if(!$scope.queryParams.isreload){
-				$scope.queryParams.page = params.page();
-				$scope.queryParams.rows = params.count();
-				$scope.queryParams.total = params.total();
-			}else{
-				$scope.queryParams.isreload = false;
-			}
-			
-			$http.post("formdesign/getMyforms", $scope.queryParams).success(function(data){
-				var total = data.pagingResult.total;
-				$scope.queryParams.total = total;
-				params.total(total);
-				$defer.resolve(data.pagingResult.rows);
-			});
-		}
-	});
-});
 
 //表单数据列表
 app.controller('FormDataListCtrl',function($scope, $http, $routeParams, 
@@ -910,6 +686,47 @@ app.factory('FormDesignService', [
 			};
 		} ]);
 
+//表单上报-列表
+app.controller('FormReportListCtrl',function($scope, $routeParams, $http, ngTableParams) {
+	//分页查询
+	var initpage = 1,
+		initrows = 10;
+	$scope.initParams = function(){
+		$scope.queryParams = {
+				page: initpage,
+				rows: initrows,
+				isreload: true
+		};
+	};
+	$scope.initParams();
+	/*重新加载*/
+	$scope.reload = function(){
+		$scope.initParams();
+		$scope.tableParams.reload();
+	};
+	$scope.tableParams = new ngTableParams({
+		page: initpage,
+		count: initrows
+	}, {
+		total: 0,
+		getData: function($defer, params) {
+			if(!$scope.queryParams.isreload){
+				$scope.queryParams.page = params.page();
+				$scope.queryParams.rows = params.count();
+				$scope.queryParams.total = params.total();
+			}else{
+				$scope.queryParams.isreload = false;
+			}
+			
+			$http.post("formdesign/getMyforms", $scope.queryParams).success(function(data){
+				var total = data.pagingResult.total;
+				$scope.queryParams.total = total;
+				params.total(total);
+				$defer.resolve(data.pagingResult.rows);
+			});
+		}
+	});
+});
 //用户管理-编辑用户
 app.controller('UserMgrEditUserCtrl',function($scope, $routeParams, $http, BaseInfoService) {
 	//新增or编辑

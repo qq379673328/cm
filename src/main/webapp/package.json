@@ -14,6 +14,17 @@
     "gulp-concat": "~2.5.2",
     "gulp-uglify": "~1.1.0",
     "gulp-rename": "~1.2.0",
-    "gulp-clean": "~0.3.1"
+    "gulp-clean": "~0.3.1",
+    "lodash": "^3.9.3",
+    "lodash._basecopy": "^3.0.1",
+    "lodash._basetostring": "^3.0.0",
+    "lodash._basevalues": "^3.0.0",
+    "lodash._isiterateecall": "^3.0.9",
+    "lodash._getnative": "^3.9.0",
+    "lodash.isarguments": "^3.0.3",
+    "lodash.isarray": "^3.0.3",
+    "lodash.restparam": "^3.6.1",
+    "lodash._reescape": "^3.0.0",
+    "lodash._reevaluate": "^3.0.0"
   }
 }

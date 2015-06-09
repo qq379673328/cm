@@ -34,6 +34,7 @@ import org.hibernate.type.Type;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import cn.com.sinosoft.common.model.TUser;
 import cn.com.sinosoft.common.util.SqlUtil;
 import cn.com.sinosoft.common.util.StrUtils;
 import cn.com.sinosoft.core.dao.SimpleBaseDao;
@@ -45,7 +46,6 @@ import cn.com.sinosoft.core.service.model.PagingSrcSql;
 import cn.com.sinosoft.core.util.UserUtil;
 import cn.com.sinosoft.formdesign.model.TFormdesignForm;
 import cn.com.sinosoft.formdesign.model.TFormdesignFormdata;
-import cn.com.sinosoft.usermgr.model.TUser;
 
 /**
  *
@@ -269,12 +269,8 @@ public class FormDesignService extends SimpleServiceImpl{
 		sb.append(" and ( t.pub_type = '1' ");
 		//本机构
 		sb.append(" or (t.pub_type = '2' and u.org_code = ? ) ");
-		values.add(user.getOrgCode());
-		types.add(StringType.INSTANCE);
 		//本机构本科室
 		sb.append(" or (t.pub_type = '3' and u.org_code = ? and u.department = ? ) ");
-		values.add(user.getOrgCode());
-		types.add(StringType.INSTANCE);
 		values.add(user.getDepartment());
 		types.add(StringType.INSTANCE);
 		//指定用户-暂未实现

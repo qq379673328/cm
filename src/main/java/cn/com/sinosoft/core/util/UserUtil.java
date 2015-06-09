@@ -6,15 +6,12 @@
  */
 package cn.com.sinosoft.core.util;
 
-import javax.annotation.Resource;
-
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Component;
 
-import cn.com.sinosoft.usermgr.model.TUser;
-import cn.com.sinosoft.usermgr.service.UserMgrService;
+import cn.com.sinosoft.common.model.TUser;
 
 /**
  * 跟用户相关的一些公共操作
@@ -25,9 +22,6 @@ import cn.com.sinosoft.usermgr.service.UserMgrService;
 @Component("userutil")
 public class UserUtil {
 
-	@Resource
-	UserMgrService userService;
-	
 	/*用户默认密码*/
 	public static final String DEFAULT_PWD = "1eaf60bd1d9d4ffdc335a1207b66e052";//11111111/
 	/*session中用户*/
@@ -53,7 +47,7 @@ public class UserUtil {
 				if(loginName == null){
 					return null;
 				}
-				TUser user = userService.findUserByLoginName(loginName);
+				TUser user = null;
 				session.setAttribute(SESSION_NAME_USER, user);
 				return user;
 			}else{

@@ -49,7 +49,6 @@
 		<property name="filterChainDefinitions">
 			<value>
 				/index.jsp = anon
-				/help/** = authc
 				/unauthorized.jsp = anon
 				/unauthorized = anon
 				/**/*.html = anon
@@ -59,12 +58,12 @@
 				/scripts/** = anon
 				/images/** = anon
 				/css/** = anon
-				/ws/** = anon
-				/** = ajaxuser,authc
+				/** = anon
+				
         	</value>
 		</property>
 	</bean>
-	<!--  -->
+	<!-- /** = ajaxuser,authc -->
 	<!-- 安全管理器 -->
 	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
 		<property name="realm" ref="userRealm" />

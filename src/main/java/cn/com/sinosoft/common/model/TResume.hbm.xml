@@ -1,0 +1,92 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-6-9 21:13:44 by Hibernate Tools 3.2.2.GA -->
+<hibernate-mapping>
+    <class name="cn.com.sinosoft.common.model.TResume" table="t_resume" catalog="cm">
+        <id name="id" type="string">
+            <column name="id" length="40" />
+            <generator class="assigned" />
+        </id>
+        <property name="name" type="string">
+            <column name="name" length="100" not-null="true">
+                <comment>&#229;&#167;&#147;&#229;&#144;&#141;</comment>
+            </column>
+        </property>
+        <property name="address" type="string">
+            <column name="address" length="200">
+                <comment>&#229;&#177;&#133;&#228;&#189;&#143;&#229;&#156;&#176;&#229;&#157;&#128;</comment>
+            </column>
+        </property>
+        <property name="sex" type="string">
+            <column name="sex" length="10" not-null="true">
+                <comment>&#230;&#128;&#167;&#229;&#136;&#171;</comment>
+            </column>
+        </property>
+        <property name="education" type="string">
+            <column name="education" length="100">
+                <comment>&#230;&#156;&#128;&#233;&#171;&#152;&#229;&#173;&#166;&#229;&#142;&#134;</comment>
+            </column>
+        </property>
+        <property name="birthcay" type="date">
+            <column name="birthcay" length="10">
+                <comment>&#229;&#135;&#186;&#231;&#148;&#159;&#230;&#151;&#165;&#230;&#156;&#159;</comment>
+            </column>
+        </property>
+        <property name="marrage" type="string">
+            <column name="marrage" length="20">
+                <comment>&#229;&#169;&#154;&#229;&#167;&#187;&#231;&#138;&#182;&#229;&#134;&#181;</comment>
+            </column>
+        </property>
+        <property name="phone" type="string">
+            <column name="phone" length="100">
+                <comment>&#230;&#137;&#139;&#230;&#156;&#186;&#229;&#143;&#183;&#231;&#160;&#129;</comment>
+            </column>
+        </property>
+        <property name="email" type="string">
+            <column name="email" length="100">
+                <comment>&#231;&#148;&#181;&#229;&#173;&#144;&#233;&#130;&#174;&#231;&#174;&#177;</comment>
+            </column>
+        </property>
+        <property name="currentWage" type="string">
+            <column name="current_wage" length="50">
+                <comment>&#231;&#155;&#174;&#229;&#137;&#141;&#229;&#185;&#180;&#232;&#150;&#170;</comment>
+            </column>
+        </property>
+        <property name="workState" type="string">
+            <column name="work_state" length="50">
+                <comment>&#229;&#183;&#165;&#228;&#189;&#156;&#231;&#138;&#182;&#230;&#128;&#129;</comment>
+            </column>
+        </property>
+        <property name="desc" type="binary">
+            <column name="desc">
+                <comment>&#228;&#184;&#170;&#228;&#186;&#186;&#231;&#174;&#128;&#228;&#187;&#139;</comment>
+            </column>
+        </property>
+        <property name="headImage" type="string">
+            <column name="head_image" length="100">
+                <comment>&#229;&#164;&#180;&#229;&#131;&#143;&#232;&#183;&#175;&#229;&#190;&#132;</comment>
+            </column>
+        </property>
+        <property name="createUser" type="string">
+            <column name="create_user" length="40" not-null="true">
+                <comment>&#229;&#136;&#155;&#229;&#187;&#186;&#228;&#186;&#186;</comment>
+            </column>
+        </property>
+        <property name="createTime" type="timestamp">
+            <column name="create_time" length="19" not-null="true">
+                <comment>&#229;&#136;&#155;&#229;&#187;&#186;&#230;&#151;&#182;&#233;&#151;&#180;</comment>
+            </column>
+        </property>
+        <property name="lastUpdateTime" type="timestamp">
+            <column name="last_update_time" length="19" not-null="true">
+                <comment>&#228;&#184;&#138;&#230;&#172;&#161;&#230;&#155;&#180;&#230;&#150;&#176;&#230;&#151;&#182;&#233;&#151;&#180;</comment>
+            </column>
+        </property>
+        <property name="lastUpdateUser" type="string">
+            <column name="last_update_user" length="40">
+                <comment>&#228;&#184;&#138;&#230;&#172;&#161;&#230;&#155;&#180;&#230;&#150;&#176;&#228;&#186;&#186;</comment>
+            </column>
+        </property>
+    </class>
+</hibernate-mapping>

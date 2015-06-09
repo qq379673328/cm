@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-6-9 21:13:44 by Hibernate Tools 3.2.2.GA -->
+<hibernate-mapping>
+    <class name="cn.com.sinosoft.common.model.TPub" table="t_pub" catalog="cm">
+        <id name="id" type="string">
+            <column name="id" length="40" />
+            <generator class="assigned" />
+        </id>
+        <property name="content" type="string">
+            <column name="content" length="500" not-null="true">
+                <comment>&#229;&#133;&#172;&#229;&#145;&#138;&#229;&#134;&#133;&#229;&#174;&#185;</comment>
+            </column>
+        </property>
+        <property name="createUser" type="string">
+            <column name="create_user" length="40" not-null="true">
+                <comment>&#229;&#136;&#155;&#229;&#187;&#186;&#228;&#186;&#186;</comment>
+            </column>
+        </property>
+        <property name="createTime" type="timestamp">
+            <column name="create_time" length="19" not-null="true">
+                <comment>&#229;&#136;&#155;&#229;&#187;&#186;&#230;&#151;&#182;&#233;&#151;&#180;</comment>
+            </column>
+        </property>
+        <property name="state" type="string">
+            <column name="state" length="40" not-null="true">
+                <comment>&#229;&#133;&#172;&#229;&#145;&#138;&#231;&#138;&#182;&#230;&#128;&#129;</comment>
+            </column>
+        </property>
+        <property name="lastUpdateUser" type="string">
+            <column name="last_update_user" length="40">
+                <comment>&#230;&#155;&#180;&#230;&#150;&#176;&#228;&#186;&#186;</comment>
+            </column>
+        </property>
+        <property name="lastUpdateTime" type="timestamp">
+            <column name="last_update_time" length="19" not-null="true">
+                <comment>&#230;&#155;&#180;&#230;&#150;&#176;&#230;&#151;&#182;&#233;&#151;&#180;</comment>
+            </column>
+        </property>
+    </class>
+</hibernate-mapping>

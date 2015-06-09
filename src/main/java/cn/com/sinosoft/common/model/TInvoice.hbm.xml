@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-6-9 21:13:44 by Hibernate Tools 3.2.2.GA -->
+<hibernate-mapping>
+    <class name="cn.com.sinosoft.common.model.TInvoice" table="t_invoice" catalog="cm">
+        <id name="id" type="string">
+            <column name="id" length="40" />
+            <generator class="assigned" />
+        </id>
+        <property name="applyUser" type="string">
+            <column name="apply_user" length="40" not-null="true">
+                <comment>&#231;&#148;&#179;&#232;&#175;&#183;&#228;&#186;&#186;</comment>
+            </column>
+        </property>
+        <property name="applyTime" type="date">
+            <column name="apply_time" length="10" not-null="true">
+                <comment>&#231;&#148;&#179;&#232;&#175;&#183;&#230;&#151;&#182;&#233;&#151;&#180;</comment>
+            </column>
+        </property>
+        <property name="customContract" type="string">
+            <column name="custom_contract" length="100" not-null="true">
+                <comment>&#229;&#174;&#162;&#230;&#136;&#183;&#229;&#144;&#136;&#229;&#144;&#140;&#231;&#188;&#150;&#229;&#143;&#183;</comment>
+            </column>
+        </property>
+        <property name="inUser" type="string">
+            <column name="in_user" length="100">
+                <comment>&#229;&#133;&#165;&#232;&#129;&#140;&#228;&#186;&#186;&#233;&#128;&#137;</comment>
+            </column>
+        </property>
+        <property name="type" type="string">
+            <column name="type" length="50" not-null="true">
+                <comment>&#229;&#143;&#145;&#231;&#165;&#168;&#231;&#177;&#187;&#229;&#158;&#139;</comment>
+            </column>
+        </property>
+        <property name="property" type="string">
+            <column name="property" length="100">
+                <comment>&#229;&#143;&#145;&#231;&#165;&#168;&#229;&#177;&#158;&#230;&#128;&#167;</comment>
+            </column>
+        </property>
+        <property name="total" type="float">
+            <column name="total" precision="12" scale="0" not-null="true">
+                <comment>&#229;&#143;&#145;&#231;&#165;&#168;&#233;&#135;&#145;&#233;&#162;&#157;</comment>
+            </column>
+        </property>
+        <property name="state" type="string">
+            <column name="state" length="100" not-null="true">
+                <comment>&#229;&#143;&#145;&#231;&#165;&#168;&#231;&#138;&#182;&#230;&#128;&#129;</comment>
+            </column>
+        </property>
+        <property name="checkUser" type="string">
+            <column name="check_user" length="100" not-null="true">
+                <comment>&#229;&#188;&#128;&#231;&#165;&#168;&#228;&#186;&#186;</comment>
+            </column>
+        </property>
+        <property name="incomeState" type="string">
+            <column name="income_state" length="50">
+                <comment>&#229;&#155;&#158;&#230;&#172;&#190;&#231;&#138;&#182;&#230;&#128;&#129;</comment>
+            </column>
+        </property>
+        <property name="comment" type="string">
+            <column name="comment" length="500">
+                <comment>&#229;&#164;&#135;&#230;&#179;&#168;</comment>
+            </column>
+        </property>
+        <property name="createUser" type="string">
+            <column name="create_user" length="40" not-null="true">
+                <comment>&#229;&#136;&#155;&#229;&#187;&#186;&#228;&#186;&#186;</comment>
+            </column>
+        </property>
+        <property name="createTime" type="timestamp">
+            <column name="create_time" length="19" not-null="true">
+                <comment>&#229;&#136;&#155;&#229;&#187;&#186;&#230;&#151;&#182;&#233;&#151;&#180;</comment>
+            </column>
+        </property>
+    </class>
+</hibernate-mapping>

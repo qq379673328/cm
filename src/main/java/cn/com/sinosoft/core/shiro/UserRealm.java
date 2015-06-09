@@ -18,9 +18,7 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 
-import cn.com.sinosoft.common.util.spring.SpringUtil;
-import cn.com.sinosoft.usermgr.model.TUser;
-import cn.com.sinosoft.usermgr.service.UserMgrService;
+import cn.com.sinosoft.common.model.TUser;
 
 /**
  *
@@ -61,14 +59,13 @@ public class UserRealm extends AuthorizingRealm {
 	protected AuthenticationInfo doGetAuthenticationInfo(
 			AuthenticationToken token) throws AuthenticationException {
 		
-		UserMgrService userService = (UserMgrService)SpringUtil.getBean("userMgrService");
 		UsernamePasswordToken uToken = (UsernamePasswordToken)token;
 		String username = uToken.getUsername();
-        TUser user = userService.findUserByLoginName(username);
+        TUser user = null;
         if(user == null) {//用户名或者密码错误
             throw new AuthenticationException();
         }
-        if("1".equals(user.getIsDisabled())) {//用户已锁定
+        if("1".equals(user.getState())) {//用户已锁定
             throw new LockedAccountException();
         }
         
