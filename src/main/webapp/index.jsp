@@ -37,39 +37,32 @@
 		</div>
 		<div class="right">
 			<div class="body">
-				<div class="navigation">
-					位置：
-					<a href="#">首页</a>
-					&gt;
-					{{ index.navigation }}
-				</div>
-				<div class="content">
-					<div ng-view></div>
-				</div>
+				<div ng-view></div>
 			</div>
 		</div>
 		<div class="menus">
-			<div class="index" ng-click="to('');"><i class="fa fa-user"></i>&nbsp;我的主页</div>
+			<div ng-class="{true: 'select'}[$root.menu=='#']" class="index" ng-click="to('');"><i class="fa fa-user"></i>&nbsp;我的主页</div>
 			
 			<div class="lv1"><i class="fa fa-list"></i>&nbsp;业务管理</div>
 			
-			<div class="lv2" ng-click="to('custommgr');"><i class="fa fa-caret-right"></i>&nbsp;客户管理</div>
-			<div class="lv2 select"><i class="fa fa-caret-right"></i>&nbsp;职位管理</div>
-			<div class="lv2"><i class="fa fa-caret-right"></i>&nbsp;简历管理</div>
-			<div class="lv2"><i class="fa fa-caret-right"></i>&nbsp;合同管理</div>
-			<div class="lv2"><i class="fa fa-caret-right"></i>&nbsp;发票管理</div>
+			<div ng-class="{true: 'select'}[$root.menu=='custom']" class="lv2" ng-click="to('custommgr/list');"><i class="fa fa-caret-right"></i>&nbsp;客户管理</div>
+			<div ng-class="{true: 'select'}[$root.menu=='job']" class="lv2" ng-click="to('jobmgr/list');"><i class="fa fa-caret-right"></i>&nbsp;职位管理</div>
+			<div ng-class="{true: 'select'}[$root.menu=='resume']" class="lv2" ng-click="to('resumemgr/list');"><i class="fa fa-caret-right"></i>&nbsp;简历管理</div>
+			<div ng-class="{true: 'select'}[$root.menu=='contract']" class="lv2" ng-click="to('contractmgr/list');"><i class="fa fa-caret-right"></i>&nbsp;合同管理</div>
+			<div ng-class="{true: 'select'}[$root.menu=='invoice']" class="lv2" ng-click="to('invoicemgr/list');"><i class="fa fa-caret-right"></i>&nbsp;发票管理</div>
 			
 			<div class="lv1"><i class="fa fa-comments"></i>&nbsp;团队管理</div>
 			
-			<div class="lv2"><i class="fa fa-caret-right"></i>&nbsp;绩效管理	</div>
-			<div class="lv2"><i class="fa fa-caret-right"></i>&nbsp;团队管理</div>
+			<div ng-class="{true: 'select'}[$root.menu=='performance']" class="lv2" ng-click="to('performancemgr/list');"><i class="fa fa-caret-right"></i>&nbsp;绩效管理	</div>
+			<div ng-class="{true: 'select'}[$root.menu=='team']" class="lv2" ng-click="to('teammgr/list');"><i class="fa fa-caret-right"></i>&nbsp;团队管理</div>
 			
 			<div class="lv1"><i class="fa fa-edit"></i>&nbsp;系统管理</div>
 			
-			<div class="lv2"><i class="fa fa-caret-right"></i>&nbsp;用户管理</div>
-			<div class="lv2"><i class="fa fa-caret-right"></i>&nbsp;修改密码</div>
+			<div ng-class="{true: 'select'}[$root.menu=='user']" class="lv2" ng-click="to('usermgr/list');"><i class="fa fa-caret-right"></i>&nbsp;用户管理</div>
+			<div ng-class="{true: 'select'}[$root.menu=='resetpwd']" class="lv2" ng-click="to('usermgr/resetpwd');"><i class="fa fa-caret-right"></i>&nbsp;修改密码</div>
 			
 			<div class="lv1"><i class="fa fa-calendar"></i>&nbsp;公告管理</div>
+			<div ng-class="{true: 'select'}[$root.menu=='pub']" class="lv2" ng-click="to('pubmgr/list');"><i class="fa fa-caret-right"></i>&nbsp;公告管理</div>
 			
 		</div>
 		
@@ -112,8 +105,7 @@
 	<script type="text/javascript" src="static/app/bower_components/angular-route/angular-route.min.js"></script>
 	<script type="text/javascript" src="static/app/bower_components/ng-table/ng-table.js"></script>
 		
-	<script type="text/javascript" src="static/app/app.js"></script>
-	<script type="text/javascript" src="static/app/components/router.js"></script>
+	<script type="text/javascript" src="static/build/main.js"></script>
 	
 </body>
 </html>

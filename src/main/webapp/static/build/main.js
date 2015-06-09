@@ -53,14 +53,11 @@ app.controller('MainCtrl', function($scope, $location) {
 	$scope.to = function(url){
 		$location.path(url);
 	};
-});
-
-app.controller('IndexCtrl', function($scope, $routeParams) {
 	
 });
 
-app.controller('CustomMgrCtrl', function($scope, $routeParams) {
-	
+app.controller('IndexCtrl', function($scope, $routeParams, $rootScope) {
+	$rootScope.menu = "#";
 });
 var fdRouterViewsBasepath = "static/app/modules/";
 
@@ -70,10 +67,143 @@ app.config([ '$routeProvider', function($routeProvider) {
 	.when('/', {//首页
 		templateUrl : fdRouterViewsBasepath + 'index/views/index.html',
 		controller : 'IndexCtrl'
-	}).when('/custommgr', {//客户管理
-		templateUrl : fdRouterViewsBasepath + 'custommgr/views/custommgr.html',
-		controller : 'CustomMgrCtrl'
-	}).otherwise({
+	})
+	
+	.when('/custommgr/list', {//客户管理-列表页
+		templateUrl : fdRouterViewsBasepath + 'custom/views/custommgrlist.html',
+		controller : 'CustomMgrListCtrl'
+	})
+	.when('/custommgr/incustom', {//客户管理-录入客户
+		templateUrl : fdRouterViewsBasepath + 'custom/views/custommgrincustom.html',
+		controller : 'CustomMgrInCustomCtrl'
+	})
+	.when('/custommgr/editcustom/:id', {//客户管理-编辑客户
+		templateUrl : fdRouterViewsBasepath + 'custom/views/custommgrincustom.html',
+		controller : 'CustomMgrInCustomCtrl'
+	})
+	.when('/custommgr/viewcustom/:id', {//客户管理-客户信息
+		templateUrl : fdRouterViewsBasepath + 'custom/views/custommgrviewcustom.html',
+		controller : 'CustomMgrViewCustomCtrl'
+	})
+	
+	.when('/jobmgr/list', {//职位管理-列表页
+		templateUrl : fdRouterViewsBasepath + 'job/views/jobmgrlist.html',
+		controller : 'JobMgrListCtrl'
+	})
+	.when('/jobmgr/injob', {//职位管理-录入职位
+		templateUrl : fdRouterViewsBasepath + 'job/views/jobmgrinjob.html',
+		controller : 'JobMgrInCustomCtrl'
+	})
+	.when('/jobmgr/editjob/:id', {//职位管理-编辑职位
+		templateUrl : fdRouterViewsBasepath + 'job/views/jobmgrinjob.html',
+		controller : 'JobMgrInJobCtrl'
+	})
+	.when('/jobmgr/viewjob/:id', {//职位管理-职位信息
+		templateUrl : fdRouterViewsBasepath + 'custom/views/jobmgrviewjob.html',
+		controller : 'JobMgrViewJobCtrl'
+	})
+	
+	.when('/resumemgr/list', {//简历管理-列表页
+		templateUrl : fdRouterViewsBasepath + 'resume/views/resumemgrlist.html',
+		controller : 'ResumeMgrListCtrl'
+	})
+	.when('/resumemgr/inresume', {//简历管理-录入简历
+		templateUrl : fdRouterViewsBasepath + 'resume/views/resumemgrinresume.html',
+		controller : 'ResumeMgrInResumeCtrl'
+	})
+	.when('/resumemgr/editcustom/:id', {//简历管理-编辑简历
+		templateUrl : fdRouterViewsBasepath + 'resume/views/resumemgrinresume.html',
+		controller : 'ResumeMgrInResumeCtrl'
+	})
+	.when('/resumemgr/viewresume/:id', {//简历管理-简历信息
+		templateUrl : fdRouterViewsBasepath + 'custom/views/resumemgrviewresume.html',
+		controller : 'ResumeMgrViewResumeCtrl'
+	})
+	
+	.when('/contractmgr/list', {//合同管理-列表页
+		templateUrl : fdRouterViewsBasepath + 'contract/views/contractmgrlist.html',
+		controller : 'ContractMgrListCtrl'
+	})
+	.when('/contractmgr/incontract', {//合同管理-录入合同
+		templateUrl : fdRouterViewsBasepath + 'contract/views/contractmgrincontract.html',
+		controller : 'ContractMgrInContractCtrl'
+	})
+	.when('/contractmgr/editcustom/:id', {//合同管理-编辑合同
+		templateUrl : fdRouterViewsBasepath + 'contract/views/contractmgrincontract.html',
+		controller : 'ContractMgrInContractCtrl'
+	})
+	.when('/contractmgr/viewcontract/:id', {//合同管理-合同信息
+		templateUrl : fdRouterViewsBasepath + 'custom/views/contractmgrviewcontract.html',
+		controller : 'ContractMgrViewContractCtrl'
+	})
+	
+	.when('/invoicemgr/list', {//发票管理-列表页
+		templateUrl : fdRouterViewsBasepath + 'invoice/views/invoicemgrlist.html',
+		controller : 'InvoiceMgrListCtrl'
+	})
+	.when('/invoicemgr/ininvoice', {//发票管理-录入发票
+		templateUrl : fdRouterViewsBasepath + 'invoice/views/invoicemgrininvoice.html',
+		controller : 'InvoiceMgrInInvoiceCtrl'
+	})
+	.when('/invoicemgr/editcustom/:id', {//发票管理-编辑发票
+		templateUrl : fdRouterViewsBasepath + 'invoice/views/invoicemgrininvoice.html',
+		controller : 'InvoiceMgrInInvoiceCtrl'
+	})
+	.when('/invoicemgr/viewinvoice/:id', {//发票管理-发票信息
+		templateUrl : fdRouterViewsBasepath + 'custom/views/invoicemgrviewinvoice.html',
+		controller : 'InvoiceMgrViewInvoiceCtrl'
+	})
+	
+	.when('/performancemgr/list', {//绩效管理-列表页
+		templateUrl : fdRouterViewsBasepath + 'performance/views/performancemgrlist.html',
+		controller : 'PerformanceMgrListCtrl'
+	})
+	
+	.when('/teammgr/list', {//团队管理-列表页
+		templateUrl : fdRouterViewsBasepath + 'team/views/teammgrlist.html',
+		controller : 'TeamMgrListCtrl'
+	})
+	.when('/teammgr/myinfo', {//团队管理-我的信息
+		templateUrl : fdRouterViewsBasepath + 'team/views/teammgrmyinfo.html',
+		controller : 'TeamMgrMyInfoCtrl'
+	})
+	
+	.when('/usermgr/list', {//用户管理-列表页
+		templateUrl : fdRouterViewsBasepath + 'user/views/usermgrlist.html',
+		controller : 'UserMgrListCtrl'
+	})
+	.when('/usermgr/inuser', {//用户管理-录入用户
+		templateUrl : fdRouterViewsBasepath + 'user/views/usermgrinuser.html',
+		controller : 'UserMgrInUserCtrl'
+	})
+	.when('/usermgr/editcustom/:id', {//用户管理-编辑用户
+		templateUrl : fdRouterViewsBasepath + 'user/views/usermgrinuser.html',
+		controller : 'UserMgrInUserCtrl'
+	})
+	.when('/usermgr/viewuser/:id', {//用户管理-用户信息
+		templateUrl : fdRouterViewsBasepath + 'custom/views/usermgrviewuser.html',
+		controller : 'UserMgrViewUserCtrl'
+	})
+	
+	.when('/usermgr/resetpwd', {//修改密码管理-列表页
+		templateUrl : fdRouterViewsBasepath + 'user/views/userresetpwd.html',
+		controller : 'UserResetPwdCtrl'
+	})
+	
+	.when('/pubmgr/list', {//公告管理-列表页
+		templateUrl : fdRouterViewsBasepath + 'pub/views/pubmgrlist.html',
+		controller : 'PubMgrListCtrl'
+	})
+	.when('/pubmgr/inpub', {//公告管理-录入公告
+		templateUrl : fdRouterViewsBasepath + 'pub/views/pubmgrinpub.html',
+		controller : 'PubMgrInPubCtrl'
+	})
+	.when('/pubmgr/editpub', {//公告管理-编辑公告
+		templateUrl : fdRouterViewsBasepath + 'pub/views/pubmgreditpub.html',
+		controller : 'PubMgrEditPubCtrl'
+	})
+	
+	.otherwise({
 		redirectTo : '/'
 	});
 } ]);
@@ -167,6 +297,69 @@ app.factory('BaseInfoService', [ '$http', function($http) {
 					if(data) cb(data);
 				});
 			}
+		}
+	};
+}]);
+//合同管理-录入合同
+app.controller('ContractMgrInContractCtrl',
+		function($scope, $http, $routeParams, ngTableParams, 
+				CustomService ,$rootScope) {
+	$rootScope.menu = "contract";
+	
+});
+
+//
+app.controller('ContractMgrListCtrl',
+		function($scope, $http, $routeParams, ngTableParams,
+				ContractService ,$rootScope) {
+	$rootScope.menu = "contract";
+	
+});
+//合同管理-合同信息
+app.controller('ContractMgrViewContractCtrl',
+		function($scope, $http, $routeParams, ngTableParams,
+				CustomService ,$rootScope) {
+	$rootScope.menu = "contract";
+	
+});
+app.factory('ContractService', [ '$http', function($http) {
+	return {
+		//
+		test: function(params, cb){
+			$http.post("formdesign/formdatadel", params).success(function(data){
+				if(cb) cb(data);
+			});
+		}
+	};
+}]);
+//客户管理-录入客户
+app.controller('CustomMgrInCustomCtrl',
+		function($scope, $http, $routeParams, ngTableParams,
+				CustomService, $rootScope) {
+	$rootScope.menu = "custom";
+	
+});
+//客户管理-列表页
+app.controller('CustomMgrListCtrl',
+		function($scope, $http, $routeParams, ngTableParams,
+				CustomService, $rootScope) {
+	$rootScope.menu = "custom";
+	
+});
+//客户管理-客户信息
+app.controller('CustomMgrViewCustomCtrl',
+		function($scope, $http, $routeParams, ngTableParams,
+				CustomService, $rootScope) {
+	$rootScope.menu = "custom";
+	
+});
+app.factory('CustomService', [ '$http', function($http) {
+	return {
+		//
+		test: function(params, cb){
+			$http.post("formdesign/formdatadel", params).success(function(data){
+				if(cb) cb(data);
+			});
 		}
 	};
 }]);
@@ -686,47 +879,179 @@ app.factory('FormDesignService', [
 			};
 		} ]);
 
-//表单上报-列表
-app.controller('FormReportListCtrl',function($scope, $routeParams, $http, ngTableParams) {
-	//分页查询
-	var initpage = 1,
-		initrows = 10;
-	$scope.initParams = function(){
-		$scope.queryParams = {
-				page: initpage,
-				rows: initrows,
-				isreload: true
-		};
-	};
-	$scope.initParams();
-	/*重新加载*/
-	$scope.reload = function(){
-		$scope.initParams();
-		$scope.tableParams.reload();
-	};
-	$scope.tableParams = new ngTableParams({
-		page: initpage,
-		count: initrows
-	}, {
-		total: 0,
-		getData: function($defer, params) {
-			if(!$scope.queryParams.isreload){
-				$scope.queryParams.page = params.page();
-				$scope.queryParams.rows = params.count();
-				$scope.queryParams.total = params.total();
-			}else{
-				$scope.queryParams.isreload = false;
-			}
-			
-			$http.post("formdesign/getMyforms", $scope.queryParams).success(function(data){
-				var total = data.pagingResult.total;
-				$scope.queryParams.total = total;
-				params.total(total);
-				$defer.resolve(data.pagingResult.rows);
+//发票管理-录入发票
+app.controller('InvoiceMgrInInvoiceCtrl',
+		function($scope, $http, $routeParams, ngTableParams,
+				CustomService, $rootScope) {
+	$rootScope.menu = "invoice";
+	
+});
+
+//
+app.controller('InvoiceMgrListCtrl',
+		function($scope, $http, $routeParams, ngTableParams,
+				InvoiceService, $rootScope) {
+	$rootScope.menu = "invoice";
+	
+});
+//发票管理-发票信息
+app.controller('InvoiceMgrViewInvoiceCtrl',
+		function($scope, $http, $routeParams, ngTableParams,
+				CustomService, $rootScope) {
+	$rootScope.menu = "invoice";
+	
+});
+app.factory('InvoiceService', [ '$http', function($http) {
+	return {
+		//
+		test: function(params, cb){
+			$http.post("formdesign/formdatadel", params).success(function(data){
+				if(cb) cb(data);
 			});
 		}
-	});
+	};
+}]);
+//职位管理-录入职位
+app.controller('JobMgrInJobCtrl',
+		function($scope, $http, $routeParams, ngTableParams, 
+				CustomService, $rootScope) {
+	$rootScope.menu = "job";
+	
 });
+
+//
+app.controller('JobMgrListCtrl',
+		function($scope, $http, $routeParams, ngTableParams,
+				JobService, $rootScope) {
+	$rootScope.menu = "job";
+	
+});
+//职位管理-职位信息
+app.controller('JobMgrViewJobCtrl',
+		function($scope, $http, $routeParams, ngTableParams,
+				CustomService, $rootScope) {
+	$rootScope.menu = "job";
+	
+});
+app.factory('JobService', [ '$http', function($http) {
+	return {
+		//
+		test: function(params, cb){
+			$http.post("formdesign/formdatadel", params).success(function(data){
+				if(cb) cb(data);
+			});
+		}
+	};
+}]);
+app.factory('PerformanceService', [ '$http', function($http) {
+	return {
+		//
+		test: function(params, cb){
+			$http.post("formdesign/formdatadel", params).success(function(data){
+				if(cb) cb(data);
+			});
+		}
+	};
+}]);
+//绩效管理
+app.controller('PerformanceMgrListCtrl',
+		function($scope, $http, $routeParams, ngTableParams,
+				PerformanceService, $rootScope) {
+	$rootScope.menu = "performance";
+	
+});
+//公告管理-录入公告
+app.controller('PubMgrInPubCtrl',
+		function($scope, $http, $routeParams, ngTableParams, 
+				CustomService, $rootScope) {
+	$rootScope.menu = "pub";
+	
+});
+
+//
+app.controller('PubMgrListCtrl',
+		function($scope, $http, $routeParams, ngTableParams,
+				PubService, $rootScope) {
+	$rootScope.menu = "pub";
+	
+});
+app.factory('PubService', [ '$http', function($http) {
+	return {
+		//
+		test: function(params, cb){
+			$http.post("formdesign/formdatadel", params).success(function(data){
+				if(cb) cb(data);
+			});
+		}
+	};
+}]);
+//简历管理-录入简历
+app.controller('ResumeMgrInResumeCtrl',
+		function($scope, $http, $routeParams, ngTableParams,
+				CustomService, $rootScope) {
+	$rootScope.menu = "resume";
+	
+});
+
+//
+app.controller('ResumeMgrListCtrl',
+		function($scope, $http, $routeParams, ngTableParams,
+				ResumeService, $rootScope) {
+	$rootScope.menu = "resume";
+	
+});
+//简历管理-简历信息
+app.controller('ResumeMgrViewResumeCtrl',
+		function($scope, $http, $routeParams, ngTableParams, 
+				CustomService, $rootScope) {
+	$rootScope.menu = "resume";
+	
+});
+app.factory('ResumeService', [ '$http', function($http) {
+	return {
+		//
+		test: function(params, cb){
+			$http.post("formdesign/formdatadel", params).success(function(data){
+				if(cb) cb(data);
+			});
+		}
+	};
+}]);
+
+//
+app.controller('TeamMgrListCtrl',
+		function($scope, $http, $routeParams, ngTableParams, 
+				TeamService, $rootScope) {
+	$rootScope.menu = "team";
+	
+});
+//团队管理-我的信息
+app.controller('TeamMgrMyInfoCtrl',
+		function($scope, $http, $routeParams, ngTableParams, 
+				CustomService, $rootScope) {
+	$rootScope.menu = "team";
+	
+});
+app.factory('TeamService', [ '$http', function($http) {
+	return {
+		//
+		test: function(params, cb){
+			$http.post("formdesign/formdatadel", params).success(function(data){
+				if(cb) cb(data);
+			});
+		}
+	};
+}]);
+app.factory('UserService', [ '$http', function($http) {
+	return {
+		//
+		test: function(params, cb){
+			$http.post("formdesign/formdatadel", params).success(function(data){
+				if(cb) cb(data);
+			});
+		}
+	};
+}]);
 //用户管理-编辑用户
 app.controller('UserMgrEditUserCtrl',function($scope, $routeParams, $http, BaseInfoService) {
 	//新增or编辑
@@ -840,5 +1165,35 @@ app.controller('UserMgrListCtrl',function($scope, $routeParams, $http, ngTablePa
 			$scope.reload();
 		});
 	};
+	
+});
+//用户管理-录入用户
+app.controller('UserMgrInUserCtrl',
+		function($scope, $http, $routeParams, ngTableParams, 
+				CustomService, $rootScope) {
+	$rootScope.menu = "user";
+	
+});
+
+//
+app.controller('UserMgrListCtrl',
+		function($scope, $http, $routeParams, ngTableParams,
+				UserService, $rootScope) {
+	$rootScope.menu = "user";
+	
+});
+//用户管理-用户信息
+app.controller('UserMgrViewUserCtrl',
+		function($scope, $http, $routeParams, ngTableParams, 
+				CustomService, $rootScope) {
+	$rootScope.menu = "user";
+	
+});
+
+//
+app.controller('UserResetPwdCtrl',
+		function($scope, $http, $routeParams, ngTableParams, 
+				UserService, $rootScope) {
+	$rootScope.menu = "resetpwd";
 	
 });

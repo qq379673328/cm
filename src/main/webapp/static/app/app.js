@@ -53,12 +53,9 @@ app.controller('MainCtrl', function($scope, $location) {
 	$scope.to = function(url){
 		$location.path(url);
 	};
-});
-
-app.controller('IndexCtrl', function($scope, $routeParams) {
 	
 });
 
-app.controller('CustomMgrCtrl', function($scope, $routeParams) {
-	
+app.controller('IndexCtrl', function($scope, $routeParams, $rootScope) {
+	$rootScope.menu = "#";
 });
