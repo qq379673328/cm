@@ -54,7 +54,7 @@ public class UserUtil {
 				return (TUser)session.getAttribute(SESSION_NAME_USER);
 			}
 		}else{
-			return null;
+			return new TUser();
 		}
 	}
 

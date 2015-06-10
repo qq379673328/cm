@@ -59,7 +59,7 @@
 			<a class="common">我的客户</a>
 			
 		</div>
-		<table>
+		<table class="my-table" ng-table="tableParams" template-pagination="custom/pager">
 			<thead>
 				<tr>
 					<th>客户来源</th>
@@ -74,27 +74,19 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr>
-					<td>广告呼入</td>
-					<td><a class="link" href="#custommgr/viewcustom/1">北京双杰电气有限公司</a></td>
-					<td>张燕</td>
-					<td>136789998866</td>
-					<td>2</td>
-					<td>李华,周董</td>
-					<td>签约运作</td>
+				<tr ng-show="!customs"><td colspan="4">加载中...</td></tr>
+				<tr ng-repeat="item in customs" ng-class="{true:'tr-odd' , false: 'tr-even'}[$index%2 == 0]">
+					<td>{{ item.source }}</td>
+					<td>
+						<a class="link" 
+						href="#custommgr/viewcustom/{{item.id}}">{{ item.custom_name }}</a></td>
+					<td>{{ item.contact_name }}</td>
+					<td>{{ item.contact_cellphone == null ? item.contact_landline : item.contact_cellphone}}</td>
+					<td>待实现</td>
+					<td>{{ item.team }}</td>
+					<td>{{ item.state }}</td>
 					<td></td>
-					<td>2012-11-11</td>
-				</tr>
-				<tr>
-					<td>广告呼入</td>
-					<td>北京双杰电气有限公司</td>
-					<td>张燕</td>
-					<td>136789998866</td>
-					<td>2</td>
-					<td>李华,周董</td>
-					<td>签约运作</td>
-					<td></td>
-					<td>2012-11-11</td>
+					<td>{{ item.create_time | date : 'yyyy-MM-dd HH:mm '}}</td>
 				</tr>
 			</tbody>
 		</table>

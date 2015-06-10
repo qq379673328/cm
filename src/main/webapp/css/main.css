@@ -139,6 +139,7 @@ textarea{
 	text-align: center;
 	line-height: 45px;
 	border-right: 1px solid #B7D5DF;
+	border-bottom: 1px solid #B7D5DF;
 }
 .main .menus .index{
 	height: 31px;
@@ -302,18 +303,25 @@ textarea{
 	text-align: center;
 }
 .mytable table tbody .tr-odd{
+	background-color: #eee;
+}
+.mytable table tbody .tr-even{
+	background-color: #E2E2E2;
+}
+.mytable table tbody .td-odd{
 	width: 15%;
 	text-align: right;
 	color: #154FA3;
 	padding-right: 5px;
 	font-weight: bold;
 }
-.mytable table tbody .tr-even{
+.mytable table tbody .td-even{
 	width: 34%;
 	text-align: left;
 	padding-left: 5px;
 }
-.mytable table tbody tr td{}
+.mytable table tbody tr td{
+}
 .card{
 	display: inline-block;
 	width: 50px;
@@ -562,3 +570,12 @@ hr {
 .warn{
 	color: red;
 }
+
+/*valid*/
+.ng-valid{ border: 1px solid green; }
+.ng-invalid{ border: 1px solid red; }
+.ng-pristine{  }
+.ng-dirty{  }
+.ng-invalid-required{  }
+.ng-invalid-minlength{  }
+.ng-valid-max-length{  }

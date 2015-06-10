@@ -5,12 +5,12 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import cn.com.sinosoft.core.action.CommonAction;
+import cn.com.sinosoft.core.action.BaseController;
 import cn.com.sinosoft.job.service.JobService;
 
 @Controller
 @RequestMapping("job")
-public class JobController extends CommonAction {
+public class JobController extends BaseController {
 
 	@Resource
 	JobService jobService;

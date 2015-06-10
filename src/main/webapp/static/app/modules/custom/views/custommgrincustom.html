@@ -6,8 +6,12 @@
 	&gt;
 	录入客户
 </div>
+<div ng-show="!isReady">
+	加载中...
+</div>
+<form name="form" novalidate="novalidate" ng-show="isReady">
+<input type="hidden" name="id" value="{{custom.id}}" />
 <div class="content">
-
 	<div class="mytable">
 		<div class="title">
 			<span>
@@ -17,85 +21,164 @@
 		<table>
 			<tbody>
 				<tr>
-					<td class="tr-odd">客户名称：</td>
-					<td class="tr-even" colspan="3">北京岩石科技</td>
-				</tr>
-				<tr>
-					<td class="tr-odd"><span class="warn">*</span>所属行业：</td>
-					<td class="tr-even" colspan="3">
-						<input name="" class="form-input" />
+					<td class="td-odd">客户名称：</td>
+					<td class="td-even" colspan="3">
+						<span ng-show="custom.id">
+							<span>{{ custom.customName }}</span>
+						</span>
+						<span ng-show="!custom.id">
+							<input 
+									name="customName" 
+									ng-model="custom.customName"
+									required
+									ng-maxlength="100"
+									class="form-input" />
+						</span>
 					</td>
 				</tr>
 				<tr>
-					<td class="tr-odd">客户来源：</td>
-					<td class="tr-even">广告呼入</td>
-					<td class="tr-odd">客户状态：</td>
-					<td class="tr-even">
-						<select>
-							<option>签约运作</option>
+					<td class="td-odd"><span class="warn">*</span>所属行业：</td>
+					<td class="td-even" colspan="3">
+						<input 
+								name="industry" 
+								ng-model="custom.industry"
+								required
+								ng-maxlength="200"
+								class="form-input" />
+					</td>
+				</tr>
+				<tr>
+					<td class="td-odd">客户来源：</td>
+					<td class="td-even">
+						<span ng-show="custom.id">
+							{{ custom.source }}
+						</span>
+						<span ng-show="!custom.id">
+							<input 
+									name="source" 
+									ng-model="custom.source"
+									ng-maxlength="100"
+									class="form-input" />
+						</span>
+					</td>
+					<td class="td-odd">客户状态：</td>
+					<td class="td-even">
+						<select 
+								name="state" 
+								ng-model="custom.state">
+							<option value="签约运作">签约运作</option>
 						</select>
 					</td>
 				</tr>
 				<tr>
-					<td class="tr-odd"><span class="warn">*</span>执行团队：</td>
-					<td class="tr-even" colspan="3">
-						<input name="" class="form-input" />
+					<td class="td-odd"><span class="warn">*</span>执行团队：</td>
+					<td class="td-even" colspan="3">
+						<input 
+									name="team" 
+									ng-model="custom.team"
+									required
+									ng-maxlength="40"
+									class="form-input" />
 						<div class="btn btn-lblue">添加成员</div>
 					</td>
 				</tr>
 				<tr>
-					<td class="tr-odd"><span class="warn">*</span>联系人名：</td>
-					<td class="tr-even">
-						<input name="" class="form-input" />
+					<td class="td-odd"><span class="warn">*</span>联系人名：</td>
+					<td class="td-even">
+						<input 
+									name="contactName"
+									ng-model="custom.contactName"
+									required
+									ng-maxlength="100"
+									class="form-input" />
 					</td>
-					<td class="tr-odd"><span class="warn">*</span>担任职务：</td>
-					<td class="tr-even">
-						<input name="" class="form-input" />
-					</td>
-				</tr>
-				<tr>
-					<td class="tr-odd"><span class="warn">*</span>座机号码：</td>
-					<td class="tr-even">
-						<input name="" class="form-input" />
-					</td>
-					<td class="tr-odd">手机号码：</td>
-					<td class="tr-even">
-						<input name="" class="form-input" />
-					</td>
-				</tr>
-				<tr>
-					<td class="tr-odd">Fax传真：</td>
-					<td class="tr-even">
-						<input name="" class="form-input" />
-					</td>
-					<td class="tr-odd">电子邮件：</td>
-					<td class="tr-even">
-						<input name="" class="form-input" />
+					<td class="td-odd"><span class="warn">*</span>担任职务：</td>
+					<td class="td-even">
+						<input 
+									name="contactDuty"
+									ng-model="custom.contactDuty"
+									required
+									ng-maxlength="100"
+									class="form-input" />
 					</td>
 				</tr>
 				<tr>
-					<td class="tr-odd">QQ：</td>
-					<td class="tr-even">
-						<input name="" class="form-input" />
+					<td class="td-odd"><span class="warn">*</span>座机号码：</td>
+					<td class="td-even">
+						<input 
+									name="contactLandline"
+									ng-model="custom.contactLandline"
+									required
+									ng-maxlength="100"
+									class="form-input" />
 					</td>
-					<td class="tr-odd">微信：</td>
-					<td class="tr-even">
-						<input name="" class="form-input" />
+					<td class="td-odd">手机号码：</td>
+					<td class="td-even">
+						<input 
+									name="contactCellphone"
+									ng-model="custom.contactCellphone"
+									ng-maxlength="100"
+									class="form-input" />
 					</td>
 				</tr>
 				<tr>
-					<td class="tr-odd">公司地址：</td>
-					<td class="tr-even">
-						<input name="" class="form-input" />
+					<td class="td-odd">Fax传真：</td>
+					<td class="td-even">
+						<input 
+									name="contactFax"
+									ng-model="custom.contactFax"
+									ng-maxlength="100"
+									class="form-input" />
 					</td>
-					<td class="tr-odd">网址：</td>
-					<td class="tr-even">
-						<input name="" class="form-input" />
+					<td class="td-odd">电子邮件：</td>
+					<td class="td-even">
+						<input 
+									name="contactEmail"
+									ng-model="custom.contactEmail"
+									type="email"
+									ng-maxlength="100"
+									class="form-input" />
 					</td>
 				</tr>
 				<tr>
-					<td class="tr-odd">客户资料：</td>
-					<td class="tr-even" colspan="3">
+					<td class="td-odd">QQ：</td>
+					<td class="td-even">
+						<input 
+									name="contactQq"
+									ng-model="custom.contactQq"
+									ng-maxlength="100"
+									class="form-input" />
+					</td>
+					<td class="td-odd">微信：</td>
+					<td class="td-even">
+						<input 
+									name="contactWeixin"
+									ng-model="custom.contactWeixin"
+									ng-maxlength="100"
+									class="form-input" />
+					</td>
+				</tr>
+				<tr>
+					<td class="td-odd">公司地址：</td>
+					<td class="td-even">
+						<input 
+									name="contactAddress"
+									ng-model="custom.contactAddress"
+									ng-maxlength="200"
+									class="form-input" />
+					</td>
+					<td class="td-odd">网址：</td>
+					<td class="td-even">
+						<input 
+									name="contactWebsite"
+									ng-model="custom.contactWebsite"
+									ng-maxlength="100"
+									class="form-input" />
+					</td>
+				</tr>
+				<tr>
+					<td class="td-odd">客户资料：</td>
+					<td class="td-even" colspan="3">
 						<div class="attach">
 							<a>北京.doc</a>
 							<br/>
@@ -105,9 +188,12 @@
 					</td>
 				</tr>
 				<tr>
-					<td class="tr-odd">公司介绍：</td>
-					<td class="tr-even" colspan="3">
-						<textarea class="textarea"></textarea>
+					<td class="td-odd">公司介绍：</td>
+					<td class="td-even" colspan="3">
+						<textarea 	class="textarea"
+									name=companyProfile
+									ng-model="custom.companyProfile"
+									ng-maxlength="500"></textarea>
 					</td>
 				</tr>
 			</tbody>
@@ -130,10 +216,16 @@
 				</tr>
 				<tr>
 					<td>
-						<div class="btn btn-lblue">保存客户信息并添加新合同</div>
+						<div class="btn btn-lblue" ng-show="!isrequest" ng-click="saveAndAddContract();">保存客户信息并添加新合同</div>
+						<div class="btn btn-blank" ng-show="isrequest">操作中...</div>
 					</td>
 					<td>
-						<div class="btn btn-lblue">保存客户信息</div>
+						<div class="btn btn-lblue" ng-show="!isrequest" ng-click="save();">保存客户信息</div>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<div core-formresult></div>
 					</td>
 				</tr>
 			</tbody>
@@ -141,3 +233,5 @@
 	</div>
 	
 </div>
+
+</form>

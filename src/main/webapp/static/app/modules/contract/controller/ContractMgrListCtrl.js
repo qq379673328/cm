@@ -1,4 +1,3 @@
-
 //
 app.controller('ContractMgrListCtrl',
 		function($scope, $http, $routeParams, ngTableParams,

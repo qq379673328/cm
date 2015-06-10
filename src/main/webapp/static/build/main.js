@@ -128,6 +128,10 @@ app.config([ '$routeProvider', function($routeProvider) {
 		templateUrl : fdRouterViewsBasepath + 'contract/views/contractmgrincontract.html',
 		controller : 'ContractMgrInContractCtrl'
 	})
+	.when('/contractmgr/incontract/:customid', {//合同管理-为指定客户录入合同
+		templateUrl : fdRouterViewsBasepath + 'contract/views/contractmgrincontract.html',
+		controller : 'ContractMgrInContractCtrl'
+	})
 	.when('/contractmgr/editcustom/:id', {//合同管理-编辑合同
 		templateUrl : fdRouterViewsBasepath + 'contract/views/contractmgrincontract.html',
 		controller : 'ContractMgrInContractCtrl'
@@ -284,7 +288,8 @@ angular.module('datepicker', []).directive('datepicker',[function(){
         }
     };
 }]);
-app.factory('BaseInfoService', [ '$http', function($http) {
+app.factory('BaseInfoService', ["$http", "ngTableParams", 
+    function($http, ngTableParams) {
 	var userInfo = null;
 	
 	return {
@@ -297,7 +302,47 @@ app.factory('BaseInfoService', [ '$http', function($http) {
 					if(data) cb(data);
 				});
 			}
+		},
+		//进行分页查询
+		pageSearch: function(sc){
+			var $scope = sc["$scope"],
+				p = sc["params"],
+				url = sc["url"],
+				page = sc["page"];
+			//每页默认数
+			if(page == undefined){
+				page = 10;
+			}
+			var items = sc["items"];
+			if(!p){
+				$scope[p] = {};
+			}
+			
+			var ret = new ngTableParams({
+				page: 0,
+				count: page
+			}, {
+				total: 0,
+				getData: function($defer, params) {
+					if(!$scope[p].isreload){
+						$scope[p].page = params.page();
+						$scope[p].rows = params.count();
+						$scope[p].total = params.total();
+					}else{
+						$scope[p].isreload = false;
+					}
+					$http.post(url, $scope[p]).success(function(data){
+						var total = data.total;
+						$scope[p].total = total;
+						params.total(total);
+						//$defer.resolve(data.rows);
+						$scope[items] = data.rows;
+					});
+				}
+			});
+			return ret;
 		}
+		
 	};
 }]);
 //合同管理-录入合同
@@ -307,7 +352,6 @@ app.controller('ContractMgrInContractCtrl',
 	$rootScope.menu = "contract";
 	
 });
-
 //
 app.controller('ContractMgrListCtrl',
 		function($scope, $http, $routeParams, ngTableParams,
@@ -335,15 +379,67 @@ app.factory('ContractService', [ '$http', function($http) {
 //客户管理-录入客户
 app.controller('CustomMgrInCustomCtrl',
 		function($scope, $http, $routeParams, ngTableParams,
-				CustomService, $rootScope) {
+				CustomService, $rootScope, $location) {
 	$rootScope.menu = "custom";
+	
+	var customId = $routeParams.id;
+	$scope.isReady = false;
+	
+	if(customId){//编辑
+		//请求客户信息
+		$http.post("custom/getCustomById", {id: customId}).success(function(data){
+			$scope.custom = data;
+			$scope.isReady = true;
+		});
+	}else{//新增
+		$scope.isReady = true;
+	}
+	
+	//保存客户信息
+	$scope.save = function(){
+		validFormAndSubmit();
+	};
+	//保存客户信息并且添加新合同
+	$scope.saveAndAddContract = function(){
+		validFormAndSubmit(function(data){
+			if(data.success == "1"){//成功
+				var customId = null;
+				if($scope.custom.id){
+					
+				}
+				$location.path("#contractmgr/incontract/" + $scope.custom.id);
+			}
+		});
+	};
+	
+	//验证表单并提交
+	function validFormAndSubmit(cb){
+		if($scope.form.$valid){
+			$scope.isrequest = true;
+			$http.post("custom/edit", $scope.custom).success(function(data){
+				$scope.formresult = data;
+				$scope.isrequest = false;
+				if(cb) cb(data);
+			});
+		}
+
+	};
 	
 });
 //客户管理-列表页
 app.controller('CustomMgrListCtrl',
 		function($scope, $http, $routeParams, ngTableParams,
-				CustomService, $rootScope) {
+				CustomService, $rootScope, BaseInfoService) {
 	$rootScope.menu = "custom";
+	
+	$scope.qp = {username: "1"};
+	
+	$scope.tableParams = BaseInfoService.pageSearch({
+		$scope: $scope,
+		params: "qp",
+		items: "customs",
+		url: "custom/list"
+	});
 	
 });
 //客户管理-客户信息
@@ -943,6 +1039,13 @@ app.factory('JobService', [ '$http', function($http) {
 		}
 	};
 }]);
+//绩效管理
+app.controller('PerformanceMgrListCtrl',
+		function($scope, $http, $routeParams, ngTableParams,
+				PerformanceService, $rootScope) {
+	$rootScope.menu = "performance";
+	
+});
 app.factory('PerformanceService', [ '$http', function($http) {
 	return {
 		//
@@ -953,13 +1056,6 @@ app.factory('PerformanceService', [ '$http', function($http) {
 		}
 	};
 }]);
-//绩效管理
-app.controller('PerformanceMgrListCtrl',
-		function($scope, $http, $routeParams, ngTableParams,
-				PerformanceService, $rootScope) {
-	$rootScope.menu = "performance";
-	
-});
 //公告管理-录入公告
 app.controller('PubMgrInPubCtrl',
 		function($scope, $http, $routeParams, ngTableParams, 
@@ -985,29 +1081,7 @@ app.factory('PubService', [ '$http', function($http) {
 		}
 	};
 }]);
-//简历管理-录入简历
-app.controller('ResumeMgrInResumeCtrl',
-		function($scope, $http, $routeParams, ngTableParams,
-				CustomService, $rootScope) {
-	$rootScope.menu = "resume";
-	
-});
-
-//
-app.controller('ResumeMgrListCtrl',
-		function($scope, $http, $routeParams, ngTableParams,
-				ResumeService, $rootScope) {
-	$rootScope.menu = "resume";
-	
-});
-//简历管理-简历信息
-app.controller('ResumeMgrViewResumeCtrl',
-		function($scope, $http, $routeParams, ngTableParams, 
-				CustomService, $rootScope) {
-	$rootScope.menu = "resume";
-	
-});
-app.factory('ResumeService', [ '$http', function($http) {
+app.factory('TeamService', [ '$http', function($http) {
 	return {
 		//
 		test: function(params, cb){
@@ -1032,17 +1106,29 @@ app.controller('TeamMgrMyInfoCtrl',
 	$rootScope.menu = "team";
 	
 });
-app.factory('TeamService', [ '$http', function($http) {
-	return {
-		//
-		test: function(params, cb){
-			$http.post("formdesign/formdatadel", params).success(function(data){
-				if(cb) cb(data);
-			});
-		}
-	};
-}]);
-app.factory('UserService', [ '$http', function($http) {
+//简历管理-录入简历
+app.controller('ResumeMgrInResumeCtrl',
+		function($scope, $http, $routeParams, ngTableParams,
+				CustomService, $rootScope) {
+	$rootScope.menu = "resume";
+	
+});
+
+//
+app.controller('ResumeMgrListCtrl',
+		function($scope, $http, $routeParams, ngTableParams,
+				ResumeService, $rootScope) {
+	$rootScope.menu = "resume";
+	
+});
+//简历管理-简历信息
+app.controller('ResumeMgrViewResumeCtrl',
+		function($scope, $http, $routeParams, ngTableParams, 
+				CustomService, $rootScope) {
+	$rootScope.menu = "resume";
+	
+});
+app.factory('ResumeService', [ '$http', function($http) {
 	return {
 		//
 		test: function(params, cb){
@@ -1197,3 +1283,13 @@ app.controller('UserResetPwdCtrl',
 	$rootScope.menu = "resetpwd";
 	
 });
+app.factory('UserService', [ '$http', function($http) {
+	return {
+		//
+		test: function(params, cb){
+			$http.post("formdesign/formdatadel", params).success(function(data){
+				if(cb) cb(data);
+			});
+		}
+	};
+}]);
