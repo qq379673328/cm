@@ -34,9 +34,12 @@ public class LoginController {
 	public String login(HttpServletRequest request, 
 			@RequestParam(required=false)String username,
 			@RequestParam(required=false)String password) {
-		password = new Md5PwdEncoder().encodePassword(password);
+		username = "admin";
+		password = "111";
+		
+		//password = new Md5PwdEncoder().encodePassword(password);
 		// 获取当前的Subject
-	    UsernamePasswordToken token = new UsernamePasswordToken(username,password);
+	    UsernamePasswordToken token = new UsernamePasswordToken(username, password);
 		Subject currentUser = SecurityUtils.getSubject();
 		try {
 			currentUser.login(token);//调用此方法,会执行shiro filter-UserReamlm.java-doGetAuthenticationInfo认证

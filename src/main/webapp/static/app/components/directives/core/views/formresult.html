@@ -1,0 +1,13 @@
+<div class="formresult" ng-class="{true: 'formresult-success', false: 'formresult-error'}[formresult.success == 1]"
+	 ng-show="formresult">
+	<div ng-click="formresult=null;" class="fa fa-times close"></div>
+	
+	<div ng-show="formresult.success == 1">
+		<i class="fa fa-check-circle"></i>
+		<span>{{formresult.message != null ? formresult.message : "操作成功"}}</span>
+	</div>
+	<div ng-show="formresult.success == 0">
+		<i class="fa fa-exclamation-triangle"></i>
+		<span>{{formresult.message != null ? formresult.message : "操作失败"}}</span>
+	</div>
+</div>

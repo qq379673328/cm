@@ -61,7 +61,7 @@ public class UserRealm extends AuthorizingRealm {
 		
 		UsernamePasswordToken uToken = (UsernamePasswordToken)token;
 		String username = uToken.getUsername();
-        TUser user = null;
+        TUser user = new TUser();
         if(user == null) {//用户名或者密码错误
             throw new AuthenticationException();
         }
@@ -71,8 +71,8 @@ public class UserRealm extends AuthorizingRealm {
         
         //交给AuthenticatingRealm使用CredentialsMatcher进行密码匹配，如果觉得人家的不好可以自定义实现
         SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
-        		username, //用户名
-        		user.getPassword(), //密码
+        		"admin", //用户名
+        		"111", //密码
                 getName()
         );
         return authenticationInfo;

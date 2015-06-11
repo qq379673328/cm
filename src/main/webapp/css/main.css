@@ -509,6 +509,15 @@ textarea{
 	margin: 3px;
 	transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
 }
+.form-select{
+	height: 34px;
+	border-radius: 4px;
+	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+	-webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+	margin: 3px;
+	transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
 .form-table td{
 	border: none;
 }
@@ -570,7 +579,6 @@ hr {
 .warn{
 	color: red;
 }
-
 /*valid*/
 .ng-valid{ border: 1px solid green; }
 .ng-invalid{ border: 1px solid red; }
@@ -579,3 +587,45 @@ hr {
 .ng-invalid-required{  }
 .ng-invalid-minlength{  }
 .ng-valid-max-length{  }
+/*dialog*/
+.dialog-wrap{
+	position: fixed;
+	top: 0px;
+	right: 0px;
+	height: 100%;
+	z-index: 999;
+	background-color: #666262;
+    filter:Alpha(opacity=50);
+    *zoom:1;
+    padding: 10px;
+}
+.dialog{
+	margin: 0 auto;
+	color: #fff;
+}
+.ok,.close{
+	cursor: pointer;
+	height: 30px;
+	line-height: 30px;
+}
+.ok:hover,.close:hover{
+	color: #D3BDBD;
+}
+/*widget-team*/
+.widget-team{
+	
+}
+.widget-team .teams{
+	width: 70%;
+	display: block;
+	float: left;
+	border: 1px solid #905C5C;
+	padding: 5px;
+}
+.widget-team .team{
+	margin-right: 5px;
+	float: left;
+	padding: 5px;
+}
+.widget-team .teams-btn{
+}

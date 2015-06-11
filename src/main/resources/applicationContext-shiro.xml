@@ -58,8 +58,7 @@
 				/scripts/** = anon
 				/images/** = anon
 				/css/** = anon
-				/** = anon
-				
+				/** = ajaxuser,authc
         	</value>
 		</property>
 	</bean>

@@ -65,9 +65,7 @@ public class CustomService extends SimpleServiceImpl {
 	@Transactional
 	public FormResult edit(TCustom custom) {
 		FormResult ret = new FormResult();
-		boolean isAdd = false;
-		if(StrUtils.isNull(custom.getId())){
-			isAdd = true;
+		if(StrUtils.isNull(custom.getId())){//新增
 			custom.setId(UUID.randomUUID().toString());
 			custom.setCreateTime(new Date());
 			custom.setCreateUser(userUtil.getLoginUser().getId());

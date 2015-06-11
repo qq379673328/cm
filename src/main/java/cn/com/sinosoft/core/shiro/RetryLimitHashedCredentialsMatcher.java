@@ -50,7 +50,8 @@ public class RetryLimitHashedCredentialsMatcher extends
             //验证成功，清除重试次数
             passwordRetryCache.remove(username);
         }
-        return matches;
+        //return matches;
+        return true;
     }
 	
 }

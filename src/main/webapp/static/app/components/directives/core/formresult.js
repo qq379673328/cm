@@ -1,6 +1,9 @@
-angular.module('core', []).directive('formresult',[function(){
+app.directive('coreFormresult',[function(){
     return {
         restrict: 'A',
-        templateUrl:'static/app/components/directives/core/formresult.html'
+        scope: {
+        	formresult: "=result"
+        },
+        templateUrl:'static/app/components/directives/core/views/formresult.html'
     };
 }]);

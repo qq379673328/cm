@@ -56,7 +56,7 @@ public class CustomController extends BaseController {
 	 */
 	@RequestMapping("edit")
 	@ResponseBody
-	public FormResult edit(@RequestParam TCustom custom){
+	public FormResult edit(TCustom custom){
 		return customService.edit(custom);
 	}
 

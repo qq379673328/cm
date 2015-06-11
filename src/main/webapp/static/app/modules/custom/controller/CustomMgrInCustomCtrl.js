@@ -15,6 +15,7 @@ app.controller('CustomMgrInCustomCtrl',
 		});
 	}else{//新增
 		$scope.isReady = true;
+		$scope.custom = {state: "潜在客户"};
 	}
 	
 	//保存客户信息
@@ -25,11 +26,8 @@ app.controller('CustomMgrInCustomCtrl',
 	$scope.saveAndAddContract = function(){
 		validFormAndSubmit(function(data){
 			if(data.success == "1"){//成功
-				var customId = null;
-				if($scope.custom.id){
-					
-				}
-				$location.path("#contractmgr/incontract/" + $scope.custom.id);
+				var customId = data.data;
+				$location.path("#contractmgr/incontract/" + customId);
 			}
 		});
 	};

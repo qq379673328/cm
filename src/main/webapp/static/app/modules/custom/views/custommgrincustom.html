@@ -63,23 +63,28 @@
 					</td>
 					<td class="td-odd">客户状态：</td>
 					<td class="td-even">
-						<select 
-								name="state" 
+						<select	class="form-select"
+								name="state"
 								ng-model="custom.state">
-							<option value="签约运作">签约运作</option>
+							<option value="潜在客户">潜在客户</option>
+							<option value="签约客户">签约客户</option>
+							<option value="签约暂停">签约暂停</option>
+							<option value="签约终止">签约终止</option>
 						</select>
 					</td>
 				</tr>
 				<tr>
 					<td class="td-odd"><span class="warn">*</span>执行团队：</td>
 					<td class="td-even" colspan="3">
-						<input 
+						<!-- <input 
 									name="team" 
 									ng-model="custom.team"
 									required
 									ng-maxlength="40"
 									class="form-input" />
-						<div class="btn btn-lblue">添加成员</div>
+						<div class="btn btn-lblue">添加成员</div>  -->
+						
+						<div core-teamselect bindteam="custom.team"></div>
 					</td>
 				</tr>
 				<tr>
@@ -225,7 +230,7 @@
 				</tr>
 				<tr>
 					<td colspan="2">
-						<div core-formresult></div>
+						<div core-formresult result="formresult"></div>
 					</td>
 				</tr>
 			</tbody>

@@ -6,6 +6,8 @@
  */
 package cn.com.sinosoft.core.util;
 
+import java.util.Date;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -31,6 +33,10 @@ public class UserUtil {
 	public static final String USERTYPE_FORMADMIN = "2";//表单管理员
 	public static final String USERTYPE_REPORTUSER = "3";//上报人员
 	
+	private TUser getTestUser(){
+		return new TUser("1", "admin", "测试用户", "1", "1", "1", "1", new Date(), new Date());
+	}
+	
 	/**
 	 * 获取当前登陆的用户
 	 * 
@@ -47,14 +53,15 @@ public class UserUtil {
 				if(loginName == null){
 					return null;
 				}
-				TUser user = null;
+				TUser user = getTestUser();
+				
 				session.setAttribute(SESSION_NAME_USER, user);
 				return user;
 			}else{
 				return (TUser)session.getAttribute(SESSION_NAME_USER);
 			}
 		}else{
-			return new TUser();
+			return null;
 		}
 	}
 

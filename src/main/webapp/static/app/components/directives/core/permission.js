@@ -1,4 +1,4 @@
-angular.module('core', []).directive('permission', ["BaseInfoService", function(BaseInfoService){
+app.directive('corePermission', ["BaseInfoService", function(BaseInfoService){
     return {
         restrict: 'A',
         link: function(scope, element, attrs, ctrl) {

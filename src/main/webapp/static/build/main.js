@@ -218,13 +218,16 @@ app.filter('trustHtml', function ($sce) {
     };
 });
 
-angular.module('core', []).directive('formresult',[function(){
+app.directive('coreFormresult',[function(){
     return {
         restrict: 'A',
-        templateUrl:'static/app/components/directives/core/formresult.html'
+        scope: {
+        	formresult: "=result"
+        },
+        templateUrl:'static/app/components/directives/core/views/formresult.html'
     };
 }]);
-angular.module('core', []).directive('permission', ["BaseInfoService", function(BaseInfoService){
+app.directive('corePermission', ["BaseInfoService", function(BaseInfoService){
     return {
         restrict: 'A',
         link: function(scope, element, attrs, ctrl) {
@@ -267,6 +270,45 @@ angular.module('core', []).directive('permission', ["BaseInfoService", function(
             	
         	});
         	
+        }
+    };
+}]);
+//执行团队选择指令
+app.directive('coreTeamselect', ["$http", function($http){
+    return {
+        restrict: 'A',
+        replace: true,
+        scope: {
+        	te: "=bindteam"
+        },
+        templateUrl: 'static/app/components/directives/core/views/teamselect.html',
+        link: function($scope, $element, attrs) {
+        	$scope.selectteams = [];
+        	$scope.teams = [];
+        	$http.post("team/getSelectTeams", {}).success(function(data){
+        		$scope.teams = data;
+        	});
+  
+        	//添加
+        	$scope.addItem = function(team, index){
+        		$scope.teams.splice(index, 1);
+        		$scope.selectteams.push(team);
+        		resetTe();
+        	};
+        	//移除
+        	$scope.removeItem = function(team, index){
+        		$scope.selectteams.splice(index, 1);
+        		$scope.teams.push(team);
+        		resetTe();
+        	};
+        	function resetTe(){
+        		var arr = [];
+        		var teams = $scope.selectteams;
+        		for(var i in teams){
+        			arr.push(teams[i]["id"]);
+        		}
+        		$scope.te = arr.join(",");
+        	}
         }
     };
 }]);
@@ -393,6 +435,7 @@ app.controller('CustomMgrInCustomCtrl',
 		});
 	}else{//新增
 		$scope.isReady = true;
+		$scope.custom = {state: "潜在客户"};
 	}
 	
 	//保存客户信息
@@ -403,11 +446,8 @@ app.controller('CustomMgrInCustomCtrl',
 	$scope.saveAndAddContract = function(){
 		validFormAndSubmit(function(data){
 			if(data.success == "1"){//成功
-				var customId = null;
-				if($scope.custom.id){
-					
-				}
-				$location.path("#contractmgr/incontract/" + $scope.custom.id);
+				var customId = data.data;
+				$location.path("#contractmgr/incontract/" + customId);
 			}
 		});
 	};
@@ -1081,7 +1121,29 @@ app.factory('PubService', [ '$http', function($http) {
 		}
 	};
 }]);
-app.factory('TeamService', [ '$http', function($http) {
+//简历管理-录入简历
+app.controller('ResumeMgrInResumeCtrl',
+		function($scope, $http, $routeParams, ngTableParams,
+				CustomService, $rootScope) {
+	$rootScope.menu = "resume";
+	
+});
+
+//
+app.controller('ResumeMgrListCtrl',
+		function($scope, $http, $routeParams, ngTableParams,
+				ResumeService, $rootScope) {
+	$rootScope.menu = "resume";
+	
+});
+//简历管理-简历信息
+app.controller('ResumeMgrViewResumeCtrl',
+		function($scope, $http, $routeParams, ngTableParams, 
+				CustomService, $rootScope) {
+	$rootScope.menu = "resume";
+	
+});
+app.factory('ResumeService', [ '$http', function($http) {
 	return {
 		//
 		test: function(params, cb){
@@ -1106,29 +1168,47 @@ app.controller('TeamMgrMyInfoCtrl',
 	$rootScope.menu = "team";
 	
 });
-//简历管理-录入简历
-app.controller('ResumeMgrInResumeCtrl',
-		function($scope, $http, $routeParams, ngTableParams,
+app.factory('TeamService', [ '$http', function($http) {
+	return {
+		//
+		test: function(params, cb){
+			$http.post("formdesign/formdatadel", params).success(function(data){
+				if(cb) cb(data);
+			});
+		}
+	};
+}]);
+//用户管理-录入用户
+app.controller('UserMgrInUserCtrl',
+		function($scope, $http, $routeParams, ngTableParams, 
 				CustomService, $rootScope) {
-	$rootScope.menu = "resume";
+	$rootScope.menu = "user";
 	
 });
 
 //
-app.controller('ResumeMgrListCtrl',
+app.controller('UserMgrListCtrl',
 		function($scope, $http, $routeParams, ngTableParams,
-				ResumeService, $rootScope) {
-	$rootScope.menu = "resume";
+				UserService, $rootScope) {
+	$rootScope.menu = "user";
 	
 });
-//简历管理-简历信息
-app.controller('ResumeMgrViewResumeCtrl',
+//用户管理-用户信息
+app.controller('UserMgrViewUserCtrl',
 		function($scope, $http, $routeParams, ngTableParams, 
 				CustomService, $rootScope) {
-	$rootScope.menu = "resume";
+	$rootScope.menu = "user";
 	
 });
-app.factory('ResumeService', [ '$http', function($http) {
+
+//
+app.controller('UserResetPwdCtrl',
+		function($scope, $http, $routeParams, ngTableParams, 
+				UserService, $rootScope) {
+	$rootScope.menu = "resetpwd";
+	
+});
+app.factory('UserService', [ '$http', function($http) {
 	return {
 		//
 		test: function(params, cb){
@@ -1253,43 +1333,3 @@ app.controller('UserMgrListCtrl',function($scope, $routeParams, $http, ngTablePa
 	};
 	
 });
-//用户管理-录入用户
-app.controller('UserMgrInUserCtrl',
-		function($scope, $http, $routeParams, ngTableParams, 
-				CustomService, $rootScope) {
-	$rootScope.menu = "user";
-	
-});
-
-//
-app.controller('UserMgrListCtrl',
-		function($scope, $http, $routeParams, ngTableParams,
-				UserService, $rootScope) {
-	$rootScope.menu = "user";
-	
-});
-//用户管理-用户信息
-app.controller('UserMgrViewUserCtrl',
-		function($scope, $http, $routeParams, ngTableParams, 
-				CustomService, $rootScope) {
-	$rootScope.menu = "user";
-	
-});
-
-//
-app.controller('UserResetPwdCtrl',
-		function($scope, $http, $routeParams, ngTableParams, 
-				UserService, $rootScope) {
-	$rootScope.menu = "resetpwd";
-	
-});
-app.factory('UserService', [ '$http', function($http) {
-	return {
-		//
-		test: function(params, cb){
-			$http.post("formdesign/formdatadel", params).success(function(data){
-				if(cb) cb(data);
-			});
-		}
-	};
-}]);
