@@ -18,12 +18,13 @@ public class TeamController extends BaseController {
 	
 	/**
 	 * 获取团队选择的团队
+	 * @param ids 已经选择的团队
 	 * @return
 	 */
 	@RequestMapping("getSelectTeams")
 	@ResponseBody
-	public Object getSelectTeams(){
-		return teamService.getSelectTeams();
+	public Object getSelectTeams(String ids){
+		return teamService.getSelectTeams(ids);
 	}
 
 }

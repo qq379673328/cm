@@ -50,9 +50,9 @@
 				<tr>
 					<td class="td-odd">客户来源：</td>
 					<td class="td-even">
-						<span ng-show="custom.id">
+						<!-- <span ng-show="custom.id">
 							{{ custom.source }}
-						</span>
+						</span> -->
 						<span ng-show="!custom.id">
 							<input 
 									name="source" 
@@ -84,7 +84,7 @@
 									class="form-input" />
 						<div class="btn btn-lblue">添加成员</div>  -->
 						
-						<div core-teamselect bindteam="custom.team"></div>
+						<div core-teamselect bindteam="custom.team" teamselect="teamselect"></div>
 					</td>
 				</tr>
 				<tr>

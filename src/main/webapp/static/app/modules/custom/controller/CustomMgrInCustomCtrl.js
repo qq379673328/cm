@@ -12,10 +12,20 @@ app.controller('CustomMgrInCustomCtrl',
 		$http.post("custom/getCustomById", {id: customId}).success(function(data){
 			$scope.custom = data;
 			$scope.isReady = true;
+			
+			//请求团队信息ss
+			$http.post("team/getSelectTeams", {ids: $scope.custom.team}).success(function(data){
+				$scope.teamselect = data;
+			});
 		});
 	}else{//新增
 		$scope.isReady = true;
 		$scope.custom = {state: "潜在客户"};
+		
+		//请求团队信息
+		$http.post("team/getSelectTeams", {}).success(function(data){
+			$scope.teamselect = data;
+		});
 	}
 	
 	//保存客户信息
