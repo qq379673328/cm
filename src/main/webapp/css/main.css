@@ -545,6 +545,8 @@ hr {
 	padding : 5px;
 	line-height: 34px;
 	width: 80%;
+	position: fixed;
+	bottom: 0px;
 }
 .formresult-success{
 	background-color: #dff0d8;
@@ -558,7 +560,7 @@ hr {
 }
 .formresult .close{
 	cursor: pointer;
-	color: #fff;
+	color: #492727;
 	width: 50px;
 	height: 20px;
 	line-height: 20px;

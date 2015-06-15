@@ -3,7 +3,7 @@
 		<div class="team formresult-success">
 			<span class="fa fa-user">&nbsp;</span>
 		</div>
-		<div class="team formresult-success" ng-repeat="selectteam in selectteams">
+		<div class="team formresult-success" ng-repeat="selectteam in teamselect.select">
 			<span
 				ng-click="removeItem(selectteam, $index);" 
 				class="fa fa-times close">
@@ -17,7 +17,7 @@
 			<input class="form-input" ng-model="filter" />
 			<div ng-click="showdialog=false;" 
 				class="fa fa-2x fa-times close"></div>
-			<div ng-repeat="team in teams"
+			<div ng-repeat="team in teamselect.unSelect"
 					ng-show="filter == null || filter == '' || team.name.indexOf(filter) != -1"
 				>
 				<span

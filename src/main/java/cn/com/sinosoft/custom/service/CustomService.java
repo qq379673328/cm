@@ -71,12 +71,13 @@ public class CustomService extends SimpleServiceImpl {
 			custom.setCreateUser(userUtil.getLoginUser().getId());
 			custom.setLastUpdateTime(new Date());
 			custom.setLastUpdateUser(userUtil.getLoginUser().getId());
-		}else{
+			dao.save(custom);
+		}else{//更新
 			custom.setLastUpdateTime(new Date());
 			custom.setLastUpdateUser(userUtil.getLoginUser().getId());
+			dao.update(custom);
 		}
 		
-		dao.save(custom);
 		ret.setSuccess(FormResult.SUCCESS);
 		ret.setData(custom.getId());
 		return ret;

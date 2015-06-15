@@ -279,31 +279,32 @@ app.directive('coreTeamselect', ["$http", function($http){
         restrict: 'A',
         replace: true,
         scope: {
-        	te: "=bindteam"
+        	te: "=bindteam",
+        	teamselect: "=teamselect",
         },
         templateUrl: 'static/app/components/directives/core/views/teamselect.html',
         link: function($scope, $element, attrs) {
-        	$scope.selectteams = [];
-        	$scope.teams = [];
-        	$http.post("team/getSelectTeams", {}).success(function(data){
-        		$scope.teams = data;
-        	});
-  
+        	/*$scope.selectteams = [];
+        	$scope.teams = [];*/
+        	/*$http.post("team/getSelectTeams", {ids: $scope.te}).success(function(data){
+        		$scope.teams = data.unSelect;
+        		$scope.selectteams = data.select;
+        	});*/
         	//添加
         	$scope.addItem = function(team, index){
-        		$scope.teams.splice(index, 1);
-        		$scope.selectteams.push(team);
+        		$scope.teamselect.unSelect.splice(index, 1);
+        		$scope.teamselect.select.push(team);
         		resetTe();
         	};
         	//移除
         	$scope.removeItem = function(team, index){
-        		$scope.selectteams.splice(index, 1);
-        		$scope.teams.push(team);
+        		$scope.teamselect.select.splice(index, 1);
+        		$scope.teamselect.unSelect.push(team);
         		resetTe();
         	};
         	function resetTe(){
         		var arr = [];
-        		var teams = $scope.selectteams;
+        		var teams = $scope.teamselect.select;
         		for(var i in teams){
         			arr.push(teams[i]["id"]);
         		}
@@ -418,6 +419,16 @@ app.factory('ContractService', [ '$http', function($http) {
 		}
 	};
 }]);
+app.factory('CustomService', [ '$http', function($http) {
+	return {
+		//
+		test: function(params, cb){
+			$http.post("formdesign/formdatadel", params).success(function(data){
+				if(cb) cb(data);
+			});
+		}
+	};
+}]);
 //客户管理-录入客户
 app.controller('CustomMgrInCustomCtrl',
 		function($scope, $http, $routeParams, ngTableParams,
@@ -432,10 +443,20 @@ app.controller('CustomMgrInCustomCtrl',
 		$http.post("custom/getCustomById", {id: customId}).success(function(data){
 			$scope.custom = data;
 			$scope.isReady = true;
+			
+			//请求团队信息ss
+			$http.post("team/getSelectTeams", {ids: $scope.custom.team}).success(function(data){
+				$scope.teamselect = data;
+			});
 		});
 	}else{//新增
 		$scope.isReady = true;
 		$scope.custom = {state: "潜在客户"};
+		
+		//请求团队信息
+		$http.post("team/getSelectTeams", {}).success(function(data){
+			$scope.teamselect = data;
+		});
 	}
 	
 	//保存客户信息
@@ -489,16 +510,6 @@ app.controller('CustomMgrViewCustomCtrl',
 	$rootScope.menu = "custom";
 	
 });
-app.factory('CustomService', [ '$http', function($http) {
-	return {
-		//
-		test: function(params, cb){
-			$http.post("formdesign/formdatadel", params).success(function(data){
-				if(cb) cb(data);
-			});
-		}
-	};
-}]);
 
 //表单数据列表
 app.controller('FormDataListCtrl',function($scope, $http, $routeParams, 
@@ -1015,6 +1026,16 @@ app.factory('FormDesignService', [
 			};
 		} ]);
 
+app.factory('InvoiceService', [ '$http', function($http) {
+	return {
+		//
+		test: function(params, cb){
+			$http.post("formdesign/formdatadel", params).success(function(data){
+				if(cb) cb(data);
+			});
+		}
+	};
+}]);
 //发票管理-录入发票
 app.controller('InvoiceMgrInInvoiceCtrl',
 		function($scope, $http, $routeParams, ngTableParams,
@@ -1037,16 +1058,6 @@ app.controller('InvoiceMgrViewInvoiceCtrl',
 	$rootScope.menu = "invoice";
 	
 });
-app.factory('InvoiceService', [ '$http', function($http) {
-	return {
-		//
-		test: function(params, cb){
-			$http.post("formdesign/formdatadel", params).success(function(data){
-				if(cb) cb(data);
-			});
-		}
-	};
-}]);
 //职位管理-录入职位
 app.controller('JobMgrInJobCtrl',
 		function($scope, $http, $routeParams, ngTableParams, 

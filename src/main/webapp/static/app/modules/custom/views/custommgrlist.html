@@ -48,7 +48,7 @@
 	<div class="mytable">
 		<div class="title">
 			<span>总数 ：
-				<span class="highlight">{{total}}222</span>
+				<span class="highlight">{{total}}</span>
 			 	个
 			 </span>
 			
@@ -71,6 +71,7 @@
 					<th>客户状态</th>
 					<th>附件</th>
 					<th>创建时间</th>
+					<th></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -87,6 +88,10 @@
 					<td>{{ item.state }}</td>
 					<td></td>
 					<td>{{ item.create_time | date : 'yyyy-MM-dd HH:mm '}}</td>
+					
+					<td>
+						<a class="btn btn-lblue" href="#custommgr/editcustom/{{item.id}}">编辑</a>
+					</td>
 				</tr>
 			</tbody>
 		</table>
