@@ -279,6 +279,7 @@ textarea{
 	font-weight: bold;
 	font-size: 14px;
 	color: #fff;
+	cursor: pointer;
 }
 .mytable .title .spe{
 	color: #9E2424;

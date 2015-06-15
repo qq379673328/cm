@@ -8,6 +8,7 @@
 	<table-filter match-name="t_custom" match-catalog="cm"></table-filter>
 	<table-filter match-name="t_custom_communication" match-catalog="cm"></table-filter>
 	<table-filter match-name="t_custom_data" match-catalog="cm"></table-filter>
+	<table-filter match-name="t_custom_team" match-catalog="cm"></table-filter>
 	<table-filter match-name="t_invoice" match-catalog="cm"></table-filter>
 	<table-filter match-name="t_job" match-catalog="cm"></table-filter>
 	<table-filter match-name="t_pub" match-catalog="cm"></table-filter>

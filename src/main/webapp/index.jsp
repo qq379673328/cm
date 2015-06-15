@@ -14,7 +14,7 @@
 <title>表单设计系统</title>
 <base href="<%=basePath%>" />
 
-<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css" />
+<link rel="stylesheet" type="text/css" href="css/fonts/font-awesome.min.css" />
 <link rel="stylesheet" type="text/css" href="css/main.css" />
 <link rel="stylesheet" type="text/css" href="static/app/bower_components/jquery-ui/themes/base/jquery-ui.min.css" />
 <link rel="stylesheet" type="text/css" href="static/app/bower_components/ng-table/ng-table.css" />

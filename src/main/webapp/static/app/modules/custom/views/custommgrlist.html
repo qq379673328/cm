@@ -60,9 +60,13 @@
 			
 			<a class="spe" href="#custommgr/incustom">录入新客户</a>
 			
-			<a class="common">其他客户</a>
-			<a class="common">合作客户</a>
-			<a class="common">我的客户</a>
+			<a class="common" ng-click="search.beyond = 'other';">
+				<i class="fa fa-user-plus"></i>&nbsp;其他客户</a>
+			<a class="common" ng-click="search.beyond = 'team';">
+				<i class="fa fa-users"></i>&nbsp;合作客户</a>
+			<a class="common" ng-click="search.beyond = 'my';">
+				<i class="fa fa-user"></i>&nbsp;我的客户</a>
+			<a class="common" ng-click="search.beyond = '';">全部</a>
 			
 		</div>
 		<table class="my-table" ng-table="tableParams" template-pagination="custom/pager">
@@ -77,6 +81,7 @@
 					<th>客户状态</th>
 					<th>附件</th>
 					<th>创建时间</th>
+					<th></th>
 					<th></th>
 				</tr>
 			</thead>
@@ -94,11 +99,16 @@
 					<td>{{ item.state }}</td>
 					<td></td>
 					<td>{{ item.create_time | date : 'yyyy-MM-dd HH:mm '}}</td>
+					<td>
+						<i ng-show="item.beyond=='my'" class="fa fa-user"></i>
+						<i ng-show="item.beyond=='team'" class="fa fa-users"></i>
+						<i ng-show="item.beyond=='other'" class="fa fa-user-plus"></i>
+					</td>
 					
 					<td ng-show="item.ishandling">操作中</td>
 					<td ng-show="!item.ishandling">
-						<a class="btn btn-small btn-lblue" href="#custommgr/editcustom/{{item.id}}">编辑</a>
-						<a class="btn btn-small btn-success"
+						<a ng-show="item.beyond=='my'" class="btn btn-small btn-lblue" href="#custommgr/editcustom/{{item.id}}">编辑</a>
+						<a ng-show="item.beyond=='my'" class="btn btn-small btn-success"
 							ng-click="item.prepareDel = !item.prepareDel"
 							>删除</a>
 						<table ng-show="item.prepareDel">

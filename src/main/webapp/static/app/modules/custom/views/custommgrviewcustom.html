@@ -10,98 +10,123 @@
 	<div class="mytable">
 		<div class="title">
 			<span>
-				客户详情（客户编号：11211）
+				客户详情（客户编号：{{custom.id}}）
 			</span>
 			
-			<a class="spe" href="#custommgr/editcustom/1">编辑客户信息</a>
+			<a class="spe" href="#custommgr/editcustom/{{custom.id}}">编辑客户信息</a>
 		</div>
 		<table>
 			<tbody>
 				<tr>
-					<td class="tr-odd">客户名称：</td>
-					<td class="tr-even">北京岩石科技</td>
-					<td class="tr-odd">所属行业：</td>
-					<td class="tr-even">房地产开发</td>
+					<td class="td-odd">客户名称：</td>
+					<td class="td-even">{{custom.customName}}</td>
+					<td class="td-odd">所属行业：</td>
+					<td class="td-even">{{custom.industry}}</td>
 				</tr>
 				<tr>
-					<td class="tr-odd">客户来源：</td>
-					<td class="tr-even">广告</td>
-					<td class="tr-odd">联系人：</td>
-					<td class="tr-even">石头</td>
+					<td class="td-odd">客户来源：</td>
+					<td class="td-even">{{custom.source}}</td>
+					<td class="td-odd">联系人：</td>
+					<td class="td-even">{{custom.contactName}}</td>
 				</tr>
 				<tr>
-					<td class="tr-odd">联系方式：</td>
-					<td class="tr-even">15621545112</td>
-					<td class="tr-odd">电子邮件：</td>
-					<td class="tr-even">test@test.com</td>
+					<td class="td-odd">联系方式：</td>
+					<td class="td-even">
+						座机：{{custom.contactLandline}} <br/>
+						手机：{{custom.contactCellphone}}
+					</td>
+					<td class="td-odd">电子邮件：</td>
+					<td class="td-even">{{custom.contactEmail}}</td>
 				</tr>
 				<tr>
-					<td class="tr-odd">QQ：</td>
-					<td class="tr-even">15621545112</td>
-					<td class="tr-odd">微信：</td>
-					<td class="tr-even">13412412</td>
+					<td class="td-odd">QQ：</td>
+					<td class="td-even">{{custom.contactQq}}</td>
+					<td class="td-odd">微信：</td>
+					<td class="td-even">{{custom.contactWeixin}}</td>
 				</tr>
 				<tr>
-					<td class="tr-odd">创建时间：</td>
-					<td colspan="3" class="tr-even">2015-01-01 15:22</td>
+					<td class="td-odd">创建时间：</td>
+					<td colspan="3" class="td-even">{{custom.createTime | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
 				</tr>
 				<tr>
-					<td class="tr-odd">公司地址：</td>
-					<td class="tr-even">大陆上</td>
-					<td class="tr-odd">网址：</td>
-					<td class="tr-even">www.baidu.com</td>
+					<td class="td-odd">公司地址：</td>
+					<td class="td-even">{{custom.contactAddress}}</td>
+					<td class="td-odd">网址：</td>
+					<td class="td-even">{{custom.contactWebsite}}</td>
 				</tr>
 				<tr>
-					<td class="tr-odd">客户资料：</td>
-					<td colspan="3" class="tr-even">
-						<a href="www.baidu.com">协议书.doc</a>
+					<td class="td-odd">客户资料：</td>
+					<td colspan="3" class="td-even">
+						<div ng-repeat="atta in attas">
+							{{atta.name}} <br/>
+						</div>
 					</td>
 				</tr>
 				<tr>
-					<td class="tr-odd">公司介绍：</td>
-					<td colspan="3" class="tr-even">
-						国内第一
+					<td class="td-odd">公司介绍：</td>
+					<td colspan="3" class="td-even">
+						{{custom.companyProfile}}
 					</td>
 				</tr>
 				<tr>
-					<td class="tr-odd">客户状态：</td>
-					<td class="tr-even">签约运作</td>
-					<td class="tr-odd">执行团队：</td>
-					<td class="tr-even">李华、立定</td>
+					<td class="td-odd">客户状态：</td>
+					<td class="td-even">{{custom.state}}</td>
+					<td class="td-odd">执行团队：</td>
+					<td class="td-even">
+						<span ng-repeat="team in teams">
+							{{team.name}},
+						</span>
+					</td>
 				</tr>
 			</tbody>
 		</table>
 	</div>
 	
-	<div class="mytable">
+	<div ng-show="!contract" class="mytable">
 		<div class="title">
 			<span>
-				合同详情（合同编号：123124123）
+				无合同信息
+			</span>
+		</div>
+	</div>
+	<div ng-show="contract" class="mytable">
+		<div class="title">
+			<span>
+				合同详情（合同编号：{{contract.id}}）
 			</span>
 		</div>
 		<table>
 			<tbody>
 				<tr>
-					<td class="tr-odd">签约日期：</td>
-					<td class="tr-even">2015-01-01</td>
-					<td class="tr-odd">签约比例：</td>
-					<td class="tr-even">30%</td>
+					<td class="td-odd">签约日期：</td>
+					<td class="td-even">{{contract.inDate | date : 'yyyy-MM-dd'}}</td>
+					<td class="td-odd">签约比例：inPercentage</td>
+					<td class="td-even">{{contract.}}</td>
 				</tr>
 				<tr>
-					<td class="tr-odd">支付方式：</td>
-					<td class="tr-even">全款</td>
-					<td class="tr-odd">保用期限：</td>
-					<td class="tr-even">3个月</td>
+					<td class="td-odd">支付方式：</td>
+					<td class="td-even">{{contract.payway}}</td>
+					<td class="td-odd">保用期限：</td>
+					<td class="td-even">{{contract.useLimit}}</td>
 				</tr>
 				<tr>
-					<td class="tr-odd">其他要求：</td>
-					<td colspan="3" class="tr-even"></td>
+					<td class="td-odd">首付款：</td>
+					<td colspan="3" class="td-even">
+						{{contract.firstPay}}
+					</td>
 				</tr>
 				<tr>
-					<td class="tr-odd">合同附件：</td>
-					<td colspan="3" class="tr-even">
-						<a href="www.baidu.com">协议书.doc</a><br/>
-						<a href="www.baidu.com">协议书2.doc</a>
+					<td class="td-odd">其他要求：</td>
+					<td colspan="3" class="td-even">
+						{{contract.otherRequire}}
+					</td>
+				</tr>
+				<tr>
+					<td class="td-odd">合同附件：</td>
+					<td colspan="3" class="td-even">
+						<div ng-repeat="atta in contractAttas">
+							{{atta.name}} <br/>
+						</div>
 					</td>
 				</tr>
 			</tbody>
@@ -113,8 +138,7 @@
 			<span>
 				合作职位情况
 			</span>
-			
-			<a class="spe" href="#jobmgr/injob">发布新职位</a>
+			<a class="spe" href="#jobmgr/injob/{{custom.id}}">发布新职位</a>
 		</div>
 		<table>
 			<thead>
@@ -130,25 +154,15 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr>
-					<td>工程造价师</td>
-					<td>运作</td>
-					<td>10-30万</td>
-					<td>沈阳</td>
-					<td>总经理</td>
-					<td>李华、周天</td>
-					<td>2</td>
-					<td>2012-11-11 12：12</td>
-				</tr>
-				<tr>
-					<td>工程造价师</td>
-					<td>运作</td>
-					<td>10-30万</td>
-					<td>沈阳</td>
-					<td>总经理</td>
-					<td>李华、周天</td>
-					<td>2</td>
-					<td>2012-11-11 12：12</td>
+				<tr ng-repeat="job in jobs">
+					<td>{{job.name}}</td>
+					<td>{{job.state}}</td>
+					<td>{{job.payMin}} - {{job.payMin}} 万</td>
+					<td>{{job.workplace}}</td>
+					<td>{{job.reportObj}}</td>
+					<td>{{job.team}}</td>
+					<td>{{job.requirePeople}}</td>
+					<td>{{job.createTime | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
 				</tr>
 			</tbody>
 		</table>
@@ -169,15 +183,10 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr>
-					<td>李华</td>
-					<td>企业干什么了</td>
-					<td>2015-12-12 12:12</td>
-				</tr>
-				<tr>
-					<td>李华</td>
-					<td>企业干什么了</td>
-					<td>2015-12-12 12:12</td>
+				<tr ng-repeat="comm in comms">
+					<td>{{comm.create_user}}</td>
+					<td>{{comm.content}}</td>
+					<td>{{comm.create_time | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
 				</tr>
 			</tbody>
 		</table>
@@ -198,7 +207,7 @@
 				</tr>
 				<tr>
 					<td>
-						<div class="btn btn-lblue">确认添加</div>
+						<div class="btn btn-lblue" ng-click="addComm();">确认添加</div>
 					</td>
 				</tr>
 			</tbody>

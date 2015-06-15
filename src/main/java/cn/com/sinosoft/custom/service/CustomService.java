@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import cn.com.sinosoft.common.model.TCustom;
 import cn.com.sinosoft.common.model.TCustomCommunication;
+import cn.com.sinosoft.common.model.TCustomTeam;
 import cn.com.sinosoft.common.model.TUser;
 import cn.com.sinosoft.common.util.SqlUtil;
 import cn.com.sinosoft.common.util.StrUtils;
@@ -46,41 +47,63 @@ public class CustomService extends SimpleServiceImpl {
 		PagingSrcSql srcSql = new PagingSrcSql();
 		List<Object> values = new ArrayList<Object>();
 		List<Type> types = new ArrayList<Type>();
-		StringBuffer sb = new StringBuffer(" SELECT * FROM t_custom t WHERE 1=1 ");
+		TUser user = userUtil.getLoginUser();
+		String userId = user.getId();
+		StringBuffer sb = new StringBuffer(" select tt.* from ( SELECT "
+				+ " t.*,  "
+				+ " CASE "
+				+ "     WHEN t.create_user = ?  "
+				+ "     THEN 'my'  "
+				+ "      WHEN ? IN ( "
+				+ " 	     SELECT u.id FROM  t_user u WHERE  "
+				+ " 	     (u.team IN ( SELECT m.user_id FROM t_custom_team m WHERE m.custom_id = t.id)) "
+				+ " 	     OR "
+				+ " 	     (u.id IN ( SELECT m.user_id FROM t_custom_team m WHERE m.custom_id = t.id)) "
+				+ "      ) "
+				+ "     THEN 'team'  "
+				+ "     ELSE 'other'  "
+				+ "   END AS beyond "
+
+				+ " FROM t_custom t ) tt WHERE 1=1 ");
+		values.add(userId);
+		types.add(StringType.INSTANCE);
+		values.add(userId);
+		types.add(StringType.INSTANCE);
 		
 		if(!StrUtils.isNull(params.get("customIndustry"))){//客户行业
-			sb.append(" AND t.industry like ? ");
+			sb.append(" AND tt.industry like ? ");
 			values.add("%" + params.get("customIndustry") + "%");
 			types.add(StringType.INSTANCE);
 		}
 		if(!StrUtils.isNull(params.get("customSource"))){//客户来源
-			sb.append(" AND t.source = ? ");
+			sb.append(" AND tt.source = ? ");
 			values.add(params.get("customSource"));
 			types.add(StringType.INSTANCE);
 		}
 		if(!StrUtils.isNull(params.get("customStatus"))){//客户状态
-			sb.append(" AND t.state = ? ");
+			sb.append(" AND tt.state = ? ");
 			values.add(params.get("customStatus"));
 			types.add(StringType.INSTANCE);
 		}
 		if(!StrUtils.isNull(params.get("companyName"))){//公司名称
-			sb.append(" AND t.custom_name like ? ");
+			sb.append(" AND tt.custom_name like ? ");
 			values.add("%" + params.get("companyName") + "%");
 			types.add(StringType.INSTANCE);
 		}
 		if(!StrUtils.isNull(params.get("createTimeStart"))){//创建日期-开始
-			sb.append(" AND " + SqlUtil.toDate(params.get("createTimeStart"), 1, 0) + " <= t.create_time ");
+			sb.append(" AND " + SqlUtil.toDate(params.get("createTimeStart"), 1, 0) + " <= tt.create_time ");
 		}
 		if(!StrUtils.isNull(params.get("createTimeEnd"))){//创建日期-结束
-			sb.append(" AND " + SqlUtil.toDate(params.get("createTimeEnd"), 1, 0) + " >= t.create_time ");
+			sb.append(" AND " + SqlUtil.toDate(params.get("createTimeEnd"), 1, 0) + " >= tt.create_time ");
 		}
 		//客户类型-我的、合作、其他
-		TUser user = userUtil.getLoginUser();
-		String userId = user.getId();
+		if(!StrUtils.isNull(params.get("beyond"))){
+			sb.append(" AND tt.beyond = ? ");
+			values.add(params.get("beyond"));
+			types.add(StringType.INSTANCE);
+		}
 		
-		
-		
-		sb.append(" ORDER BY t.create_time DESC ");
+		sb.append(" ORDER BY tt.create_time DESC ");
 		
 		srcSql.setSrcSql(sb.toString());
 		srcSql.setTypes(types.toArray(new Type[0]));
@@ -144,7 +167,25 @@ public class CustomService extends SimpleServiceImpl {
 			c.setCustomId(custom.getId());
 			dao.save(c);
 		}
-		
+		//保存执行团队信息
+		dao.executeDelOrUpdateSql("delete from t_custom_team where custom_id = ? ",
+				new Object[]{custom.getId()},
+				new Type[]{StringType.INSTANCE});
+		if(!StrUtils.isNull(custom.getTeam())){
+			List<TCustomTeam> ts = new ArrayList<TCustomTeam>();
+			String teams = custom.getTeam();
+			String[] tIds = teams.split(",");
+			for(String tId : tIds){
+				ts.add(
+						new TCustomTeam(
+								UUID.randomUUID().toString(),
+								tId,
+								custom.getId()));
+			}
+			if(ts.size() > 0){
+				dao.batchSave(ts);
+			}
+		}
 		
 		ret.setSuccess(FormResult.SUCCESS);
 		ret.setData(custom.getId());
@@ -234,6 +275,45 @@ public class CustomService extends SimpleServiceImpl {
 						"select * from t_custom_communication where custom_id = ? order by create_time desc",
 						new Object[]{customId},
 						new Type[]{StringType.INSTANCE});
+	}
+
+	/**
+	 * 根据客户id获取客户信息-查看客户信息使用
+	 * @param id
+	 * @return
+	 */
+	public Object getCustomViewById(String id) {
+		Map<String, Object> ret = new HashMap<String, Object>();
+		//客户主表
+		ret.put("custom", dao.queryById(id, TCustom.class));
+		//客户沟通记录
+		ret.put("comms", dao.queryListBySql("select * from t_custom_communication where custom_id = ? ", 
+				new Object[]{id},
+				new Type[]{StringType.INSTANCE}));
+		//客户附件
+		ret.put("attas", dao.queryListBySql("select * from t_custom_data where custom_id = ? ", 
+				new Object[]{id},
+				new Type[]{StringType.INSTANCE}));
+		//客户职位
+		ret.put("jobs", dao.queryListBySql("select * from t_job where custom_id = ? ", 
+				new Object[]{id},
+				new Type[]{StringType.INSTANCE}));
+		//客户执行团队
+		ret.put("teams", dao.queryListBySql(
+				"select u.name from t_custom_team t left join t_user u on t.user_id = u.id where t.custom_id = ? ", 
+				new Object[]{id},
+				new Type[]{StringType.INSTANCE}));
+		//客户合同
+		ret.put("contracts", dao.queryListBySql("select * from t_contract where custom_id = ? ", 
+				new Object[]{id},
+				new Type[]{StringType.INSTANCE}));
+		//客户合同附件
+		ret.put("contractAttas", dao.queryListBySql(
+				"select att.* from t_attachment att,t_contract_data data,t_contract con where"
+				+ " att.id = data.attachment_id and data.contract_id = con.id and con.custom_id = ? ", 
+				new Object[]{id},
+				new Type[]{StringType.INSTANCE}));
+		return ret;
 	}
 	
 }

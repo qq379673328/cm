@@ -1,5 +1,5 @@
 package cn.com.sinosoft.common.model;
-// Generated 2015-6-9 21:12:46 by Hibernate Tools 3.2.2.GA
+// Generated 2015-6-15 21:19:57 by Hibernate Tools 3.2.2.GA
 
 
 import java.util.Date;
@@ -19,6 +19,13 @@ public class TCustomCommunication  implements java.io.Serializable {
     public TCustomCommunication() {
     }
 
+	
+    public TCustomCommunication(String id, String customId, String content, Date createTime) {
+        this.id = id;
+        this.customId = customId;
+        this.content = content;
+        this.createTime = createTime;
+    }
     public TCustomCommunication(String id, String customId, String commuDate, String content, Date createTime) {
        this.id = id;
        this.customId = customId;

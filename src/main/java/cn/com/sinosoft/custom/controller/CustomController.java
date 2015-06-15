@@ -41,13 +41,23 @@ public class CustomController extends BaseController {
 	}
 	
 	/**
-	 * 根据客户id获取客户信息
+	 * 根据客户id获取客户信息-编辑客户信息使用
 	 * @return
 	 */
 	@RequestMapping("getCustomById")
 	@ResponseBody
 	public Object getCustomById(String id){
 		return customService.getCustomById(id);
+	}
+	
+	/**
+	 * 根据客户id获取客户信息-查看客户信息使用
+	 * @return
+	 */
+	@RequestMapping("getCustomViewById")
+	@ResponseBody
+	public Object getCustomViewById(String id){
+		return customService.getCustomViewById(id);
 	}
 	
 	/**
