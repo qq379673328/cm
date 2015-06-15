@@ -1,0 +1,32 @@
+<div>
+<!-- 下拉框类型 -->
+<select class="form-select" ng-show="type=='select'" ng-model="bindModel" name="{{name}}">
+	<option ng-show="allSelectName" value="">{{allSelectName}}</option>
+	<option ng-repeat="item in items" value="{{item[0]}}">
+		{{item[1]}}
+	</option>
+</select>
+
+<!-- span 类型 -->
+<div ng-show="type=='span'">
+	<a ng-show="allSelectName" ng-click="click('');">
+		{{allSelectName}}
+	</a>
+	<a ng-repeat="item in items" value="{{item[0]}}" ng-click="click(item[0]);">
+		{{item[1]}}
+	</a>
+</div>
+
+<!-- radio 类型 -->
+<div ng-show="type=='radio'">
+	<span ng-show="allSelectName">
+		<input type="radio" name="{{name}}" value="" ng-click="click('');" />
+		<span>{{allSelectName}}</span>
+	</span>
+	<span ng-repeat="item in items">
+		<input type="radio" name="{{name}}" value="{{item[0]}}" ng-click="click(item[0]);" />
+		<span>{{item[1]}}</span>
+	</span>
+</div>
+
+</div>

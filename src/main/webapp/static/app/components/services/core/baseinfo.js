@@ -45,8 +45,7 @@ app.factory('BaseInfoService', ["$http", "ngTableParams",
 						var total = data.total;
 						$scope[p].total = total;
 						params.total(total);
-						//$defer.resolve(data.rows);
-						$scope[items] = data.rows;
+						$defer.resolve(data.rows);
 					});
 				}
 			});

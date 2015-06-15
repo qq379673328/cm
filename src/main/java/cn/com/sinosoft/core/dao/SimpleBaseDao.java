@@ -17,6 +17,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.type.Type;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.stereotype.Repository;
@@ -32,6 +33,8 @@ public class SimpleBaseDao {
 	
 	@Resource
 	HibernateTemplate template;
+	@Resource
+	JdbcTemplate jdbcTemplat; 
 	
 	/**
 	 *
@@ -134,7 +137,10 @@ public class SimpleBaseDao {
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked"})
 	public List queryListBySql(final String sql, final Object[] values, final Type[] types) {
-		return template.executeFind(new HibernateCallback() {
+		
+		return jdbcTemplat.queryForList(sql, values);
+		
+		/*return template.executeFind(new HibernateCallback() {
 
 			public List doInHibernate(Session session) throws HibernateException,
 					SQLException {
@@ -145,7 +151,7 @@ public class SimpleBaseDao {
 				return query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP).list();
 			}
 			
-		});
+		});*/
 	}
 
 	/**

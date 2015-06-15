@@ -9,7 +9,7 @@
 <div ng-show="!isReady">
 	加载中...
 </div>
-<form name="form" novalidate="novalidate" ng-show="isReady">
+<form id="customeditform" name="form" ng-show="isReady">
 <input type="hidden" name="id" value="{{custom.id}}" />
 <div class="content">
 	<div class="mytable">
@@ -21,17 +21,12 @@
 		<table>
 			<tbody>
 				<tr>
-					<td class="td-odd">客户名称：</td>
+					<td class="td-odd"><span class="warn">*</span>客户名称：</td>
 					<td class="td-even" colspan="3">
-						<span ng-show="custom.id">
-							<span>{{ custom.customName }}</span>
-						</span>
-						<span ng-show="!custom.id">
+						<span>
 							<input 
 									name="customName" 
 									ng-model="custom.customName"
-									required
-									ng-maxlength="100"
 									class="form-input" />
 						</span>
 					</td>
@@ -39,12 +34,12 @@
 				<tr>
 					<td class="td-odd"><span class="warn">*</span>所属行业：</td>
 					<td class="td-even" colspan="3">
-						<input 
-								name="industry" 
-								ng-model="custom.industry"
-								required
-								ng-maxlength="200"
-								class="form-input" />
+						<div
+							name="industry"
+							core-basedata 
+							type="select"
+							bind-model="custom.industry"
+							key="customIndustry"></div>
 					</td>
 				</tr>
 				<tr>
@@ -53,13 +48,12 @@
 						<!-- <span ng-show="custom.id">
 							{{ custom.source }}
 						</span> -->
-						<span ng-show="!custom.id">
-							<input 
-									name="source" 
-									ng-model="custom.source"
-									ng-maxlength="100"
-									class="form-input" />
-						</span>
+						<div
+							name="source"
+							core-basedata 
+							type="select"
+							bind-model="custom.source"
+							key="customSource"></div>
 					</td>
 					<td class="td-odd">客户状态：</td>
 					<td class="td-even">
@@ -205,6 +199,47 @@
 		</table>
 	</div>
 	
+	<div class="mytable" ng-show="custom.id">
+		<div class="title">
+			<span>
+				沟通记录
+			</span>
+		</div>
+		<div>
+		<table class="my-table">
+			<thead>
+				<tr>
+					<th>内容</th>
+					<th>创建时间</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="item in communs" ng-class="{true:'tr-odd' , false: 'tr-even'}[$index%2 == 0]">
+					<td>{{ item.content }}</td>
+					<td>{{ item.create_time | date : 'yyyy-MM-dd HH:mm '}}</td>
+					<td ng-show="item.ishandling">操作中</td>
+					<td ng-show="!item.ishandling">
+						<a class="btn btn-small btn-success btn-w4"
+							ng-click="item.prepareDel = !item.prepareDel"
+							>删除</a>
+						<table ng-show="item.prepareDel">
+							<tr>
+								<td colspan="5"></td>
+								<td>
+									<a class="btn btn-small btn-danger btn-w4"
+										ng-click="delCommun(item);;item.ishandling=true;"
+										>确认删除</a>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		</div>
+	</div>
+	
 	<div class="mytable">
 		<div class="title">
 			<span>
@@ -214,9 +249,11 @@
 		<table>
 			<tbody>
 				<tr>
-					<td colspan="2">
-						沟通记录：
-						<textarea class="textarea"></textarea>
+					<td class="td-odd">沟通记录：</td>
+					<td class="td-even" colspan="3">
+						<textarea 	class="textarea"
+									name=companyProfile
+									ng-model="custom.commun"></textarea>
 					</td>
 				</tr>
 				<tr>

@@ -5,9 +5,12 @@
 	<div ng-show="formresult.success == 1">
 		<i class="fa fa-check-circle"></i>
 		<span>{{formresult.message != null ? formresult.message : "操作成功"}}</span>
+		<span>{{formresult.time | date : 'HH:mm:ss '}}</span>
 	</div>
 	<div ng-show="formresult.success == 0">
 		<i class="fa fa-exclamation-triangle"></i>
 		<span>{{formresult.message != null ? formresult.message : "操作失败"}}</span>
+		<span>{{formresult.time | date : 'HH:mm:ss '}}</span>
+		<br />
 	</div>
 </div>

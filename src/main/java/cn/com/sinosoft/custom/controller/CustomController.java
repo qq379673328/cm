@@ -46,7 +46,7 @@ public class CustomController extends BaseController {
 	 */
 	@RequestMapping("getCustomById")
 	@ResponseBody
-	public TCustom getCustomById(String id){
+	public Object getCustomById(String id){
 		return customService.getCustomById(id);
 	}
 	
@@ -56,8 +56,39 @@ public class CustomController extends BaseController {
 	 */
 	@RequestMapping("edit")
 	@ResponseBody
-	public FormResult edit(TCustom custom){
-		return customService.edit(custom);
+	public FormResult edit(TCustom custom, String commun){
+		return customService.edit(custom, commun);
 	}
 
+	/**
+	 * 删除客户信息
+	 * @return
+	 */
+	@RequestMapping("del")
+	@ResponseBody
+	public FormResult del(String id){
+		return customService.del(id);
+	}
+
+	/**
+	 * 删除沟通记录
+	 * @return
+	 */
+	@RequestMapping("delCommun")
+	@ResponseBody
+	public FormResult delCommun(String id){
+		return customService.delCommun(id);
+	}
+	
+	/**
+	 * 加载沟通记录
+	 * @return
+	 */
+	@RequestMapping("getCommuns")
+	@ResponseBody
+	public Object getCommuns(String customId){
+		return customService.getCommuns(customId);
+	}
+	
+	
 }

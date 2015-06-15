@@ -6,6 +6,8 @@
  */
 package cn.com.sinosoft.core.service.model;
 
+import java.util.Date;
+
 /**
  * 表单提交返回结果
  *
@@ -32,9 +34,23 @@ public class FormResult {
 	 */
 	String message;
 	/**
+	 * 返回时间
+	 */
+	Date time;
+	/**
 	 * 返回的数据
 	 */
 	Object data;
+	public FormResult(){
+		super();
+		this.time = new Date();
+	}
+	public Date getTime() {
+		return time;
+	}
+	public void setTime(Date time) {
+		this.time = time;
+	}
 	public int getSuccess() {
 		return success;
 	}

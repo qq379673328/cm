@@ -2,7 +2,7 @@
 var app = angular
 		.module(
 				'app',
-				[ 'ngRoute', 'ngTable'],
+				[ 'ngRoute', 'ngTable', 'datepicker'],
 				function($httpProvider) {
 					$httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
 					/**

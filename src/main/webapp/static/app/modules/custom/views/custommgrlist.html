@@ -10,37 +10,43 @@
 		<div class="line">
 			<div class="desc">客户行业：</div>
 			<div class="vals">
-				<a>房地产开发/建筑与工程</a>
-				<a>金融业(投资/保险/证券/银行/基金)</a>
+				<div core-basedata
+					 type="span"
+					 ng-model="search.customIndustry"
+					 key="customIndustry"
+					 all-select-name="不限"></div>
 			</div>
 		</div>
 		<div class="line">
 			<div class="desc">客户来源：</div>
 			<div class="vals">
-				<a>广告呼入</a>
-				<a>主动BD</a>
-				<a>机构合作</a>
-				<a>人脉推荐</a>
+				<div 
+					core-basedata 
+					type="span"
+					ng-model="search.customSource"
+					key="customSource"
+					all-select-name="不限"></div>
 			</div>
 			<div class="desc">客户状态：</div>
 			<div class="vals">
-				<a>潜在客户</a>
-				<a>签约运作</a>
-				<a>签约暂停</a>
-				<a>签约终止</a>
+				<div core-basedata
+					 type="span"
+					 key="customState"
+					 ng-model="search.customStatus"
+					 all-select-name="不限"></div>
 			</div>
 		</div>
 		<div class="line border-none">
 			<div class="desc">创建时间：</div>
 			<div class="vals">
-				<input name="searchCreateTimeStart" />
+				<input datepicker ng-model="search.createTimeStart" />
 				至
-				<input name="searchCreateTimeEnd" />
+				<input datepicker ng-model="search.createTimeEnd"/>
 			</div>
 			<div class="desc">公司名称：</div>
 			<div class="vals">
-				<input name="searchCompanyName" />
-				<div class="btn btn-lblue">搜索</div>
+				<input ng-model="search.companyName" />
+				<div class="btn btn-lblue" ng-click="reload();">搜索</div>
 			</div>
 		</div>
 	</div>
@@ -48,7 +54,7 @@
 	<div class="mytable">
 		<div class="title">
 			<span>总数 ：
-				<span class="highlight">{{total}}</span>
+				<span class="highlight">{{queryParams.total}}</span>
 			 	个
 			 </span>
 			
@@ -75,8 +81,8 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr ng-show="!customs"><td colspan="4">加载中...</td></tr>
-				<tr ng-repeat="item in customs" ng-class="{true:'tr-odd' , false: 'tr-even'}[$index%2 == 0]">
+				<tr ng-show="!$data"><td colspan="4">加载中...</td></tr>
+				<tr ng-repeat="item in $data" ng-class="{true:'tr-odd' , false: 'tr-even'}[$index%2 == 0]">
 					<td>{{ item.source }}</td>
 					<td>
 						<a class="link" 
@@ -89,11 +95,27 @@
 					<td></td>
 					<td>{{ item.create_time | date : 'yyyy-MM-dd HH:mm '}}</td>
 					
-					<td>
-						<a class="btn btn-lblue" href="#custommgr/editcustom/{{item.id}}">编辑</a>
+					<td ng-show="item.ishandling">操作中</td>
+					<td ng-show="!item.ishandling">
+						<a class="btn btn-small btn-lblue" href="#custommgr/editcustom/{{item.id}}">编辑</a>
+						<a class="btn btn-small btn-success"
+							ng-click="item.prepareDel = !item.prepareDel"
+							>删除</a>
+						<table ng-show="item.prepareDel">
+							<tr>
+								<td colspan="5"></td>
+								<td>
+									<a class="btn btn-small btn-danger btn-w4"
+										ng-click="del(item);;item.ishandling=true;"
+										>确认删除</a>
+								</td>
+							</tr>
+						</table>
+									
 					</td>
 				</tr>
 			</tbody>
 		</table>
+		<div core-formresult result="formresult"></div>
 	</div>
 </div>

@@ -158,7 +158,7 @@
         }
         function defaultError(error) { //Default error template
             var msgErrorClass = config.classes && config.classes.message || 'unhappyMessage';
-            return $('<span id="' + error.id + '" class="' + msgErrorClass + '" role="alert">' + error.message + '</span>');
+            return $('<div id="' + error.id + '" class="' + msgErrorClass + '" role="alert">' + error.message + '</div>');
         }
         function getError(error) { //Generate error html from either config or default
             if (isFunction(config.errorTemplate)) {
@@ -200,9 +200,9 @@
         					message = format( message.replace( theregex, "{$1}" ), val );
         				}
         				if($field.length > 1){
-        					$field.parent().append("<span class='valid-error'>" + message + "</span>");
+        					$field.parent().append("<div class='valid-error'>" + message + "</div>");
         				}else{
-        					$field.after("<span class='valid-error'>" + message + "</span>");
+        					$field.after("<div class='valid-error'>" + message + "</div>");
         				}
             		}
             	}
