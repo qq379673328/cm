@@ -5,4 +5,126 @@
 	简历管理
 </div>
 <div class="content">
+	<div class="searchzone">
+		<div class="title"><i class="fa fa-users"></i>&nbsp;简历管理</div>
+		<div class="line">
+			<div class="desc">当前行业：</div>
+			<div class="vals">
+				<div core-basedata
+					 type="span"
+					 ng-model="search.industry"
+					 key="customIndustry"
+					 all-select-name="不限"></div>
+			</div>
+		</div>
+		<div class="line">
+			<div class="desc">最近职业：</div>
+			<div class="vals">
+				<div 
+					core-basedata
+					type="span"
+					ng-model="search.duty"
+					key="duty"
+					all-select-name="不限"></div>
+			</div>
+		</div>
+		<div class="line">
+			<div class="desc">目前年薪：</div>
+			<div class="vals">
+				<div core-basedata
+					 type="span"
+					 key="yearpay"
+					 ng-model="search.yearpay"
+					 all-select-name="不限"></div>
+			</div>
+		</div>
+		<div class="line">
+			<div class="desc">所在城市：</div>
+			<div class="vals">
+				<div core-basedata
+					 type="span"
+					 key="zone"
+					 ng-model="search.zone"
+					 all-select-name="不限"></div>
+			</div>
+		</div>
+		<div class="line">
+			<div class="desc">最高学历：</div>
+			<div class="vals">
+				<div core-basedata
+					 type="span"
+					 key="edu"
+					 ng-model="search.edu"
+					 all-select-name="不限"></div>
+			</div>
+			<div class="desc">年龄：</div>
+			<div class="vals">
+				<input ng-model="search.agemin" />
+				至
+				<input ng-model="search.agemax" />
+			</div>
+			<div class="desc">性别：</div>
+			<div class="vals">
+				<input type="radio" name="sex" value="不限" ng-model="search.sex" />不限
+				<input type="radio" name="sex" value="男" ng-model="search.sex" />男
+				<input type="radio" name="sex" value="女" ng-model="search.sex" />女
+			</div>
+		</div>
+		<div class="line border-none">
+			<div class="desc">更新时间：</div>
+			<div class="vals">
+				<input datepicker ng-model="search.createTimeStart" />
+				至
+				<input datepicker ng-model="search.createTimeEnd"/>
+			</div>
+		</div>
+		<div class="line border-none">
+			<div class="desc">检索：</div>
+			<div class="vals">
+				<input ng-model="search.index" />
+			</div>
+		</div>
+	</div>
+	
+	<div class="mytable">
+		<div class="title">
+			<span>总数 ：
+				<span class="highlight">{{queryParams.total}}</span>
+			 	个
+			 </span>
+			
+			<a class="spe" href="#resumemgr/inresume">添加新简历</a>
+		</div>
+		<table class="my-table" ng-table="tableParams" template-pagination="custom/pager">
+			<thead>
+				<tr>
+					<th>姓名</th>
+					<th>性别</th>
+					<th>年龄</th>
+					<th>学历</th>
+					<th>所在地</th>
+					<th>职位</th>
+					<th>行业</th>
+					<th>更新时间</th>
+					<th>推荐</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-show="!$data"><td colspan="4">加载中...</td></tr>
+				<tr ng-repeat="item in $data" ng-class="{true:'tr-odd' , false: 'tr-even'}[$index%2 == 0]">
+					<td>
+						<a class="link" 
+						href="#resumemgr/viewresume/{{item.id}}">{{ item.name }}</a></td>
+					<td>{{ item.sex }}</td>
+					<td>{{ item.birthcay }}</td>
+					<td>{{ item.education }}</td>
+					<td>{{ item.address }}</td>
+					<td>未实现</td>
+					<td>未实现</td>
+					<td>{{ item.last_update_time | date : 'yyyy-MM-dd HH:mm '}}</td>
+					<td>未实现</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 </div>

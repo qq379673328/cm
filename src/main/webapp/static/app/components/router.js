@@ -50,7 +50,7 @@ app.config([ '$routeProvider', function($routeProvider) {
 		templateUrl : fdRouterViewsBasepath + 'resume/views/resumemgrinresume.html',
 		controller : 'ResumeMgrInResumeCtrl'
 	})
-	.when('/resumemgr/editcustom/:id', {//简历管理-编辑简历
+	.when('/resumemgr/editresume/:id', {//简历管理-编辑简历
 		templateUrl : fdRouterViewsBasepath + 'resume/views/resumemgrinresume.html',
 		controller : 'ResumeMgrInResumeCtrl'
 	})

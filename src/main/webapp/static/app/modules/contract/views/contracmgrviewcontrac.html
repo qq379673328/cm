@@ -7,5 +7,109 @@
 	合同信息
 </div>
 <div class="content">
+	<div class="mytable">
+		<div class="title">
+			<span>
+				基本信息
+			</span>
+		</div>
+		<table>
+			<tbody>
+				<tr>
+					<td class="td-odd">客户名称：</td>
+					<td class="td-even">
+						<a href="#custommgr/viewcustom/{{custom.id}}">{{custom.customName}}</a>
+					</td>
+					<td class="td-odd">所属行业：</td>
+					<td class="td-even">{{custom.industry}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	<div class="mytable">
+		<div class="title">
+			<span>
+				合同详情
+			</span>
+		</div>
+		<table>
+			<tbody>
+				<tr>
+					<td class="td-odd">合同编号：</td>
+					<td class="td-even">{{contract.id}}</td>
+					<td class="td-odd">合同状态</td>
+					<td class="td-even">{{contract.state}}</td>
+				</tr>
+				<tr>
+					<td class="td-odd">签约日期：</td>
+					<td class="td-even">{{contract.inDate | date : 'yyyy-MM-dd'}}</td>
+					<td class="td-odd">签约比例：</td>
+					<td class="td-even">{{contract.inPercentage}}</td>
+				</tr>
+				<tr>
+					<td class="td-odd">支付方式：</td>
+					<td class="td-even">{{contract.payway}}</td>
+					<td class="td-odd">保用期限：</td>
+					<td class="td-even">{{contract.useLimit}}</td>
+				</tr>
+				<tr>
+					<td class="td-odd">首付款：</td>
+					<td colspan="3" class="td-even">
+						{{contract.firstPay}}
+					</td>
+				</tr>
+				<tr>
+					<td class="td-odd">其他要求：</td>
+					<td colspan="3" class="td-even">
+						{{contract.otherRequire}}
+					</td>
+				</tr>
+				<tr>
+					<td class="td-odd">合同附件：</td>
+					<td colspan="3" class="td-even">
+						<div ng-repeat="atta in contractAttas">
+							{{atta.name}} <br/>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	<div class="mytable">
+		<div class="title">
+			<span>
+				合作职位情况
+			</span>
+			<a class="spe" href="#jobmgr/injob/{{custom.id}}">发布新职位</a>
+		</div>
+		<table>
+			<thead>
+				<tr>
+					<th>招聘职位</th>
+					<th>职位状态</th>
+					<th>职位年薪</th>
+					<th>工作地点</th>
+					<th>汇报对象</th>
+					<th>执行团队</th>
+					<th>需求人数</th>
+					<th>创建时间</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="job in jobs">
+					<td>{{job.name}}</td>
+					<td>{{job.state}}</td>
+					<td>{{job.payMin}} - {{job.payMin}} 万</td>
+					<td>{{job.workplace}}</td>
+					<td>{{job.reportObj}}</td>
+					<td>{{job.team}}</td>
+					<td>{{job.requirePeople}}</td>
+					<td>{{job.createTime | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 	
 </div>

@@ -5,4 +5,116 @@
 	职位管理
 </div>
 <div class="content">
+	<div class="searchzone">
+		<div class="title"><i class="fa fa-users"></i>&nbsp;客户管理</div>
+		<div class="line">
+			<div class="desc">职位行业：</div>
+			<div class="vals">
+				<div core-basedata
+					 type="span"
+					 ng-model="search.industry"
+					 key="customIndustry"
+					 all-select-name="不限"></div>
+			</div>
+		</div>
+		<div class="line">
+			<div class="desc">工作地点：</div>
+			<div class="vals">
+				<div 
+					core-basedata 
+					type="span"
+					ng-model="search.workplace"
+					key="zone"
+					all-select-name="不限"></div>
+			</div>
+		</div>
+		<div class="line">
+			<div class="desc">职位年薪：</div>
+			<div class="vals">
+				<input ng-model="search.payMin" />万
+				至
+				<input ng-model="search.payMax" />万
+			</div>
+			<div class="desc">职位状态：</div>
+			<div class="vals">
+				<div core-basedata
+					 type="span"
+					 ng-model="search.state"
+					 key="jobState"
+					 all-select-name="不限"></div>
+			</div>
+		</div>
+		
+		<div class="line border-none">
+			<div class="desc">创建时间：</div>
+			<div class="vals">
+				<input datepicker ng-model="search.createTimeStart" />
+				至
+				<input datepicker ng-model="search.createTimeEnd"/>
+			</div>
+			<div class="desc">职位关键词：</div>
+			<div class="vals">
+				<input ng-model="search.name" />
+			</div>
+		</div>
+	</div>
+	
+	<div class="mytable">
+		<div class="title">
+			<span>总数 ：
+				<span class="highlight">{{queryParams.total}}</span>
+			 	个
+			 </span>
+			
+			<a class="spe" href="#jobmgr/injob">发布新职位</a>
+			
+			<a class="common" ng-click="search.beyond = 'other';">
+				<i class="fa fa-user-plus"></i>&nbsp;其他职位</a>
+			<a class="common" ng-click="search.beyond = 'team';">
+				<i class="fa fa-users"></i>&nbsp;合作职位</a>
+			<a class="common" ng-click="search.beyond = 'my';">
+				<i class="fa fa-user"></i>&nbsp;我的职位</a>
+			<a class="common" ng-click="search.beyond = '';">全部</a>
+			
+		</div>
+		<table class="my-table" ng-table="tableParams" template-pagination="custom/pager">
+			<thead>
+				<tr>
+					<th>状态</th>
+					<th>职位名称</th>
+					<th>职位年薪</th>
+					<th>工作地点</th>
+					<th>招聘企业</th>
+					<th>执行团队</th>
+					<th>推荐</th>
+					<th>应聘</th>
+					<th>更新时间</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-show="!$data"><td colspan="4">加载中...</td></tr>
+				<tr ng-repeat="item in $data" ng-class="{true:'tr-odd' , false: 'tr-even'}[$index%2 == 0]">
+					<td>
+						<i ng-show="item.state=='运作'" class="fa fa-user"></i>
+						<i ng-show="item.state=='结束'" class="fa fa-users"></i>
+						<i ng-show="item.state=='暂停'" class="fa fa-user-plus"></i>
+						<i ng-show="item.state=='关闭'" class="fa fa-user-plus"></i>
+						{{ item.state }}
+					</td>
+					<td>
+						<a class="link" 
+						href="#jobmgr/viewjob/{{item.id}}">{{ item.name }}</a></td>
+					<td>{{ item.contact_name }}</td>
+					<td>{{pay_min}}-{{pay_max}}万</td>
+					<td>{{ item.workplace }}</td>
+					<td>{{ item.customname }}</td>
+					<td>{{ item.team }}</td>
+					<td>未实现</td>
+					<td>未实现</td>
+					<td>{{ item.last_update_time | date : 'yyyy-MM-dd'}}</td>
+					
+				</tr>
+			</tbody>
+		</table>
+	</div>
 </div>

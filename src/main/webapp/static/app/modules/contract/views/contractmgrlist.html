@@ -5,4 +5,104 @@
 	合同管理
 </div>
 <div class="content">
+	<div class="searchzone">
+		<div class="title"><i class="fa fa-users"></i>&nbsp;合同管理</div>
+		<div class="line">
+			<div class="desc">签约人：</div>
+			<div class="vals">
+				<input ng-model="search.createUser" />
+			</div>
+			<div class="desc">合同编号：</div>
+			<div class="vals">
+				<input ng-model="search.no" />
+			</div>
+		</div>
+		<div class="line border-none">
+			<div class="desc">签约时间：</div>
+			<div class="vals">
+				<input datepicker ng-model="search.createTimeStart" />
+				至
+				<input datepicker ng-model="search.createTimeEnd"/>
+			</div>
+			<div class="desc">公司名称：</div>
+			<div class="vals">
+				<input ng-model="search.companyName" />
+			</div>
+		</div>
+	</div>
+	
+	<div class="mytable">
+		<div class="title">
+			<span>总数 ：
+				<span class="highlight">{{queryParams.total}}</span>
+			 	个
+			 </span>
+			
+			<a class="spe" href="#contractmgr/incontract">创建新合同</a>
+		</div>
+		<table class="my-table" ng-table="tableParams" template-pagination="custom/pager">
+			<thead>
+				<tr>
+					<th>合同编号</th>
+					<th>公司名称</th>
+					<th>签约人</th>
+					<th>签约日期</th>
+					<th>截止日期</th>
+					<th>签约比例</th>
+					<th>首付款</th>
+					<th>付款方式</th>
+					<th>保障期</th>
+					<th>合同附件</th>
+					<th>合同状态</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-show="!$data"><td colspan="4">加载中...</td></tr>
+				<tr ng-repeat="item in $data" ng-class="{true:'tr-odd' , false: 'tr-even'}[$index%2 == 0]">
+					<td>{{ item.no }}
+						<a class="link" 
+						href="#contractmgr/viewcontract/{{item.id}}">
+						{{ item.no }}</a>
+					</td>
+					<td>
+						<a class="link" 
+						href="#custommgr/viewcustom/{{item.custom_id}}">
+						{{ item.custom_name }}</a>
+					</td>
+					<td>{{ item.create_user }}</td>
+					<td>{{ item.create_time | date : 'yyyy-MM-dd'}}</td>
+					<td>待实现</td>
+					<td>{{ item.in_percentage }}</td>
+					<td>{{ item.first_pay }}</td>
+					<td>{{ item.payway }}</td>
+					<td>{{ item.use_limit }}</td>
+					<td>待实现</td>
+					<td>{{ item.state }}</td>
+					
+					<td ng-show="item.ishandling">操作中</td>
+					<td ng-show="!item.ishandling">
+						<a ng-show="item.state=='运作' || item.state=='暂停'"
+							class="btn btn-small btn-lblue"
+							 href="#contractmgr/editcustom/{{item.id}}">编辑</a>
+						<a class="btn btn-small btn-success"
+							ng-click="item.prepareDel = !item.prepareDel"
+							>删除</a>
+						<table ng-show="item.prepareDel">
+							<tr>
+								<td colspan="5"></td>
+								<td>
+									<a class="btn btn-small btn-danger btn-w4"
+										ng-click="del(item);;item.ishandling=true;"
+										>确认删除</a>
+								</td>
+							</tr>
+						</table>
+									
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<div core-formresult result="formresult"></div>
+	</div>
 </div>

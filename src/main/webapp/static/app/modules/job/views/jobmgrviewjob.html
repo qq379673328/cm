@@ -4,8 +4,224 @@
 	&gt;
 	<a href="#jobmgrlist">职位管理</a>
 	&gt;
-	职位信息
+	[{{job.name}}]招聘概况
 </div>
 <div class="content">
+	<div class="mytable">
+		<div class="title">
+			<span>
+				{{job.name}}招聘概述 <br/>
+				{{create_time | date : 'yyyy-MM-dd HH:mm'}} 发布
+				
+			</span>
+			
+			<a class="spe" href="#jobmgr/editjob/{{job.id}}">编辑职位</a>
+		</div>
+		<table>
+			<tbody>
+				<tr>
+					<td class="td-odd">职位状态：</td>
+					<td class="td-even">{{job.state}}</td>
+					<td class="td-odd">推荐概要：</td>
+					<td class="td-even">
+						向企业推荐{{job.pubcustom}}人 |
+						企业面试{{job.customverify}}人 |
+						企业否决{{job.customno}}人 |
+						确定录用{{job.customok}}人 |
+						未处理{{job.customnot}}人 |
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+				
+	<div class="mytable">
+		<div class="title">
+			<span>
+				{{job.name}}职位描述
+				(职位编号：{{job.id}})
+			</span>
+			
+			<a class="spe" ng-click="showDetail = !showDetail">隐藏详情</a>
+		</div>
+		<table>
+			<tbody>
+				<tr>
+					<td class="td-odd">职位名称：</td>
+					<td class="td-even">{{job.name}}</td>
+					<td class="td-odd">客户名称：</td>
+					<td class="td-even">{{custom.customName}}</td>
+				</tr>
+				<tr>
+					<td class="td-odd">职位年薪：</td>
+					<td class="td-even">
+						{{job.payMin}}-
+						{{job.payMax}}万
+					</td>
+					<td class="td-odd">工作地点：</td>
+					<td class="td-even">{{job.workplace}}</td>
+				</tr>
+				<tr>
+					<td class="td-odd">所属行业：</td>
+					<td class="td-even">
+						{{job.industry}}
+					</td>
+					<td class="td-odd">汇报对象：</td>
+					<td class="td-even">{{job.reportObj}}</td>
+				</tr>
+				<tr>
+					<td class="td-odd">所属部门：</td>
+					<td class="td-even">
+						{{job.department}}
+					</td>
+					<td class="td-odd">年龄要求：</td>
+					<td class="td-even">{{job.ageMin}}-{{job.ageMax}}岁</td>
+				</tr>
+				<tr>
+					<td class="td-odd">学历要求：</td>
+					<td class="td-even">
+						{{job.eduLimit}}
+					</td>
+					<td class="td-odd">工作年限：</td>
+					<td class="td-even">{{job.workYear}}</td>
+				</tr>
+				<tr>
+					<td class="td-odd">执行团队：</td>
+					<td class="td-even">
+						{{job.team}}
+					</td>
+					<td class="td-odd">咨询电话：</td>
+					<td class="td-even">谁的电话？</td>
+				</tr>
+				<tr>
+					<td class="td-odd" colspan="4">职位描述：</td>
+				</tr>
+				<tr>
+					<td class="td-even" colspan="4">
+						{{job.jobDesc}}
+					</td>
+				</tr>
+				
+			</tbody>
+		</table>
+	</div>
+	
+	<div class="mytable">
+		<div class="title">
+			<span>
+				公司内部团队推荐人选
+			</span>
+			<span>
+				关键词
+				<input ng-model="search.name" />
+			</span>
+		</div>
+		<table>
+			<thead>
+				<tr>
+					<th>操作</th>
+					<th>人选姓名</th>
+					<th>最近所在公司</th>
+					<th>当前职务</th>
+					<th>联系电话</th>
+					<th>推荐状态</th>
+					<th>推荐时间</th>
+					<th>评语或沟通记录</th>
+					<th>推荐人</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="item in inteams">
+					<td><input type="checkbox" ng-model="checkpub" /></td>
+					<td>{{item.name}}</td>
+					<td>未实现</td>
+					<td>未实现</td>
+					<td>{{job.phone}}</td>
+					<td>{{job.recom_state}}</td>
+					<td>{{job.recom_time | date : 'yyyy-Mm-dd Hh:mm:ss'}}</td>
+					<td>{{job.comm}}</td>
+					<td>{{job.recom_user}}</td>
+				</tr>
+				<tr>
+					<input type="checkbox" />全选
+					<a ng-click="recom(1);">推荐</a>
+					<a ng-click="recom(0);">不合适</a>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	<div class="mytable">
+		<div class="title">
+			<span>
+				向企业投递的简历
+			</span>
+		</div>
+		<table>
+			<thead>
+				<tr>
+					<th>操作</th>
+					<th>人选姓名</th>
+					<th>最近所在公司</th>
+					<th>当前职务</th>
+					<th>联系电话</th>
+					<th>企业反馈</th>
+					<th>反馈时间</th>
+					<th>评语或沟通记录</th>
+					<th>投递时间</th>
+					<th>推荐人</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="item in inteams">
+					<td><input type="checkbox" ng-model="checkpub" /></td>
+					<td>{{item.name}}</td>
+					<td>未实现</td>
+					<td>未实现</td>
+					<td>{{job.phone}}</td>
+					<td>未实现</td>
+					<td>未实现</td>
+					<td>{{job.verify_time | date : 'yyyy-Mm-dd Hh:mm:ss'}}</td>
+					<td>{{job.recom_user}}</td>
+				</tr>
+				<tr>
+					<input type="checkbox" />全选
+					<a ng-click="verify(1);">初试</a>
+					<a ng-click="verify(2);">复试</a>
+					<a ng-click="verify(3);">终试</a>
+					<a ng-click="verify(4);">offer</a>
+					<a ng-click="verify(5);">入职</a>
+					<a ng-click="verify(6);">审核不通过</a>
+					<a ng-click="verify(7);">面试不通过</a>
+					<a ng-click="verify(8);">候选人放弃</a>
+					<a ng-click="verify(9);">离职</a>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	
+	
+	<div class="mytable">
+		<div class="title">
+			<span>
+				团队职位运作交流信息
+			</span>
+		</div>
+		<table>
+			<tbody>
+				<tr>
+					<td>
+						<textarea ng-model="addcomm" class="textarea"></textarea>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="btn btn-lblue" ng-click="addComm();">确认添加</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 	
 </div>

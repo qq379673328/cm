@@ -4,8 +4,191 @@
 	&gt;
 	<a href="#resumemgrlist">简历管理</a>
 	&gt;
-	录入简历
+	登记简历
 </div>
+<div ng-show="!isReady">
+	加载中...
+</div>
+<form id="resumeeditform" name="form" ng-show="isReady">
 <div class="content">
+	<div class="mytable">
+		<div class="title">
+			<span>
+				基本信息
+			</span>
+		</div>
+		<table>
+			<tbody>
+				<tr>
+					<td class="td-odd"><span class="warn">*</span>姓名：</td>
+					<td class="td-even">
+						<input 
+								name="name" 
+								ng-model="resume.name"
+								class="form-input" />
+					</td>
+					<td class="td-odd"><span class="warn">*</span>居住地址：</td>
+					<td class="td-even">
+						<input 
+								name="address" 
+								ng-model="resume.address"
+								class="form-input" />
+					</td>
+				</tr>
+				<tr>
+					<td class="td-odd"><span class="warn">*</span>性别：</td>
+					<td class="td-even">
+						<select name="sex" ng-modle="resume.sex">
+							<option value="男">男</option>
+							<option value="女">女</option>
+						</select>
+					</td>
+					<td class="td-odd"><span class="warn">*</span>最高学历：</td>
+					<td class="td-even">
+						<div
+							name="education"
+							core-basedata 
+							type="select"
+							bind-model="resume.education"
+							key="edu"></div>
+					</td>
+				</tr>
+				<tr>
+					<td class="td-odd"><span class="warn">*</span>出生日期：</td>
+					<td class="td-even">
+						<input datepicker name="birthcay" ng-model="resume.birthcay" />
+					</td>
+					<td class="td-odd"><span class="warn">*</span>婚姻状况：</td>
+					<td class="td-even">
+						<select name="marrage" ng-modle="resume.marrage">
+							<option value="已婚">已婚</option>
+							<option value="未婚">未婚</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="td-odd"><span class="warn">*</span>手机号码：</td>
+					<td class="td-even">
+						<input name="phone" ng-model="resume.phone" />
+					</td>
+					<td class="td-odd"><span class="warn">*</span>电子邮箱：</td>
+					<td class="td-even">
+						<input name="email" ng-model="resume.email" />
+					</td>
+				</tr>
+				<tr>
+					<td class="td-odd"><span class="warn">*</span>目前年薪：</td>
+					<td class="td-even">
+						<input name="yearPay" ng-model="resume.yearPay" />
+					</td>
+					<td class="td-odd"><span class="warn">*</span>工作状态：</td>
+					<td class="td-even">
+						<select name="workState" ng-modle="resume.workState">
+							<option value="在职">在职</option>
+							<option value="离职">离职</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="td-odd"><span class="warn">*</span>个人简介：</td>
+					<td class="td-even">
+						<input name="desc" ng-model="resume.desc" />
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	<div class="mytable">
+		<div class="title">
+			<span>
+				求职意向
+			</span>
+		</div>
+		<table>
+			<tbody>
+				<tr>
+					
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	<div class="mytable">
+		<div class="title">
+			<span>
+				工作经历
+			</span>
+		</div>
+		<table>
+			<tbody>
+				<tr>
+					
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	<div class="mytable">
+		<div class="title">
+			<span>
+				教育培训经历
+			</span>
+		</div>
+		<table>
+			<tbody>
+				<tr>
+					
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	<div class="mytable">
+		<div class="title">
+			<span>
+				语言能力
+			</span>
+		</div>
+		<table>
+			<tbody>
+				<tr>
+					
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	<div class="mytable">
+		<div class="title">
+			<span>
+				个人头像
+			</span>
+		</div>
+		<table>
+			<tbody>
+				<tr>
+					
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	<div class="mytable">
+		<div class="title">
+			<span>
+				简历附件
+			</span>
+		</div>
+		<table>
+			<tbody>
+				<tr>
+					
+				</tr>
+			</tbody>
+		</table>
+	</div>
 	
 </div>
+
+</form>

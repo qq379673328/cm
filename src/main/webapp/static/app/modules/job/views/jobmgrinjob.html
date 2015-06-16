@@ -6,6 +6,201 @@
 	&gt;
 	录入职位
 </div>
+<div ng-show="!isReady">
+	加载中...
+</div>
+<form id="jobditform" name="form" ng-show="isReady">
 <div class="content">
+	<div class="mytable">
+		<div class="title">
+			<span>
+				发布招聘职位
+			</span>
+		</div>
+		<table>
+			<tbody>
+				<tr>
+					<td class="td-odd"><span class="warn">*</span>客户名称：</td>
+					<td class="td-even" colspan="3">
+						<span>
+							<input 
+									name="customName" 
+									ng-model="custom.customName"
+									class="form-input" />
+						</span>
+					</td>
+				</tr>
+				<tr>
+					<td class="td-odd"><span class="warn">*</span>职位名称：</td>
+					<td class="td-even" colspan="3">
+						<input
+							name="name"
+							bind-model="job.name"
+							class="form-input"/>
+					</td>
+				</tr>
+				<tr>
+					<td class="td-odd">薪酬待遇：</td>
+					<td class="td-even">
+						<input
+							name="payMin"
+							bind-model="job.payMin"
+							class="form-input"/>
+						至
+						<input
+							name="payMax"
+							bind-model="job.payMax"
+							class="form-input"/>
+					</td>
+					<td class="td-odd">职位状态：</td>
+					<td class="td-even">
+						<div
+							name="state"
+							core-basedata 
+							type="select"
+							bind-model="job.state"
+							key="jobState"></div>
+					</td>
+				</tr>
+				<tr>
+					<td class="td-odd"><span class="warn">*</span>执行团队：</td>
+					<td class="td-even" colspan="3">
+						<div core-teamselect bindteam="job.team" teamselect="teamselect"></div>
+					</td>
+				</tr>
+				<tr>
+					<td class="td-odd"><span class="warn">*</span>工作地点：</td>
+					<td class="td-even" colspan="3">
+						<input 
+									name="workplace"
+									ng-model="job.workplace"
+									class="form-input" />
+					</td>
+				</tr>
+				<tr>
+					<td class="td-odd"><span class="warn">*</span>职位类别：</td>
+					<td class="td-even" colspan="3">
+						<input 
+									name="jobType"
+									ng-model="job.jobType"
+									class="form-input" />
+					</td>
+				</tr>
+				<tr>
+					<td class="td-odd"><span class="warn">*</span>所属行业：</td>
+					<td class="td-even" colspan="3">
+						<input 
+									name="industry"
+									ng-model="job.industry"
+									class="form-input" />
+					</td>
+				</tr>
+				<tr>
+					<td class="td-odd"><span class="warn">*</span>工作年限：</td>
+					<td class="td-even">
+						<input 
+									name="workYear"
+									ng-model="job.workYear"
+									class="form-input" />
+					</td>
+					<td class="td-odd"><span class="warn">*</span>需求人数：</td>
+					<td class="td-even">
+						<input 
+									name="requirePeople"
+									ng-model="job.requirePeople"
+									class="form-input" />
+					</td>
+				</tr>
+				<tr>
+					<td class="td-odd"><span class="warn">*</span>所属部门：</td>
+					<td class="td-even">
+						<input 
+									name="department"
+									ng-model="job.department"
+									class="form-input" />
+					</td>
+					<td class="td-odd"><span class="warn">*</span>汇报对象：</td>
+					<td class="td-even">
+						<input 
+									name="reportObj"
+									ng-model="job.reportObj"
+									class="form-input" />
+					</td>
+				</tr>
+				<tr>
+					<td class="td-odd"><span class="warn">*</span>年龄要求：</td>
+					<td class="td-even">
+						<input 
+									name="ageMin"
+									ng-model="job.ageMin"
+									class="form-input" />
+						至
+						<input 
+									name="ageMax"
+									ng-model="job.ageMax"
+									class="form-input" />
+					</td>
+					<td class="td-odd">性别要求：</td>
+					<td class="td-even">
+						<select name="sexLimit" ng-model="job.sexLimit" class="form-select">
+							<option value="不限"></option>
+							<option value="男"></option>
+							<option value="女"></option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="td-odd">学历要求：</td>
+					<td class="td-even">
+						<div
+							name="eduLimit"
+							core-basedata 
+							type="select"
+							bind-model="job.eduLimit"
+							key="edu"></div>
+					</td>
+					<td class="td-odd">语言要求：</td>
+					<td class="td-even">
+						<input 
+									name="languageLimit"
+									ng-model="job.languageLimit"
+									class="form-input" />
+					</td>
+				</tr>
+				<tr>
+					<td class="td-odd"><span class="warn">*</span>职位描述：</td>
+					<td class="td-even" colspan="3">
+						<textarea 	class="textarea"
+									name=jobDesc
+									ng-model="job.jobDesc"
+									></textarea>
+					</td>
+				</tr>
+				<tr>
+					<td class="td-odd"><span class="warn">*</span>公司介绍：</td>
+					<td class="td-even" colspan="3">
+						<textarea 	class="textarea"
+									name=companyDesc
+									ng-model="job.companyDesc"
+									></textarea>
+					</td>
+				</tr>
+				
+				<tr>
+					<td>
+						<div class="btn btn-lblue" ng-show="!isrequest" ng-click="save();">发布招聘信息</div>
+						<div class="btn btn-blank" ng-show="isrequest">操作中...</div>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<div core-formresult result="formresult"></div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 	
 </div>
+
+</form>

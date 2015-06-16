@@ -6,6 +6,132 @@
 	&gt;
 	录入合同
 </div>
+<div ng-show="!isReady">
+	加载中...
+</div>
+<form id="contracteditform" name="form" ng-show="isReady">
 <div class="content">
+	<div class="mytable">
+		<div class="title">
+			<span>
+				基本信息
+			</span>
+		</div>
+		<table>
+			<tbody>
+				<tr>
+					<td class="td-odd">客户名称：</td>
+					<td class="td-even" colspan="3">
+						<span>{{custom.customName}}</span>
+					</td>
+				</tr>
+				<tr>
+					<td class="td-odd">所属行业：</td>
+					<td class="td-even" colspan="3">
+						<span>{{custom.industry}}</span>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	<div class="mytable">
+		<div class="title">
+			<span>
+				基本信息
+			</span>
+		</div>
+		<table>
+			<tbody>
+				<tr>
+					<td class="td-odd">合同编号：</td>
+					<td class="td-even">
+						<input 
+							name="no"
+							ng-model="contract.no"
+							class="form-input" />
+					</td>
+					<td class="td-odd">合同状态：</td>
+					<td class="td-even">
+						<div
+							name="state"
+							core-basedata 
+							type="select"
+							bind-model="contract.state"
+							key="contractState"></div>
+					</td>
+				</tr>
+				<tr>
+					<td class="td-odd">签约日期：</td>
+					<td class="td-even">
+						<input 
+							name="inDate"
+							ng-model="contract.inDate"
+							datepicker
+							class="form-input" />
+					</td>
+					<td class="td-odd">签约比例：</td>
+					<td class="td-even">
+						<input 
+							name="inPercentage"
+							ng-model="contract.inPercentage"
+							class="form-input" />
+					</td>
+				</tr>
+				<tr>
+					<td class="td-odd">支付方式：</td>
+					<td class="td-even">
+						<input 
+							name="payway"
+							ng-model="contract.payway"
+							class="form-input" />
+					</td>
+					<td class="td-odd">首付款：</td>
+					<td class="td-even">
+						<input 
+							name="firstPay"
+							ng-model="contract.firstPay"
+							class="form-input" />
+					</td>
+				</tr>
+				<tr>
+					<td class="td-odd">使用期限：</td>
+					<td class="td-even" colspan="3">
+						<input 
+							name="useLimit"
+							ng-model="contract.useLimit"
+							class="form-input" />
+					</td>
+				</tr>
+				<tr>
+					<td class="td-odd">其他要求：</td>
+					<td class="td-even" colspan="3">
+						<input 
+							name="otherRequire"
+							ng-model="contract.otherRequire"
+							class="form-input" />
+					</td>
+				</tr>
+				<tr>
+					<td class="td-odd">合同附件：</td>
+					<td class="td-even" colspan="3">
+						<div class="attach">
+							<a>北京.doc</a>
+							<br/>
+							<a>北京.doc</a>
+						</div>
+						<div class="btn btn-lblue">浏览</div>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="4">
+						<div class="btn btn-lblue" ng-show="!isrequest" ng-click="save();">保存</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 	
 </div>
+
+</form>

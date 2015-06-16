@@ -4,8 +4,215 @@
 	&gt;
 	<a href="#resumemgrlist">简历管理</a>
 	&gt;
-	简历信息
+	简历详情
 </div>
 <div class="content">
+	<div class="mytable">
+		<div class="title">
+			<span>
+				简历详情
+			</span>
+			
+			<a class="spe" href="#resumemgr/editresume/{{resume.id}}">编辑简历信息</a>
+		</div>
+		<table>
+			<tbody>
+				<tr>
+					<td class="td-odd">{{resume.name}}</td>
+					<td class="td-even"></td>
+					<td class="td-odd">简历编号：{{resume.id}}</td>
+					<td class="td-even">更新时间：{{resume.last_update_time | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+				</tr>
+				<tr>
+					<td class="td-odd">基本概况：</td>
+					<td class="td-even">
+						{{resume.education}} |
+						{{resume.sex}} |
+						{{resume.birthcay}} |
+						{{resume.marrage}}
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+				
+	<div class="mytable">
+		<div class="title">
+			<span>
+				基本信息
+			</span>
+		</div>
+		<table>
+			<tbody>
+				<tr>
+					<td class="td-odd">性别：</td>
+					<td class="td-even">
+						{{resume.sex}}
+					</td>
+					<td class="td-odd">生日：</td>
+					<td class="td-even">{{resume.birthcay}}</td>
+				</tr>
+				<tr>
+					<td class="td-odd">工作状态：</td>
+					<td class="td-even">{{resume.work_state}}</td>
+					<td class="td-odd">现居住地：</td>
+					<td class="td-even">{{resume.address}}</td>
+				</tr>
+				<tr>
+					<td class="td-odd">最近公司：</td>
+					<td class="td-even">未实现</td>
+					<td class="td-odd">手机号码：</td>
+					<td class="td-even">{{resume.phone}}</td>
+				</tr>
+				<tr>
+					<td class="td-odd">当前行业：</td>
+					<td class="td-even">未实现</td>
+					<td class="td-odd">电子邮件：</td>
+					<td class="td-even">{{resume.email}}</td>
+				</tr>
+				<tr>
+					<td class="td-odd">目前年薪：</td>
+					<td class="td-even">未实现</td>
+					<td class="td-odd">最高学历：</td>
+					<td class="td-even">{{resume.education}}</td>
+				</tr>
+				
+			</tbody>
+		</table>
+	</div>
+	
+	<div class="mytable">
+		<div class="title">
+			<span>
+				个人简介
+			</span>
+		</div>
+		<table>
+			<tbody>
+				<tr>
+					<td class="td-odd">期望行业：</td>
+					<td class="td-even">未实现</td>
+				</tr>
+				<tr>
+					<td class="td-odd">期望职业：</td>
+					<td class="td-even">未实现</td>
+				</tr>
+				<tr>
+					<td class="td-odd">期望地址：</td>
+					<td class="td-even">未实现</td>
+				</tr>
+				<tr>
+					<td class="td-odd">期望年薪：</td>
+					<td class="td-even">未实现</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	<div class="mytable">
+		<div class="title">
+			<span>
+				工作经验
+			</span>
+		</div>
+		<table>
+			<tbody>
+				<tr ng-repeat="item in resumeWorkhistorys">
+					
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	<div class="mytable">
+		<div class="title">
+			<span>
+				教育背景
+			</span>
+		</div>
+		<table>
+			<tbody>
+				<tr ng-repeat="item in resumeEdus">
+					
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	<div class="mytable">
+		<div class="title">
+			<span>
+				语言能力
+			</span>
+		</div>
+		<table>
+			<tbody>
+				<tr ng-repeat="item in resumeLanguages">
+					
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	<div class="mytable">
+		<div class="title">
+			<span>
+				候选人相关附件
+			</span>
+		</div>
+		<table>
+			<tbody>
+				<tr ng-repeat="item in resumeDatas">
+					
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	<div class="mytable">
+		<div class="title">
+			<span>
+				沟通记录
+			</span>
+		</div>
+		<table>
+			<thead>
+				<tr>
+					<th>执行人</th>
+					<th>内容</th>
+					<th>时间</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="comm in resumeComms">
+					<td>{{comm.create_user}}</td>
+					<td>{{comm.content}}</td>
+					<td>{{comm.create_time | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	<div class="mytable">
+		<div class="title">
+			<span>
+				添加沟通记录
+			</span>
+		</div>
+		<table>
+			<tbody>
+				<tr>
+					<td>
+						<textarea class="textarea" ng-model="addcomm"></textarea>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="btn btn-lblue" ng-click="addComm();">确认添加</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 	
 </div>
