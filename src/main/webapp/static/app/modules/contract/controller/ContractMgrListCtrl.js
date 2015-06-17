@@ -1,7 +1,7 @@
 //合同管理-列表页
 app.controller('ContractMgrListCtrl',
 		function($scope, $http, $routeParams, ngTableParams,
-				ContractService ,$rootScope) {
+				$rootScope) {
 	$rootScope.menu = "contract";
 	
 	//分页查询

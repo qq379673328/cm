@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import javax.annotation.Resource;
 
+import org.hibernate.type.StringType;
 import org.hibernate.type.Type;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -68,6 +69,10 @@ public class JobService extends SimpleServiceImpl {
 	 * @param Job
 	 * @return
 	 */
+	/**
+	 * @param job
+	 * @return
+	 */
 	@Transactional
 	public FormResult edit(TJob job) {
 		FormResult ret = new FormResult();
@@ -75,6 +80,15 @@ public class JobService extends SimpleServiceImpl {
 			job.setId(UUID.randomUUID().toString());
 			job.setCreateUser(userUtil.getLoginUser().getId());
 			job.setCreateTime(new Date());
+			//绑定最新合同
+			String contractId = getCustomNewContract(job.getCustomId());
+			if(contractId == null){
+				ret.setSuccess(FormResult.ERROR);
+				ret.setMessage("职位保存失败，无最新合同");
+				return ret;
+			}else{
+				job.setContractId(contractId);
+			}
 		}else{
 			job.setLastUpdateTime(new Date());
 			job.setLastUpdateUser(userUtil.getLoginUser().getId());
@@ -84,6 +98,22 @@ public class JobService extends SimpleServiceImpl {
 		ret.setSuccess(FormResult.SUCCESS);
 		ret.setData(job.getId());
 		return ret;
+	}
+	
+	/**
+	 * 获取客户最新合同id
+	 * @param customId
+	 * @return
+	 */
+	public String getCustomNewContract(String customId){
+		List<Map<String, Object>> items = dao.queryListBySql("select * from t_contract where custom_id = ? order by in_date desc limit 1 ",
+				new Object[]{customId},
+				new Type[]{StringType.INSTANCE});
+		if(items.size() == 0){
+			return null;
+		}else{
+			return String.valueOf(items.get(0).get("id"));
+		}
 	}
 
 }

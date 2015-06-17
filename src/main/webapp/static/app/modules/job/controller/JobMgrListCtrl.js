@@ -1,7 +1,7 @@
 //职位管理列表页面
 app.controller('JobMgrListCtrl',
 		function($scope, $http, $routeParams, ngTableParams,
-				JobService, $rootScope) {
+				$rootScope) {
 	$rootScope.menu = "job";
 	
 	//分页查询
@@ -41,7 +41,7 @@ app.controller('JobMgrListCtrl',
 			}else{
 				$scope.queryParams.isreload = false;
 			}
-			$http.post("custom/list", $scope.queryParams).success(function(data){
+			$http.post("job/list", $scope.queryParams).success(function(data){
 				var total = data.total;
 				$scope.queryParams.total = total;
 				params.total(total);
@@ -64,5 +64,10 @@ app.controller('JobMgrListCtrl',
 			$scope.reload(true);
 		});
 	};
+	
+	$scope.changeSelect = function(target){
+		$(target).siblings().removeClass("select");
+		$(target).addClass("select");
+	}
 	
 });

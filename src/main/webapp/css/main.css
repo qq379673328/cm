@@ -228,6 +228,11 @@ textarea{
 	float: left;
 	margin-right: 100px;
 }
+.searchzone .line .vals .select{
+	color: #D20000;
+	font-weight: bold;
+	border-bottom: 2px solid;
+}
 .searchzone .line .vals a{
 	color: #21639C;
 	margin-right: 5px;
@@ -280,6 +285,11 @@ textarea{
 	font-size: 14px;
 	color: #fff;
 	cursor: pointer;
+}
+.mytable .title .select{
+	color: #D20000;
+	font-weight: bold;
+	border-bottom: 2px solid;
 }
 .mytable .title .spe{
 	color: #9E2424;

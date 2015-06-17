@@ -1,7 +1,7 @@
 //职位管理-录入职位
 app.controller('JobMgrInJobCtrl',
 		function($scope, $http, $routeParams, ngTableParams, 
-				CustomService, $rootScope) {
+				$rootScope) {
 	$rootScope.menu = "job";
 	
 	var jobId = $routeParams.id;
@@ -9,13 +9,24 @@ app.controller('JobMgrInJobCtrl',
 	//请求职位信息
 	if(jobId){
 		$http.post("job/getJobById", {id: jobId}).success(function(data){
-			$scope.job = data.custom;
+			$scope.job = data.job;
 			$scope.isReady = true;
 			
 			//请求团队信息
 			$http.post("team/getSelectTeams", {ids: $scope.job.team}).success(function(data){
 				$scope.teamselect = data;
-			});
+			});		});
+	}else{
+		$scope.isReady = true;
+		
+		$scope.job = {
+				state: "运作",
+				sexLimit: "不限"
+		};
+		
+		//请求团队信息
+		$http.post("team/getSelectTeams", {ids: ""}).success(function(data){
+			$scope.teamselect = data;
 		});
 	}
 	
@@ -32,7 +43,7 @@ app.controller('JobMgrInJobCtrl',
 	function validFormAndSubmit(cb){
 		if(validForm()){
 			$scope.isrequest = true;
-			$http.post("job/edit", $scope.custom).success(function(data){
+			$http.post("job/edit", $scope.job).success(function(data){
 				$scope.formresult = data;
 				$scope.isrequest = false;
 				if(cb) cb(data);

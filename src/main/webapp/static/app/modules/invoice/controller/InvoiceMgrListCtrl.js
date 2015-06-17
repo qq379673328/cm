@@ -2,7 +2,7 @@
 //
 app.controller('InvoiceMgrListCtrl',
 		function($scope, $http, $routeParams, ngTableParams,
-				InvoiceService, $rootScope) {
+				$rootScope) {
 	$rootScope.menu = "invoice";
 	
 });

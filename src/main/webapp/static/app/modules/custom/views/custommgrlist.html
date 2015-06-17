@@ -60,13 +60,13 @@
 			
 			<a class="spe" href="#custommgr/incustom">录入新客户</a>
 			
-			<a class="common" ng-click="search.beyond = 'other';">
+			<a class="common" ng-click="search.beyond = 'other';changeSelect($event.target);">
 				<i class="fa fa-user-plus"></i>&nbsp;其他客户</a>
-			<a class="common" ng-click="search.beyond = 'team';">
+			<a class="common" ng-click="search.beyond = 'team';changeSelect($event.target);">
 				<i class="fa fa-users"></i>&nbsp;合作客户</a>
-			<a class="common" ng-click="search.beyond = 'my';">
+			<a class="common" ng-click="search.beyond = 'my';changeSelect($event.target);">
 				<i class="fa fa-user"></i>&nbsp;我的客户</a>
-			<a class="common" ng-click="search.beyond = '';">全部</a>
+			<a class="common select" ng-click="search.beyond = '';changeSelect($event.target);">全部</a>
 			
 		</div>
 		<table class="my-table" ng-table="tableParams" template-pagination="custom/pager">

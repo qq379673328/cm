@@ -23,10 +23,7 @@
 					<td class="td-odd"><span class="warn">*</span>客户名称：</td>
 					<td class="td-even" colspan="3">
 						<span>
-							<input 
-									name="customName" 
-									ng-model="custom.customName"
-									class="form-input" />
+							<div core-customselect ng-model="job.customId"></div>
 						</span>
 					</td>
 				</tr>
@@ -143,9 +140,9 @@
 					<td class="td-odd">性别要求：</td>
 					<td class="td-even">
 						<select name="sexLimit" ng-model="job.sexLimit" class="form-select">
-							<option value="不限"></option>
-							<option value="男"></option>
-							<option value="女"></option>
+							<option value="不限">不限</option>
+							<option value="男">男</option>
+							<option value="女">女</option>
 						</select>
 					</td>
 				</tr>

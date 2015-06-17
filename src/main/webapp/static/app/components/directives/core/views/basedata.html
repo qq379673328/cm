@@ -9,10 +9,10 @@
 
 <!-- span 类型 -->
 <div ng-show="type=='span'">
-	<a ng-show="allSelectName" ng-click="click('');">
+	<a ng-show="allSelectName" ng-click="click('', $event.target);">
 		{{allSelectName}}
 	</a>
-	<a ng-repeat="item in items" value="{{item[0]}}" ng-click="click(item[0]);">
+	<a ng-repeat="item in items" value="{{item[0]}}" ng-class="" ng-click="click(item[0], $event.target);">
 		{{item[1]}}
 	</a>
 </div>

@@ -1,7 +1,7 @@
 //简历管理
 app.controller('ResumeMgrListCtrl',
 		function($scope, $http, $routeParams, ngTableParams,
-				ResumeService, $rootScope) {
+				$rootScope) {
 	$rootScope.menu = "resume";
 	
 	//分页查询

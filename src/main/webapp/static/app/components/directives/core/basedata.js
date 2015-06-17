@@ -18,7 +18,7 @@ app.directive('coreBasedata', ["$http", function($http){
                           ["签约暂停", "签约暂停"],
                           ["签约终止", "签约终止"]],
            //合同状态
-           customState: [
+           contractState: [
                         ["运作", "运作"],
                         ["暂停", "暂停"],
                         ["终止", "终止"]],
@@ -75,8 +75,13 @@ app.directive('coreBasedata', ["$http", function($http){
         link: function($scope, $el, attrs, ngModel){
         	$scope.items = baseData[$scope.key];
         	
-        	$scope.click = function(val){
+        	$scope.click = function(val ,target){
         		ngModel.$setViewValue(val);
+        		if(target){
+        			var $target = $(target);
+        			$target.siblings().removeClass("select");
+        			$target.addClass("select");
+        		}
         	};
         }
     };

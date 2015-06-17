@@ -1,7 +1,7 @@
 //客户管理-列表页
 app.controller('CustomMgrListCtrl',
 		function($scope, $http, $routeParams, ngTableParams,
-				CustomService, $rootScope, BaseInfoService) {
+				$rootScope, BaseInfoService) {
 	//菜单
 	$rootScope.menu = "custom";
 	
@@ -65,5 +65,10 @@ app.controller('CustomMgrListCtrl',
 			$scope.reload(true);
 		});
 	};
+	
+	$scope.changeSelect = function(target){
+		$(target).siblings().removeClass("select");
+		$(target).addClass("select");
+	}
 	
 });

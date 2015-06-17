@@ -68,13 +68,13 @@
 			
 			<a class="spe" href="#jobmgr/injob">发布新职位</a>
 			
-			<a class="common" ng-click="search.beyond = 'other';">
+			<a class="common" ng-click="search.beyond = 'other';changeSelect($event.target);">
 				<i class="fa fa-user-plus"></i>&nbsp;其他职位</a>
-			<a class="common" ng-click="search.beyond = 'team';">
+			<a class="common" ng-click="search.beyond = 'team';changeSelect($event.target);">
 				<i class="fa fa-users"></i>&nbsp;合作职位</a>
-			<a class="common" ng-click="search.beyond = 'my';">
+			<a class="common" ng-click="search.beyond = 'my';changeSelect($event.target);">
 				<i class="fa fa-user"></i>&nbsp;我的职位</a>
-			<a class="common" ng-click="search.beyond = '';">全部</a>
+			<a class="common select" ng-click="search.beyond = '';">全部</a>
 			
 		</div>
 		<table class="my-table" ng-table="tableParams" template-pagination="custom/pager">

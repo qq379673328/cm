@@ -1,0 +1,32 @@
+<div class="widget-team">
+	<div class="teams">
+		<div class="team formresult-success">
+			<span class="fa fa-user">&nbsp;</span>
+		</div>
+		<div class="team formresult-success">
+			<span
+				ng-show="customname!=null"
+				ng-click="customname=null"
+				ng-bind="customname"
+				class="fa fa-times close">
+				</span>
+		</div>
+	</div>
+	<span class="btn btn-lblue teams-btn" ng-click="showdialog=true;">选择客户</span>
+	<div class="dialog-wrap" ng-show="showdialog">
+		<div class="dialog">
+			<span>至多显示100条记录</span>
+			<input class="form-input" ng-model="customsearch" />
+			<div ng-click="showdialog=false;" 
+				class="fa fa-2x fa-times close"></div>
+			<div ng-repeat="item in customs">
+				<span
+					ng-click="customname = item;ok(item.id);"
+					class="fa fa-2x fa-check-circle ok">
+						{{item.custom_name}}
+					</span>
+				<br/>
+			</div>
+		</div>
+	</div>
+</div>
