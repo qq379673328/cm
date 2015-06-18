@@ -60,7 +60,7 @@
 			<tbody>
 				<tr ng-show="!$data"><td colspan="4">加载中...</td></tr>
 				<tr ng-repeat="item in $data" ng-class="{true:'tr-odd' , false: 'tr-even'}[$index%2 == 0]">
-					<td>{{ item.no }}
+					<td>
 						<a class="link" 
 						href="#contractmgr/viewcontract/{{item.id}}">
 						{{ item.no }}</a>
@@ -84,7 +84,7 @@
 					<td ng-show="!item.ishandling">
 						<a ng-show="item.state=='运作' || item.state=='暂停'"
 							class="btn btn-small btn-lblue"
-							 href="#contractmgr/editcustom/{{item.id}}">编辑</a>
+							 href="#contractmgr/editcontract/{{item.id}}">编辑</a>
 						<a class="btn btn-small btn-success"
 							ng-click="item.prepareDel = !item.prepareDel"
 							>删除</a>

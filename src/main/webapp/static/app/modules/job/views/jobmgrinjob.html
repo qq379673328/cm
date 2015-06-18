@@ -23,7 +23,7 @@
 					<td class="td-odd"><span class="warn">*</span>客户名称：</td>
 					<td class="td-even" colspan="3">
 						<span>
-							<div core-customselect ng-model="job.customId"></div>
+							<div core-customselect ng-model="custom" customid="custom.id"></div>
 						</span>
 					</td>
 				</tr>
@@ -32,7 +32,7 @@
 					<td class="td-even" colspan="3">
 						<input
 							name="name"
-							bind-model="job.name"
+							ng-model="job.name"
 							class="form-input"/>
 					</td>
 				</tr>
@@ -41,12 +41,12 @@
 					<td class="td-even">
 						<input
 							name="payMin"
-							bind-model="job.payMin"
+							ng-model="job.payMin"
 							class="form-input"/>
 						至
 						<input
 							name="payMax"
-							bind-model="job.payMax"
+							ng-model="job.payMax"
 							class="form-input"/>
 					</td>
 					<td class="td-odd">职位状态：</td>
@@ -55,7 +55,7 @@
 							name="state"
 							core-basedata 
 							type="select"
-							bind-model="job.state"
+							ng-model="job.state"
 							key="jobState"></div>
 					</td>
 				</tr>

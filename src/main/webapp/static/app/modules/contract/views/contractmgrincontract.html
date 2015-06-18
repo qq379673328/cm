@@ -22,7 +22,7 @@
 				<tr>
 					<td class="td-odd">客户名称：</td>
 					<td class="td-even" colspan="3">
-						<span>{{custom.customName}}</span>
+						<div core-customselect ng-model="custom"></div>
 					</td>
 				</tr>
 				<tr>
@@ -126,6 +126,11 @@
 				<tr>
 					<td colspan="4">
 						<div class="btn btn-lblue" ng-show="!isrequest" ng-click="save();">保存</div>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<div core-formresult result="formresult"></div>
 					</td>
 				</tr>
 			</tbody>

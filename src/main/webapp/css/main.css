@@ -228,6 +228,9 @@ textarea{
 	float: left;
 	margin-right: 100px;
 }
+.searchzone .line .vals input{
+	margin-top: 5px;
+}
 .searchzone .line .vals .select{
 	color: #D20000;
 	font-weight: bold;

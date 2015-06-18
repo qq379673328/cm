@@ -2,17 +2,20 @@ package cn.com.sinosoft.contract.service;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import javax.annotation.Resource;
 
+import org.hibernate.type.StringType;
 import org.hibernate.type.Type;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import cn.com.sinosoft.common.model.TContract;
+import cn.com.sinosoft.common.model.TCustom;
 import cn.com.sinosoft.common.util.StrUtils;
 import cn.com.sinosoft.core.service.SimpleServiceImpl;
 import cn.com.sinosoft.core.service.model.FormResult;
@@ -59,8 +62,24 @@ public class ContractService extends SimpleServiceImpl {
 	 * @param id
 	 * @return
 	 */
-	public TContract getContractById(String id) {
-		return dao.queryById(id, TContract.class);
+	public Object getContractViewById(String id) {
+		Map<String, Object> ret = new HashMap<String, Object>();
+		if(StrUtils.isNull(id)){
+			return ret;
+		}
+		//合同信息
+		TContract contract = dao.queryById(id, TContract.class);
+		ret.put("contract", contract);
+		if(contract != null){
+			//客户信息
+			ret.put("custom", dao.queryById(contract.getCustomId(), TCustom.class));
+			//合作职位
+			ret.put("jobs", dao.queryListBySql(
+					"select * from t_job where contract_id = ? ",
+					new Object[]{id},
+					new Type[]{StringType.INSTANCE}));
+		}
+		return ret;
 	}
 
 	/**
@@ -74,9 +93,11 @@ public class ContractService extends SimpleServiceImpl {
 		if(StrUtils.isNull(contract.getId())){//新增
 			contract.setId(UUID.randomUUID().toString());
 			contract.setInDate(new Date());
+			dao.save(contract);
+		}else{
+			dao.update(contract);
 		}
 		
-		dao.save(contract);
 		ret.setSuccess(FormResult.SUCCESS);
 		ret.setData(contract.getId());
 		return ret;

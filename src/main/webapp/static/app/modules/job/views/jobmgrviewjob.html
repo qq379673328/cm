@@ -10,8 +10,9 @@
 	<div class="mytable">
 		<div class="title">
 			<span>
-				{{job.name}}招聘概述 <br/>
-				{{create_time | date : 'yyyy-MM-dd HH:mm'}} 发布
+				{{job.name}}&nbsp;&nbsp;&nbsp;&nbsp;招聘概述 
+				&nbsp;&nbsp;&nbsp;&nbsp;
+				{{job.create_time | date : 'yyyy-MM-dd HH:mm'}} 发布
 				
 			</span>
 			
@@ -38,8 +39,8 @@
 	<div class="mytable">
 		<div class="title">
 			<span>
-				{{job.name}}职位描述
-				(职位编号：{{job.id}})
+				{{job.name}}&nbsp;&nbsp;&nbsp;&nbsp;职位描述
+				(职位编号: {{job.id}})
 			</span>
 			
 			<a class="spe" ng-click="showDetail = !showDetail">隐藏详情</a>
@@ -94,10 +95,8 @@
 					<td class="td-even">谁的电话？</td>
 				</tr>
 				<tr>
-					<td class="td-odd" colspan="4">职位描述：</td>
-				</tr>
-				<tr>
-					<td class="td-even" colspan="4">
+					<td class="td-odd" colspan="1">职位描述：</td>
+					<td class="td-even" colspan="3">
 						{{job.jobDesc}}
 					</td>
 				</tr>

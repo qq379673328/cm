@@ -42,13 +42,13 @@ public class ContractController extends BaseController {
 	}
 	
 	/**
-	 * 根据合同id获取合同信息
+	 * 根据合同id获取合同信息-查看合同页面
 	 * @return
 	 */
-	@RequestMapping("getContractById")
+	@RequestMapping("getContractViewById")
 	@ResponseBody
-	public TContract getcontractById(String id){
-		return contractService.getContractById(id);
+	public Object getContractViewById(String id){
+		return contractService.getContractViewById(id);
 	}
 	
 	/**

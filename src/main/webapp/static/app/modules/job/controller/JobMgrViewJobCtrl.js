@@ -8,7 +8,7 @@ app.controller('JobMgrViewJobCtrl',
 	$scope.isReady = false;
 	
 	//请求职位信息
-	$http.post("custom/getCustomViewById", {id: jobId}).success(function(data){
+	$http.post("job/getJobViewById", {id: jobId}).success(function(data){
 		$scope.job = data.job;
 		$scope.inteamresumes = data.inteamresumes;
 		$scope.pubresumes = data.pubresumes;

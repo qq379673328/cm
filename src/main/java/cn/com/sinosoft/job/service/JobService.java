@@ -2,6 +2,7 @@ package cn.com.sinosoft.job.service;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -13,6 +14,7 @@ import org.hibernate.type.Type;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import cn.com.sinosoft.common.model.TCustom;
 import cn.com.sinosoft.common.model.TJob;
 import cn.com.sinosoft.common.util.StrUtils;
 import cn.com.sinosoft.core.service.SimpleServiceImpl;
@@ -60,9 +62,32 @@ public class JobService extends SimpleServiceImpl {
 	 * @param id
 	 * @return
 	 */
-	public TJob getJobById(String id) {
-		return dao.queryById(id, TJob.class);
+	public Object getJobViewById(String id) {
+		Map<String, Object> ret = new HashMap<String, Object>();
+		if(StrUtils.isNull(id)){
+			return ret;
+		}
+		TJob job = dao.queryById(id, TJob.class);
+		ret.put("job", job);
+		if(job != null){
+			//客户信息
+			ret.put("custom", dao.queryById(job.getCustomId(), TCustom.class));
+			//向企业投递的简历
+			ret.put("pubresumes", dao.queryListBySql(
+					"select * from t_resume_job where job_id = ? and recom_state = '已推荐' ",
+					new Object[]{id},
+					new Type[]{StringType.INSTANCE}));
+			//内部推荐
+			ret.put("inteamresumes", dao.queryListBySql(
+					"select * from t_resume_job where job_id = ? ",
+					new Object[]{id},
+					new Type[]{StringType.INSTANCE}));
+		}
+		return ret;
 	}
+	
+	//更新职位简历的状态
+	
 
 	/**
 	 * 编辑职位
@@ -89,12 +114,13 @@ public class JobService extends SimpleServiceImpl {
 			}else{
 				job.setContractId(contractId);
 			}
+			dao.save(job);
 		}else{
 			job.setLastUpdateTime(new Date());
 			job.setLastUpdateUser(userUtil.getLoginUser().getId());
+			dao.update(job);
 		}
 		
-		dao.save(job);
 		ret.setSuccess(FormResult.SUCCESS);
 		ret.setData(job.getId());
 		return ret;

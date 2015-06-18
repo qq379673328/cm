@@ -8,14 +8,16 @@ app.controller('JobMgrInJobCtrl',
 	$scope.isReady = false;
 	//请求职位信息
 	if(jobId){
-		$http.post("job/getJobById", {id: jobId}).success(function(data){
+		$http.post("job/getJobViewById", {id: jobId}).success(function(data){
 			$scope.job = data.job;
+			$scope.custom = data.custom;
 			$scope.isReady = true;
 			
 			//请求团队信息
 			$http.post("team/getSelectTeams", {ids: $scope.job.team}).success(function(data){
 				$scope.teamselect = data;
-			});		});
+			});		
+		});
 	}else{
 		$scope.isReady = true;
 		
@@ -43,6 +45,7 @@ app.controller('JobMgrInJobCtrl',
 	function validFormAndSubmit(cb){
 		if(validForm()){
 			$scope.isrequest = true;
+			$scope.job.customId = $scope.custom.id;
 			$http.post("job/edit", $scope.job).success(function(data){
 				$scope.formresult = data;
 				$scope.isrequest = false;

@@ -42,13 +42,13 @@ public class JobController extends BaseController {
 	}
 	
 	/**
-	 * 根据职位id获取职位信息
+	 * 根据职位id获取职位相关信息
 	 * @return
 	 */
-	@RequestMapping("getJobById")
+	@RequestMapping("getJobViewById")
 	@ResponseBody
-	public TJob getJobById(String id){
-		return jobService.getJobById(id);
+	public Object getJobViewById(String id){
+		return jobService.getJobViewById(id);
 	}
 	
 	/**

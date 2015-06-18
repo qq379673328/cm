@@ -38,7 +38,7 @@ app.config([ '$routeProvider', function($routeProvider) {
 		controller : 'JobMgrInJobCtrl'
 	})
 	.when('/jobmgr/viewjob/:id', {//职位管理-职位信息
-		templateUrl : fdRouterViewsBasepath + 'custom/views/jobmgrviewjob.html',
+		templateUrl : fdRouterViewsBasepath + 'job/views/jobmgrviewjob.html',
 		controller : 'JobMgrViewJobCtrl'
 	})
 	
@@ -67,16 +67,16 @@ app.config([ '$routeProvider', function($routeProvider) {
 		templateUrl : fdRouterViewsBasepath + 'contract/views/contractmgrincontract.html',
 		controller : 'ContractMgrInContractCtrl'
 	})
-	.when('/contractmgr/incontract/:customid', {//合同管理-为指定客户录入合同
+	.when('/contractmgr/incontract/:contractid', {//合同管理-为指定客户录入合同
 		templateUrl : fdRouterViewsBasepath + 'contract/views/contractmgrincontract.html',
 		controller : 'ContractMgrInContractCtrl'
 	})
-	.when('/contractmgr/editcustom/:id', {//合同管理-编辑合同
+	.when('/contractmgr/editcontract/:id', {//合同管理-编辑合同
 		templateUrl : fdRouterViewsBasepath + 'contract/views/contractmgrincontract.html',
 		controller : 'ContractMgrInContractCtrl'
 	})
 	.when('/contractmgr/viewcontract/:id', {//合同管理-合同信息
-		templateUrl : fdRouterViewsBasepath + 'custom/views/contractmgrviewcontract.html',
+		templateUrl : fdRouterViewsBasepath + 'contract/views/contractmgrviewcontract.html',
 		controller : 'ContractMgrViewContractCtrl'
 	})
 	

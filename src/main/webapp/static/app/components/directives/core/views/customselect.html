@@ -7,8 +7,8 @@
 			<span
 				ng-show="customname!=null"
 				ng-click="customname=null"
-				ng-bind="customname"
 				class="fa fa-times close">
+					{{customname}}
 				</span>
 		</div>
 	</div>
@@ -21,7 +21,7 @@
 				class="fa fa-2x fa-times close"></div>
 			<div ng-repeat="item in customs">
 				<span
-					ng-click="customname = item;ok(item.id);"
+					ng-click="ok(item);"
 					class="fa fa-2x fa-check-circle ok">
 						{{item.custom_name}}
 					</span>

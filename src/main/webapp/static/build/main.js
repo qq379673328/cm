@@ -99,7 +99,7 @@ app.config([ '$routeProvider', function($routeProvider) {
 		controller : 'JobMgrInJobCtrl'
 	})
 	.when('/jobmgr/viewjob/:id', {//职位管理-职位信息
-		templateUrl : fdRouterViewsBasepath + 'custom/views/jobmgrviewjob.html',
+		templateUrl : fdRouterViewsBasepath + 'job/views/jobmgrviewjob.html',
 		controller : 'JobMgrViewJobCtrl'
 	})
 	
@@ -128,16 +128,16 @@ app.config([ '$routeProvider', function($routeProvider) {
 		templateUrl : fdRouterViewsBasepath + 'contract/views/contractmgrincontract.html',
 		controller : 'ContractMgrInContractCtrl'
 	})
-	.when('/contractmgr/incontract/:customid', {//合同管理-为指定客户录入合同
+	.when('/contractmgr/incontract/:contractid', {//合同管理-为指定客户录入合同
 		templateUrl : fdRouterViewsBasepath + 'contract/views/contractmgrincontract.html',
 		controller : 'ContractMgrInContractCtrl'
 	})
-	.when('/contractmgr/editcustom/:id', {//合同管理-编辑合同
+	.when('/contractmgr/editcontract/:id', {//合同管理-编辑合同
 		templateUrl : fdRouterViewsBasepath + 'contract/views/contractmgrincontract.html',
 		controller : 'ContractMgrInContractCtrl'
 	})
 	.when('/contractmgr/viewcontract/:id', {//合同管理-合同信息
-		templateUrl : fdRouterViewsBasepath + 'custom/views/contractmgrviewcontract.html',
+		templateUrl : fdRouterViewsBasepath + 'contract/views/contractmgrviewcontract.html',
 		controller : 'ContractMgrViewContractCtrl'
 	})
 	
@@ -311,20 +311,39 @@ app.directive('coreCustomselect', ["$http", function($http){
     return {
         restrict: 'A',
         replace: true,
+        scope: {
+        	customid: "=customid"
+        },
         require: 'ngModel',
         templateUrl: 'static/app/components/directives/core/views/customselect.html',
         link: function($scope, $element, attrs, ngModel) {
-        	
+        	var isInit = false;
         	//选择
-        	$scope.ok = function(id){
-        		ngModel.$setViewValue(id);
+        	$scope.ok = function(item){
+        		$scope.customname = item.custom_name;
+        		ngModel.$setViewValue(item);
         	};
+        	//监控客户初始化
+        	$scope.$watch('customid', function(newValue, oldValue){
+        		if(!newValue){
+        			return;
+        		}
+        		if(isInit){
+        			return;
+        		}else{
+        			isInit = true;
+        			$http.post("custom/getCustomById",{id: newValue}).success(function(data){
+        					if(data.custom){
+        						$scope.customname = data.custom.customName;
+        					}
+                		});
+        		}
+        	}, true);
         	
         	//监控查询
         	$scope.$watch('customsearch', function(newValue, oldValue){
         		if(newValue == oldValue) return;
-        		$http.post("custom/list",{companyName: newValue, page: 1, rows: 100}).success(
-					function(data){
+        		$http.post("custom/list",{companyName: newValue, page: 1, rows: 100}).success(function(data){
 						$scope.customs = data.rows;
         		});
         	}, true);
@@ -517,6 +536,163 @@ app.factory('BaseInfoService', ["$http", "ngTableParams",
 			return ret;
 		}
 		
+	};
+}]);
+//合同管理-录入合同
+app.controller('ContractMgrInContractCtrl',
+		function($scope, $http, $routeParams, ngTableParams, 
+				$rootScope) {
+	$rootScope.menu = "contract";
+	
+	var contractId = $routeParams.id;
+	var customId = $routeParams.customId;
+	$scope.isReady = false;
+	//请求客户信息-直接跳转过来的
+	if(customId){
+		$http.post("custom/getCustomById", {id: customId}).success(function(data){
+			$scope.custom = data;
+			$scope.isReady = true;
+		});
+	}
+	if(contractId){//编辑合同
+		//请求合同信息
+		$http.post("contract/getContractViewById", {id: contractId}).success(function(data){
+			$scope.custom = data.custom;
+			$scope.contract = data.contract;
+			$scope.isReady = true;
+		});
+	}
+	if(!contractId && !customId){
+		$scope.isReady = true;
+	}
+	
+	//保存合同信息
+	$scope.save = function(){
+		validFormAndSubmit(function(data){
+			if(data.success == "1"){//成功
+				$location.path("contractmgr/list");
+			}
+		});
+	};
+	
+	//验证表单并提交
+	function validFormAndSubmit(cb){
+		if(validForm()){
+			$scope.isrequest = true;
+			$scope.contract.customId = $scope.custom.id;
+			$http.post("contract/edit", $scope.contract).success(function(data){
+				$scope.formresult = data;
+				$scope.isrequest = false;
+				if(cb) cb(data);
+			});
+		}
+
+	};
+	
+	//验证表单
+	function validForm(){
+		return $("#contracteditform").isHappy({
+			fields: {
+				
+			}
+		});
+	}
+	
+});
+//合同管理-列表页
+app.controller('ContractMgrListCtrl',
+		function($scope, $http, $routeParams, ngTableParams,
+				$rootScope) {
+	$rootScope.menu = "contract";
+	
+	//分页查询
+	var initpage = 1,
+		initrows = 10;
+	$scope.search = {};
+	$scope.queryParams = {rows: initrows};
+	$scope.initParams = function(pageNotChange){
+		var iPage = initpage;
+		if(pageNotChange){
+			iPage = $scope.queryParams.page;
+		}
+		var temp = {
+				page: iPage,
+				rows: $scope.queryParams.rows,
+				isreload: true
+			};
+		angular.extend(temp, $scope.search);
+		angular.extend($scope.queryParams, temp);
+	};
+	$scope.initParams();
+	/*重新加载*/
+	$scope.reload = function(pageNotChange){
+		$scope.initParams(pageNotChange);
+		$scope.tableParams.reload();
+	};
+	$scope.tableParams = new ngTableParams({
+		page: initpage,
+		count: initrows
+	}, {
+		total: 0,
+		getData: function($defer, params) {
+			if(!$scope.queryParams.isreload){
+				$scope.queryParams.page = params.page();
+				$scope.queryParams.rows = params.count();
+				$scope.queryParams.total = params.total();
+			}else{
+				$scope.queryParams.isreload = false;
+			}
+			$http.post("contract/list", $scope.queryParams).success(function(data){
+				var total = data.total;
+				$scope.queryParams.total = total;
+				params.total(total);
+				params.page($scope.queryParams.page);
+				$defer.resolve(data.rows);
+			});
+		}
+	});
+
+	//监控查询条件
+	$scope.$watch('search', function(newValue, oldValue){
+		if(newValue == oldValue) return;
+		$scope.reload();
+	}, true);
+	
+	//删除
+	$scope.del = function(item){
+		$http.post("contract/del", {id: item.id}).success(function(data){
+			$scope.formresult = data;
+			$scope.reload(true);
+		});
+	};
+	
+});
+//合同管理-合同信息
+app.controller('ContractMgrViewContractCtrl',
+		function($scope, $http, $routeParams, ngTableParams,
+				$rootScope) {
+	$rootScope.menu = "contract";
+	
+	var contractId = $routeParams.id;
+	$scope.isReady = false;
+	
+	//请求合同信息
+	$http.post("contract/getContractViewById", {id: contractId}).success(function(data){
+		$scope.custom = data.custom;
+		$scope.contract = data.contract;
+		$scope.jobs = data.jobs;
+		$scope.isReady = true;
+	});
+	
+});
+app.factory('ContractService', [ '$http', function($http) {
+	return {
+		//
+		test: function(params, cb){
+			$http.post("formdesign/formdatadel", params).success(function(data){
+				if(cb) cb(data);
+			});
+		}
 	};
 }]);
 //客户管理-录入客户
@@ -713,159 +889,6 @@ app.controller('CustomMgrViewCustomCtrl',
 	};
 	
 });
-//合同管理-录入合同
-app.controller('ContractMgrInContractCtrl',
-		function($scope, $http, $routeParams, ngTableParams, 
-				$rootScope) {
-	$rootScope.menu = "contract";
-	
-	var contractId = $routeParams.id;
-	var customId = $routeParams.customId;
-	$scope.isReady = false;
-	//请求客户信息-直接跳转过来的
-	if(customId){
-		$http.post("custom/getCustomById", {id: customId}).success(function(data){
-			$scope.custom = data;
-			$scope.isReady = true;
-		});
-	}
-	if(contractId){//编辑合同
-		//请求合同信息
-		$http.post("contract/getContractById", {id: customId}).success(function(data){
-			$scope.custom = data.custom;
-			$scope.contract = data.contract;
-			$scope.isReady = true;
-		});
-	}
-	
-	//保存合同信息
-	$scope.save = function(){
-		validFormAndSubmit(function(data){
-			if(data.success == "1"){//成功
-				$location.path("contractmgr/list");
-			}
-		});
-	};
-	
-	//验证表单并提交
-	function validFormAndSubmit(cb){
-		if(validForm()){
-			$scope.isrequest = true;
-			$http.post("contract/edit", $scope.custom).success(function(data){
-				$scope.formresult = data;
-				$scope.isrequest = false;
-				if(cb) cb(data);
-			});
-		}
-
-	};
-	
-	//验证表单
-	function validForm(){
-		return $("#contracteditform").isHappy({
-			fields: {
-				
-			}
-		});
-	}
-	
-});
-//合同管理-列表页
-app.controller('ContractMgrListCtrl',
-		function($scope, $http, $routeParams, ngTableParams,
-				$rootScope) {
-	$rootScope.menu = "contract";
-	
-	//分页查询
-	var initpage = 1,
-		initrows = 10;
-	$scope.search = {};
-	$scope.queryParams = {rows: initrows};
-	$scope.initParams = function(pageNotChange){
-		var iPage = initpage;
-		if(pageNotChange){
-			iPage = $scope.queryParams.page;
-		}
-		var temp = {
-				page: iPage,
-				rows: $scope.queryParams.rows,
-				isreload: true
-			};
-		angular.extend(temp, $scope.search);
-		angular.extend($scope.queryParams, temp);
-	};
-	$scope.initParams();
-	/*重新加载*/
-	$scope.reload = function(pageNotChange){
-		$scope.initParams(pageNotChange);
-		$scope.tableParams.reload();
-	};
-	$scope.tableParams = new ngTableParams({
-		page: initpage,
-		count: initrows
-	}, {
-		total: 0,
-		getData: function($defer, params) {
-			if(!$scope.queryParams.isreload){
-				$scope.queryParams.page = params.page();
-				$scope.queryParams.rows = params.count();
-				$scope.queryParams.total = params.total();
-			}else{
-				$scope.queryParams.isreload = false;
-			}
-			$http.post("contract/list", $scope.queryParams).success(function(data){
-				var total = data.total;
-				$scope.queryParams.total = total;
-				params.total(total);
-				params.page($scope.queryParams.page);
-				$defer.resolve(data.rows);
-			});
-		}
-	});
-
-	//监控查询条件
-	$scope.$watch('search', function(newValue, oldValue){
-		if(newValue == oldValue) return;
-		$scope.reload();
-	}, true);
-	
-	//删除
-	$scope.del = function(item){
-		$http.post("contract/del", {id: item.id}).success(function(data){
-			$scope.formresult = data;
-			$scope.reload(true);
-		});
-	};
-	
-});
-//合同管理-合同信息
-app.controller('ContractMgrViewContractCtrl',
-		function($scope, $http, $routeParams, ngTableParams,
-				$rootScope) {
-	$rootScope.menu = "contract";
-	
-	var contractId = $routeParams.id;
-	$scope.isReady = false;
-	
-	//请求合同信息
-	$http.post("contract/getContractViewById", {id: contractId}).success(function(data){
-		$scope.custom = data.custom;
-		$scope.contract = data.contract;
-		$scope.jobs = data.jobs;
-		$scope.isReady = true;
-	});
-	
-});
-app.factory('ContractService', [ '$http', function($http) {
-	return {
-		//
-		test: function(params, cb){
-			$http.post("formdesign/formdatadel", params).success(function(data){
-				if(cb) cb(data);
-			});
-		}
-	};
-}]);
 
 //表单数据列表
 app.controller('FormDataListCtrl',function($scope, $http, $routeParams, 
@@ -1424,14 +1447,16 @@ app.controller('JobMgrInJobCtrl',
 	$scope.isReady = false;
 	//请求职位信息
 	if(jobId){
-		$http.post("job/getJobById", {id: jobId}).success(function(data){
+		$http.post("job/getJobViewById", {id: jobId}).success(function(data){
 			$scope.job = data.job;
+			$scope.custom = data.custom;
 			$scope.isReady = true;
 			
 			//请求团队信息
 			$http.post("team/getSelectTeams", {ids: $scope.job.team}).success(function(data){
 				$scope.teamselect = data;
-			});		});
+			});		
+		});
 	}else{
 		$scope.isReady = true;
 		
@@ -1459,6 +1484,7 @@ app.controller('JobMgrInJobCtrl',
 	function validFormAndSubmit(cb){
 		if(validForm()){
 			$scope.isrequest = true;
+			$scope.job.customId = $scope.custom.id;
 			$http.post("job/edit", $scope.job).success(function(data){
 				$scope.formresult = data;
 				$scope.isrequest = false;
@@ -1561,7 +1587,7 @@ app.controller('JobMgrViewJobCtrl',
 	$scope.isReady = false;
 	
 	//请求职位信息
-	$http.post("custom/getCustomViewById", {id: jobId}).success(function(data){
+	$http.post("job/getJobViewById", {id: jobId}).success(function(data){
 		$scope.job = data.job;
 		$scope.inteamresumes = data.inteamresumes;
 		$scope.pubresumes = data.pubresumes;
@@ -1611,7 +1637,22 @@ app.factory('PerformanceService', [ '$http', function($http) {
 		}
 	};
 }]);
-app.factory('ResumeService', [ '$http', function($http) {
+//公告管理-录入公告
+app.controller('PubMgrInPubCtrl',
+		function($scope, $http, $routeParams, ngTableParams, 
+				$rootScope) {
+	$rootScope.menu = "pub";
+	
+});
+
+//
+app.controller('PubMgrListCtrl',
+		function($scope, $http, $routeParams, ngTableParams,
+			$rootScope) {
+	$rootScope.menu = "pub";
+	
+});
+app.factory('PubService', [ '$http', function($http) {
 	return {
 		//
 		test: function(params, cb){
@@ -1775,7 +1816,7 @@ app.controller('ResumeMgrViewResumeCtrl',
 	};
 	
 });
-app.factory('PubService', [ '$http', function($http) {
+app.factory('ResumeService', [ '$http', function($http) {
 	return {
 		//
 		test: function(params, cb){
@@ -1785,21 +1826,6 @@ app.factory('PubService', [ '$http', function($http) {
 		}
 	};
 }]);
-//公告管理-录入公告
-app.controller('PubMgrInPubCtrl',
-		function($scope, $http, $routeParams, ngTableParams, 
-				$rootScope) {
-	$rootScope.menu = "pub";
-	
-});
-
-//
-app.controller('PubMgrListCtrl',
-		function($scope, $http, $routeParams, ngTableParams,
-			$rootScope) {
-	$rootScope.menu = "pub";
-	
-});
 
 //
 app.controller('TeamMgrListCtrl',

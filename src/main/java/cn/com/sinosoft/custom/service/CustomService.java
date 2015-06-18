@@ -119,6 +119,9 @@ public class CustomService extends SimpleServiceImpl {
 	 */
 	public Object getCustomById(String id) {
 		Map<String, Object> ret = new HashMap<String, Object>();
+		if(StrUtils.isNull(id)){
+			return ret;
+		}
 		//客户信息
 		ret.put("custom", dao.queryById(id, TCustom.class));
 		//沟通信息
