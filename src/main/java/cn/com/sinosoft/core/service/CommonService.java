@@ -6,13 +6,24 @@
  */
 package cn.com.sinosoft.core.service;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Map;
+import java.util.UUID;
 
 import org.hibernate.type.StringType;
 import org.hibernate.type.Type;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import cn.com.sinosoft.common.model.TAttachment;
+import cn.com.sinosoft.common.util.PropertiesUtil;
+import cn.com.sinosoft.common.util.StrUtils;
+import cn.com.sinosoft.core.service.model.FormResult;
 
 /**
  *
@@ -103,6 +114,104 @@ public class CommonService extends SimpleServiceImpl {
 		}else{
 			return "";
 		}
+	}
+	
+	/*附件路径*/
+	public static String ATTAPATH = "";
+	static{
+		try {
+			ATTAPATH = String.valueOf(PropertiesUtil.getValue("app.properties", "app.filepath"));
+			if(!ATTAPATH.endsWith(File.separator)){
+				ATTAPATH += File.separator;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 保存附件
+	 * @param muFile
+	 * @return 附件id
+	 * @throws IOException 
+	 * @throws IllegalStateException 
+	 */
+	@Transactional
+	public TAttachment saveFile(MultipartFile muFile) throws Exception{
+		String fileName = muFile.getOriginalFilename();
+		String type = getFileTypeByName(fileName);
+		long size = muFile.getSize();
+		String id = UUID.randomUUID().toString();
+		String newName = id + "." + type;
+		//保存附件到文件系统
+		File saveFile = new File(ATTAPATH + newName);
+		saveFile.createNewFile();
+		muFile.transferTo(saveFile);
+		//保存附件信息到数据库
+		TAttachment atta = new TAttachment();
+		atta.setId(id);
+		atta.setName(fileName);
+		atta.setPath(newName);
+		atta.setType(type);
+		atta.setUploadTime(new Date());
+		atta.setIsUse("0");
+		atta.setSize(Double.valueOf(size));
+		
+		dao.save(atta);
+		
+		return atta;
+	}
+	private String getFileTypeByName(String fileName){
+		if(StrUtils.isNull(fileName)){
+			return null;
+		}
+		String[] nameSp = fileName.split("\\.");
+		String type = nameSp[nameSp.length -1];
+		if(type.length() >= 10){
+			type = "";
+		}
+		return type;
+	}
+	
+	/**
+	 * 删除附件
+	 * @param id
+	 * @return
+	 */
+	@Transactional
+	public FormResult fileDel(String id) {
+		FormResult ret = new FormResult();
+		TAttachment att = dao.queryById(id, TAttachment.class);
+		//附件表
+		dao.executeDelOrUpdateSql("delete from t_attachment where id = ? ",
+				new Object[]{id},
+				new Type[]{StringType.INSTANCE});
+		//附件业务关联表
+		dao.executeDelOrUpdateSql("delete from t_custom_data where attachment_id = ? ",
+				new Object[]{id},
+				new Type[]{StringType.INSTANCE});
+		dao.executeDelOrUpdateSql("delete from t_contract_data where attachment_id = ? ",
+				new Object[]{id},
+				new Type[]{StringType.INSTANCE});
+		dao.executeDelOrUpdateSql("delete from t_resume_date where attachment_id = ? ",
+				new Object[]{id},
+				new Type[]{StringType.INSTANCE});
+		//删除附件文件
+		File saveFile = new File(ATTAPATH + att.getId());
+		saveFile.delete();
+		
+		ret.setSuccess(FormResult.SUCCESS);
+		ret.setMessage("附件删除成功");
+		return ret;
+	}
+
+	/**
+	 * 获取附件
+	 * @param id
+	 * @return
+	 */
+	public TAttachment getFile(String id) {
+		return dao.queryById(id, TAttachment.class);
 	}
 	
 }

@@ -104,11 +104,11 @@
 					<td>
 						<a class="link" 
 						href="#jobmgr/viewjob/{{item.id}}">{{ item.name }}</a></td>
-					<td>{{pay_min}}-{{pay_max}}万</td>
+					<td>{{item.pay_min}}-{{item.pay_max}}万</td>
 					<td>{{ item.workplace }}</td>
-					<td>未实现</td> 
-					<td>{{ item.team }}</td>
-					<td>未实现</td>
+					<td>{{ item.custom_name }}</td> 
+					<td>{{ item.teams_desc }}</td>
+					<td>{{ item.jobcount }}</td>
 					<td>未实现</td>
 					<td>{{ item.last_update_time | date : 'yyyy-MM-dd'}}</td>
 					

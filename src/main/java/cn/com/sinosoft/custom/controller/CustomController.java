@@ -66,8 +66,8 @@ public class CustomController extends BaseController {
 	 */
 	@RequestMapping("edit")
 	@ResponseBody
-	public FormResult edit(TCustom custom, String commun){
-		return customService.edit(custom, commun);
+	public FormResult edit(TCustom custom, String commun, String attas){
+		return customService.edit(custom, commun, attas);
 	}
 
 	/**

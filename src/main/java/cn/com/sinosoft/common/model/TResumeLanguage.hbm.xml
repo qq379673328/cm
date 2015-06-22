@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated 2015-6-15 21:20:12 by Hibernate Tools 3.2.2.GA -->
+<!-- Generated 2015-6-22 19:41:21 by Hibernate Tools 3.2.2.GA -->
 <hibernate-mapping>
     <class name="cn.com.sinosoft.common.model.TResumeLanguage" table="t_resume_language" catalog="cm">
         <id name="id" type="string">
@@ -14,8 +14,23 @@
             </column>
         </property>
         <property name="content" type="binary">
-            <column name="content" not-null="true">
+            <column name="content">
                 <comment>&#229;&#134;&#133;&#229;&#174;&#185;</comment>
+            </column>
+        </property>
+        <property name="lanType" type="string">
+            <column name="lan_type" length="100">
+                <comment>&#232;&#175;&#173;&#231;&#167;&#141;</comment>
+            </column>
+        </property>
+        <property name="readAb" type="string">
+            <column name="read_ab" length="100">
+                <comment>&#232;&#175;&#187;&#229;&#134;&#153;&#232;&#131;&#189;&#229;&#138;&#155;</comment>
+            </column>
+        </property>
+        <property name="listenAb" type="string">
+            <column name="listen_ab" length="100">
+                <comment>&#229;&#144;&#172;&#232;&#175;&#180;&#232;&#131;&#189;&#229;&#138;&#155;</comment>
             </column>
         </property>
     </class>

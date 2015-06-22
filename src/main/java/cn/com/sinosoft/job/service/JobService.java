@@ -47,9 +47,16 @@ public class JobService extends SimpleServiceImpl {
 		PagingSrcSql srcSql = new PagingSrcSql();
 		List<Object> values = new ArrayList<Object>();
 		List<Type> types = new ArrayList<Type>();
-		StringBuffer sb = new StringBuffer(" SELECT * from t_job t where 1=1 ");
+		StringBuffer sb = new StringBuffer(" SELECT t.*, cus.custom_name, getDictName(t.team) teams_desc, "
+				+ " IFNULL(jobcou.jobcount, 0) jobcount "
+				+ " from "
+				+ " t_job t left join t_custom cus on t.custom_id = cus.id"
+				+ " left join "
+				+ "(select job.job_id, count(1) jobcount from t_resume_job job group by job.job_id  ) jobcou "
+				+ " on t.id = jobcou.job_id "
+				+ " where 1=1 ");
 		
-		
+		sb.append(" order by t.last_update_time desc ");
 		srcSql.setSrcSql(sb.toString());
 		srcSql.setTypes(types.toArray(new Type[0]));
 		srcSql.setValues(values.toArray());
@@ -105,6 +112,8 @@ public class JobService extends SimpleServiceImpl {
 			job.setId(UUID.randomUUID().toString());
 			job.setCreateUser(userUtil.getLoginUser().getId());
 			job.setCreateTime(new Date());
+			job.setLastUpdateTime(new Date());
+			job.setLastUpdateUser(userUtil.getLoginUser().getId());
 			//绑定最新合同
 			String contractId = getCustomNewContract(job.getCustomId());
 			if(contractId == null){

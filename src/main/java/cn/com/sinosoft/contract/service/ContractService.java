@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import cn.com.sinosoft.common.model.TContract;
+import cn.com.sinosoft.common.model.TContractData;
 import cn.com.sinosoft.common.model.TCustom;
 import cn.com.sinosoft.common.util.StrUtils;
 import cn.com.sinosoft.core.service.SimpleServiceImpl;
@@ -47,9 +48,23 @@ public class ContractService extends SimpleServiceImpl {
 		PagingSrcSql srcSql = new PagingSrcSql();
 		List<Object> values = new ArrayList<Object>();
 		List<Type> types = new ArrayList<Type>();
-		StringBuffer sb = new StringBuffer(" SELECT * from t_contract t where 1=1 ");
+		StringBuffer sb = new StringBuffer(" SELECT t.*, cus.custom_name,"
+				+ " getDictName(cus.create_user) create_user, "
+				+ " IFNULL(atta.cou, 0) attacou "
+				+ " from t_contract t "
+				+ " left join  t_custom cus on t.custom_id = cus.id "
+				+ " left join ( select data.contract_id, count(1) cou from t_contract_data data"
+				+ "                group by data.contract_id  ) atta  "
+				+ "     on t.id = atta.contract_id "
+				+ " where 1=1 ");
 		
+		//只能查询自己的合同
+		String userId = userUtil.getLoginUser().getId();
+		sb.append(" and cus.create_user = ? ");
+		values.add(userId);
+		types.add(StringType.INSTANCE);
 		
+		sb.append(" order by t.in_date desc ");
 		srcSql.setSrcSql(sb.toString());
 		srcSql.setTypes(types.toArray(new Type[0]));
 		srcSql.setValues(values.toArray());
@@ -78,6 +93,14 @@ public class ContractService extends SimpleServiceImpl {
 					"select * from t_job where contract_id = ? ",
 					new Object[]{id},
 					new Type[]{StringType.INSTANCE}));
+			//附件信息
+			ret.put("attachs", dao.queryListBySql(
+					"select a.id, a.path, a.name, a.upload_time, a.type from t_contract_data t "
+					+ "left join t_attachment a on t.attachment_id = a.id "
+					+ " where t.contract_id = ? order by a.upload_time desc",
+					new Object[]{id},
+					new Type[]{StringType.INSTANCE}));
+			
 		}
 		return ret;
 	}
@@ -88,14 +111,27 @@ public class ContractService extends SimpleServiceImpl {
 	 * @return
 	 */
 	@Transactional
-	public FormResult edit(TContract contract) {
+	public FormResult edit(TContract contract, String attas) {
 		FormResult ret = new FormResult();
 		if(StrUtils.isNull(contract.getId())){//新增
 			contract.setId(UUID.randomUUID().toString());
 			contract.setInDate(new Date());
 			dao.save(contract);
-		}else{
+		}else{//更新
 			dao.update(contract);
+		}
+		
+		//更新附件信息
+		dao.executeDelOrUpdateSql("delete from t_contract_data where contract_id = ? ",
+				new Object[]{contract.getId()},
+				new Type[]{StringType.INSTANCE});
+		if(!StrUtils.isNull(attas)){
+			String[] ids = attas.split(",");
+			List<TContractData> tAttachments = new ArrayList<TContractData>();
+			for(String id : ids){
+				tAttachments.add(new TContractData(UUID.randomUUID().toString(), contract.getId(), id));
+			}
+			dao.getTemplate().saveOrUpdateAll(tAttachments);
 		}
 		
 		ret.setSuccess(FormResult.SUCCESS);

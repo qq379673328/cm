@@ -1,5 +1,5 @@
 package cn.com.sinosoft.common.model;
-// Generated 2015-6-15 21:19:57 by Hibernate Tools 3.2.2.GA
+// Generated 2015-6-22 19:41:12 by Hibernate Tools 3.2.2.GA
 
 
 import java.util.Date;
@@ -16,17 +16,30 @@ public class TAttachment  implements java.io.Serializable {
      private String name;
      private Date uploadTime;
      private String type;
+     private String isUse;
+     private Double size;
 
     public TAttachment() {
     }
 
-    public TAttachment(String id, String module, String path, String name, Date uploadTime, String type) {
+	
+    public TAttachment(String id, String path, String name, Date uploadTime, String type, String isUse) {
+        this.id = id;
+        this.path = path;
+        this.name = name;
+        this.uploadTime = uploadTime;
+        this.type = type;
+        this.isUse = isUse;
+    }
+    public TAttachment(String id, String module, String path, String name, Date uploadTime, String type, String isUse, Double size) {
        this.id = id;
        this.module = module;
        this.path = path;
        this.name = name;
        this.uploadTime = uploadTime;
        this.type = type;
+       this.isUse = isUse;
+       this.size = size;
     }
    
     public String getId() {
@@ -70,6 +83,20 @@ public class TAttachment  implements java.io.Serializable {
     
     public void setType(String type) {
         this.type = type;
+    }
+    public String getIsUse() {
+        return this.isUse;
+    }
+    
+    public void setIsUse(String isUse) {
+        this.isUse = isUse;
+    }
+    public Double getSize() {
+        return this.size;
+    }
+    
+    public void setSize(Double size) {
+        this.size = size;
     }
 
 

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated 2015-6-15 21:20:12 by Hibernate Tools 3.2.2.GA -->
+<!-- Generated 2015-6-22 19:41:21 by Hibernate Tools 3.2.2.GA -->
 <hibernate-mapping>
     <class name="cn.com.sinosoft.common.model.TResumeWorkhistory" table="t_resume_workhistory" catalog="cm">
         <id name="id" type="string">
@@ -16,6 +16,21 @@
         <property name="content" type="binary">
             <column name="content" not-null="true">
                 <comment>&#229;&#134;&#133;&#229;&#174;&#185;</comment>
+            </column>
+        </property>
+        <property name="timeBegin" type="string">
+            <column name="time_begin" length="100">
+                <comment>&#229;&#188;&#128;&#229;&#167;&#139;&#230;&#151;&#165;&#230;&#156;&#159;</comment>
+            </column>
+        </property>
+        <property name="timeEnd" type="string">
+            <column name="time_end" length="100">
+                <comment>&#231;&#187;&#147;&#230;&#157;&#159;&#230;&#151;&#165;&#230;&#156;&#159;</comment>
+            </column>
+        </property>
+        <property name="company" type="string">
+            <column name="company" length="100">
+                <comment>&#229;&#133;&#172;&#229;&#143;&#184;&#229;&#144;&#141;</comment>
             </column>
         </property>
     </class>

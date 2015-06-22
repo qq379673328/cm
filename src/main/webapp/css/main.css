@@ -145,7 +145,7 @@ textarea{
 	height: 31px;
 	line-height: 31px;
 	background-color: #3B95C8;
-	color: #990000;
+	color: #E9EACA;
 	border-top: 1px solid #5AB8EF;
 	cursor: pointer;
 	text-align: left;
@@ -172,7 +172,7 @@ textarea{
 }
 .main .menus .select{
 	background: url("../images/menu-select.png");
-	color: #990000;
+	color: #E9EACA;
 }
 .main .right{
 	width: 100%;
@@ -257,7 +257,7 @@ textarea{
 }
 .mytable .link{
 	text-decoration: underline;
-	color: #D40E0E;
+	color: #6C2C2C;
 	font-weight: bold;
 }
 .mytable .textarea{
@@ -266,7 +266,7 @@ textarea{
 	margin: 5px 3px;
 }
 .mytable .title{
-	background-color: #8AA5CC;
+	background-color: #608BCA;
 	border: 1px solid #627FA8;
 	height: 35px;
 	line-height: 35px;
@@ -283,6 +283,20 @@ textarea{
 	float: right;
 	margin-right: 10px;
 }
+.mytable .title .item{
+	float: left;
+	margin-right: 10px;
+	color: #fff;
+	cursor: pointer;
+}
+.mytable .title .disabled{
+	float: left;
+	margin-right: 10px;
+	color: #E4DFDF;
+}
+.mytable .title .select{
+	border-bottom: 2px solid red;
+}
 .mytable .title .common{
 	font-weight: bold;
 	font-size: 14px;
@@ -290,12 +304,12 @@ textarea{
 	cursor: pointer;
 }
 .mytable .title .select{
-	color: #D20000;
+	color: #DFEC26;
 	font-weight: bold;
 	border-bottom: 2px solid;
 }
 .mytable .title .spe{
-	color: #9E2424;
+	color: #E9EACA;
 	font-weight: bold;
 	font-size: 14px;
 }
@@ -305,17 +319,20 @@ textarea{
 .mytable table thead{}
 .mytable table thead tr{
 	background-color: #D5D3D3;
-	height: 30px;
-	line-height: 30px;
+	height: 40px;
+	line-height: 40px;
 	text-align: center;
 	font-weight: bold;
 }
 .mytable table thead tr th{}
 .mytable table tbody{}
 .mytable table tbody tr{
-	height: 30px;
-	line-height: 30px;
+	height: 40px;
+	line-height: 40px;
 	text-align: center;
+}
+.mytable table tbody .line{
+	border-bottom: 2px solid #608BCA;
 }
 .mytable table tbody .tr-odd{
 	background-color: #eee;
@@ -697,7 +714,7 @@ hr {
 .pagination .disabled a{
 	color: #fff;
 	cursor: not-allowed;
-	background-color: #393939;
+	background-color: #608BCA;
 	border-color: #ddd;
 }
 .pagination>.active>a, .pagination>.active>span, .pagination>.active>a:hover, .pagination>.active>span:hover, .pagination>.active>a:focus, .pagination>.active>span:focus {
@@ -728,4 +745,7 @@ hr {
 	padding: 3px;
 	top: 20px;
 	left: 0px;
+}
+.fileupload{
+	padding: 5px;
 }

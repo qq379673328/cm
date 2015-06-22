@@ -53,10 +53,11 @@
 		</property>
 	</bean>
 
-	<!-- 对模型视图名称的解析 -->
+	<!-- 附件的解析 -->
 	<bean id="multipartResolver"
 		class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
-		p:defaultEncoding="utf-8" />
+		p:defaultEncoding="utf-8"
+		/>
 
 	<!-- 启动注解驱动的Spring MVC功能，注册请求url和注解POJO类方法的映射 方便加拦截器以下面方面声明标注 -->
 	<mvc:annotation-driven />

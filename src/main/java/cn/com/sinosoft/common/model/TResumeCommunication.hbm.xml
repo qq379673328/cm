@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-6-22 19:41:21 by Hibernate Tools 3.2.2.GA -->
+<hibernate-mapping>
+    <class name="cn.com.sinosoft.common.model.TResumeCommunication" table="t_resume_communication" catalog="cm">
+        <id name="id" type="string">
+            <column name="id" length="40" />
+            <generator class="assigned" />
+        </id>
+        <property name="resumeId" type="string">
+            <column name="resume_id" length="40" not-null="true">
+                <comment>&#229;&#174;&#162;&#230;&#136;&#183;id</comment>
+            </column>
+        </property>
+        <property name="commuDate" type="string">
+            <column name="commu_date" length="100">
+                <comment>&#230;&#178;&#159;&#233;&#128;&#154;&#230;&#151;&#182;&#233;&#151;&#180;</comment>
+            </column>
+        </property>
+        <property name="content" type="string">
+            <column name="content" length="500" not-null="true">
+                <comment>&#230;&#178;&#159;&#233;&#128;&#154;&#229;&#134;&#133;&#229;&#174;&#185;</comment>
+            </column>
+        </property>
+        <property name="createTime" type="timestamp">
+            <column name="create_time" length="19" not-null="true">
+                <comment>&#229;&#136;&#155;&#229;&#187;&#186;&#230;&#151;&#182;&#233;&#151;&#180;</comment>
+            </column>
+        </property>
+        <property name="createUser" type="string">
+            <column name="create_user" length="100" not-null="true">
+                <comment>&#229;&#136;&#155;&#229;&#187;&#186;&#228;&#186;&#186;</comment>
+            </column>
+        </property>
+    </class>
+</hibernate-mapping>

@@ -55,7 +55,7 @@ app.config([ '$routeProvider', function($routeProvider) {
 		controller : 'ResumeMgrInResumeCtrl'
 	})
 	.when('/resumemgr/viewresume/:id', {//简历管理-简历信息
-		templateUrl : fdRouterViewsBasepath + 'custom/views/resumemgrviewresume.html',
+		templateUrl : fdRouterViewsBasepath + 'resume/views/resumemgrviewresume.html',
 		controller : 'ResumeMgrViewResumeCtrl'
 	})
 	

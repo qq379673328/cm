@@ -57,8 +57,8 @@ public class ContractController extends BaseController {
 	 */
 	@RequestMapping("edit")
 	@ResponseBody
-	public FormResult edit(TContract contract){
-		return contractService.edit(contract);
+	public FormResult edit(TContract contract, String attas){
+		return contractService.edit(contract, attas);
 	}
 	
 

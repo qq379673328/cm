@@ -19,9 +19,11 @@
 			<tbody>
 				<tr>
 					<td class="td-odd">{{resume.name}}</td>
-					<td class="td-even"></td>
 					<td class="td-odd">简历编号：{{resume.id}}</td>
-					<td class="td-even">更新时间：{{resume.last_update_time | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+				</tr>
+				<tr>
+					<td class="td-odd">更新时间：</td>
+					<td class="td-even">{{resume.last_update_time | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
 				</tr>
 				<tr>
 					<td class="td-odd">基本概况：</td>
@@ -60,13 +62,13 @@
 				</tr>
 				<tr>
 					<td class="td-odd">最近公司：</td>
-					<td class="td-even">未实现</td>
+					<td class="td-even">{{resumeWorkhistorys[0].company}}</td>
 					<td class="td-odd">手机号码：</td>
 					<td class="td-even">{{resume.phone}}</td>
 				</tr>
 				<tr>
 					<td class="td-odd">当前行业：</td>
-					<td class="td-even">未实现</td>
+					<td class="td-even">{{target.targetIndustry}}</td>
 					<td class="td-odd">电子邮件：</td>
 					<td class="td-even">{{resume.email}}</td>
 				</tr>
@@ -84,26 +86,26 @@
 	<div class="mytable">
 		<div class="title">
 			<span>
-				个人简介
+				求职意向
 			</span>
 		</div>
 		<table>
 			<tbody>
 				<tr>
 					<td class="td-odd">期望行业：</td>
-					<td class="td-even">未实现</td>
+					<td class="td-even" colspan="3">{{target.targetIndustry}}</td>
 				</tr>
 				<tr>
 					<td class="td-odd">期望职业：</td>
-					<td class="td-even">未实现</td>
+					<td class="td-even" colspan="3">{{target.targetJob}}</td>
 				</tr>
 				<tr>
 					<td class="td-odd">期望地址：</td>
-					<td class="td-even">未实现</td>
+					<td class="td-even" colspan="3">{{target.targetPlace}}</td>
 				</tr>
 				<tr>
 					<td class="td-odd">期望年薪：</td>
-					<td class="td-even">未实现</td>
+					<td class="td-even" colspan="3">{{target.targetPay}}</td>
 				</tr>
 			</tbody>
 		</table>
@@ -116,9 +118,16 @@
 			</span>
 		</div>
 		<table>
+			<thead>
+				<tr>
+					<th>日期</th>
+					<th>内容</th>
+				</tr>
+			</thead>
 			<tbody>
-				<tr ng-repeat="item in resumeWorkhistorys">
-					
+				<tr ng-repeat="work in resumeWorkhistorys">
+					<td>{{work.time_begin}} - {{work.time_end}}</td>
+					<td>{{work.content}}</td>
 				</tr>
 			</tbody>
 		</table>
@@ -131,9 +140,20 @@
 			</span>
 		</div>
 		<table>
+			<thead>
+				<tr>
+					<th>日期</th>
+					<th>培训机构</th>
+					<th>培训课程</th>
+					<th>培训内容</th>
+				</tr>
+			</thead>
 			<tbody>
-				<tr ng-repeat="item in resumeEdus">
-					
+				<tr ng-repeat="edu in resumeEdus">
+					<td>{{edu.time_begin}} - {{edu.time_end}}</td>
+					<td>{{edu.org}}</td>
+					<td>{{edu.course}}</td>
+					<td>{{edu.content}}</td>
 				</tr>
 			</tbody>
 		</table>
@@ -146,9 +166,18 @@
 			</span>
 		</div>
 		<table>
+			<thead>
+				<tr>
+					<th>语种</th>
+					<th>读写能力</th>
+					<th>听说能力</th>
+				</tr>
+			</thead>
 			<tbody>
-				<tr ng-repeat="item in resumeLanguages">
-					
+				<tr ng-repeat="lan in resumeLanguages">
+					<td>{{lan.lan_type}}</td>
+					<td>{{lan.read_ab}}</td>
+					<td>{{lan.listen_ab}}</td>
 				</tr>
 			</tbody>
 		</table>
@@ -162,8 +191,10 @@
 		</div>
 		<table>
 			<tbody>
-				<tr ng-repeat="item in resumeDatas">
-					
+				<tr ng-repeat="atta in resumeDatas">
+					<td colspan="4" class="td-even">
+						<a class="link" href="download/{{atta.id}}" target="_blank">{{atta.name}}</a>
+					</td>
 				</tr>
 			</tbody>
 		</table>
@@ -178,16 +209,30 @@
 		<table>
 			<thead>
 				<tr>
-					<th>执行人</th>
-					<th>内容</th>
 					<th>时间</th>
+					<th>内容</th>
+					<th></th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr ng-repeat="comm in resumeComms">
-					<td>{{comm.create_user}}</td>
-					<td>{{comm.content}}</td>
 					<td>{{comm.create_time | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+					<td>{{comm.content}}</td>
+					<td>
+						<a class="btn btn-small btn-success"
+							ng-click="comm.prepareDel = !comm.prepareDel"
+							>删除</a>
+						<table ng-show="comm.prepareDel">
+							<tr>
+								<td colspan="5"></td>
+								<td>
+									<a class="btn btn-small btn-danger btn-w4"
+										ng-click="delComm(comm.id);comm.ishandling=true;"
+										>确认删除</a>
+								</td>
+							</tr>
+						</table>
+					</td>
 				</tr>
 			</tbody>
 		</table>

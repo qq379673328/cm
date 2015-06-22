@@ -16,8 +16,9 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.hibernate.type.StringType;
+import org.hibernate.type.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -28,6 +29,7 @@ import cn.com.sinosoft.common.util.DbDialect;
 import cn.com.sinosoft.common.util.PropertiesUtil;
 import cn.com.sinosoft.core.dao.SimpleBaseDao;
 import cn.com.sinosoft.core.service.model.ExtListData;
+import cn.com.sinosoft.core.service.model.FormResult;
 import cn.com.sinosoft.core.service.model.PageParam;
 import cn.com.sinosoft.core.service.model.PagingResult;
 import cn.com.sinosoft.core.service.model.PagingSql;
@@ -63,8 +65,34 @@ public class SimpleServiceImpl{
 	 * @param t
 	 * @return
 	 */
-	public void saveBean(Object t) {
+	@Transactional
+	public FormResult saveBean(Object t) {
+		FormResult ret = new FormResult();
+		
 		dao.save(t);
+		
+		ret.setSuccess(FormResult.SUCCESS);
+		ret.setMessage("保存成功");
+		ret.setData(t);
+		return ret;
+	}
+	
+	/**
+	 * 更新
+	 * 
+	 * @param t
+	 * @return
+	 */
+	@Transactional
+	public FormResult updateBean(Object t) {
+		FormResult ret = new FormResult();
+		
+		dao.update(t);
+		
+		ret.setSuccess(FormResult.SUCCESS);
+		ret.setMessage("保存成功");
+		ret.setData(t);
+		return ret;
 	}
 
 	/**
@@ -135,6 +163,24 @@ public class SimpleServiceImpl{
 	 */
 	public <T> void del(T t) {
 		dao.del(t);
+	}
+	
+	/**
+	 * 删除数据
+	 * @param id
+	 * @param tabName
+	 * @return
+	 */
+	@Transactional
+	public FormResult delById(String id, String tabName){
+		FormResult ret = new FormResult();
+		dao.executeDelOrUpdateSql("delete from " + tabName + " where id = ? ",
+				new Object[]{id},
+				new Type[]{StringType.INSTANCE});
+		ret.setSuccess(FormResult.SUCCESS);
+		ret.setMessage("删除成功");
+		ret.setData(id);
+		return ret;
 	}
 
 	/**

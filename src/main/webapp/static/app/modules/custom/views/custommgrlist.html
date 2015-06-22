@@ -46,7 +46,6 @@
 			<div class="desc">公司名称：</div>
 			<div class="vals">
 				<input ng-model="search.companyName" />
-				<div class="btn btn-lblue" ng-click="reload();">搜索</div>
 			</div>
 		</div>
 	</div>
@@ -95,7 +94,7 @@
 					<td>{{ item.contact_name }}</td>
 					<td>{{ item.contact_cellphone == null ? item.contact_landline : item.contact_cellphone}}</td>
 					<td>待实现</td>
-					<td>{{ item.team }}</td>
+					<td>{{ item.teams_desc }}</td>
 					<td>{{ item.state }}</td>
 					<td></td>
 					<td>{{ item.create_time | date : 'yyyy-MM-dd HH:mm '}}</td>

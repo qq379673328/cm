@@ -1,5 +1,5 @@
 package cn.com.sinosoft.common.model;
-// Generated 2015-6-15 21:19:57 by Hibernate Tools 3.2.2.GA
+// Generated 2015-6-22 19:41:12 by Hibernate Tools 3.2.2.GA
 
 
 

@@ -22,7 +22,7 @@
 				<tr>
 					<td class="td-odd">客户名称：</td>
 					<td class="td-even" colspan="3">
-						<div core-customselect ng-model="custom"></div>
+						<div core-customselect ng-model="custom" customid="custom.id"></div>
 					</td>
 				</tr>
 				<tr>
@@ -115,12 +115,7 @@
 				<tr>
 					<td class="td-odd">合同附件：</td>
 					<td class="td-even" colspan="3">
-						<div class="attach">
-							<a>北京.doc</a>
-							<br/>
-							<a>北京.doc</a>
-						</div>
-						<div class="btn btn-lblue">浏览</div>
+						<div core-fileupload ng-model="contract.attas" attas="attachs"></div>
 					</td>
 				</tr>
 				<tr>

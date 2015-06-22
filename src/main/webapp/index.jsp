@@ -11,7 +11,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta http-equiv="X-UA-Compatible" content="edge" />
-<title>表单设计系统</title>
+<title>客户管理系统</title>
 <base href="<%=basePath%>" />
 
 <link rel="stylesheet" type="text/css" href="css/fonts/font-awesome.min.css" />
@@ -99,6 +99,7 @@
 	<script type="text/javascript" src="static/app/components/3rd/jquery_ext/jquery.ishappy.js"></script>
 	<script type="text/javascript" src="static/app/bower_components/jquery-ui/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="static/app/bower_components/jquery-ui/ui/i18n/datepicker-zh-CN.js"></script>
+	<script type="text/javascript" src="static/app/bower_components/jquery-file-upload/jquery.fileupload.js"></script>
 	
 	<!-- ng -->
 	<script type="text/javascript" src="static/app/bower_components/angular/angular.min.js"></script>
@@ -106,6 +107,10 @@
 	<script type="text/javascript" src="static/app/bower_components/ng-table/ng-table.js"></script>
 		
 	<script type="text/javascript" src="static/build/main.js"></script>
+	
+	<!--[if (gte IE 8)&(lt IE 10)]>
+	<script src="static/app/bower_components/jquery-file-upload/jquery.xdr-transport.js"></script>
+	<![endif]-->
 	
 </body>
 </html>

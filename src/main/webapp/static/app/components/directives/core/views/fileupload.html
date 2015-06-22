@@ -1,0 +1,15 @@
+<div class="fileupload">
+	<div>
+		<div ng-repeat="atta in attas">
+			{{atta.name}}
+			<span
+				ng-click="delAttach(atta)"
+				class="fa fa-times close">
+			</span>
+		</div>
+	</div>
+	<input core-fu type="file" name="files" ng-model="attaresult" multiple />
+	<div>
+		<div core-formresult result="attaformresult"></div>
+	</div>
+</div>

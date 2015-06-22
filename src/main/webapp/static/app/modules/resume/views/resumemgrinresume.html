@@ -9,14 +9,35 @@
 <div ng-show="!isReady">
 	加载中...
 </div>
-<form id="resumeeditform" name="form" ng-show="isReady">
-<div class="content">
-	<div class="mytable">
-		<div class="title">
-			<span>
-				基本信息
-			</span>
+
+<div class="content" ng-show="isReady">
+	<div class="mytable" >
+		<div class="title" ng-init="show='baseinfo'">
+			<a class="item" ng-click="show='baseinfo'"
+				ng-class="{true: 'select', false: 'unselect'}[show=='baseinfo']" >基本信息</a>
+			<a class="item" ng-show="resume.id" ng-click="show='target'" 
+				ng-class="{true: 'select', false: 'unselect'}[show=='target']">求职意向</a>
+			<a ng-show="!resume.id" class="disabled">求职意向</a>
+			<a class="item" ng-show="resume.id" ng-click="show='workhistory'"
+				ng-class="{true: 'select', false: 'unselect'}[show=='workhistory']" >工作经历</a>
+			<a ng-show="!resume.id" class="disabled">工作经历</a>
+			<a class="item" ng-show="resume.id" ng-click="show='eduhistory'"
+				ng-class="{true: 'select', false: 'unselect'}[show=='eduhistory']" >教育培训经历</a>
+			<a ng-show="!resume.id" class="disabled">教育培训经历</a>
+			<a class="item" ng-show="resume.id" ng-click="show='language'"
+				ng-class="{true: 'select', false: 'unselect'}[show=='language']" >语言能力</a>
+			<a ng-show="!resume.id" class="disabled">语言能力</a>
+			<a class="item" ng-show="resume.id" ng-click="show='icon'"
+				ng-class="{true: 'select', false: 'unselect'}[show=='icon']" >个人头像</a>
+			<a ng-show="!resume.id" class="disabled">个人头像</a>
+			<a class="item" ng-show="resume.id" ng-click="show='atta'"
+				ng-class="{true: 'select', false: 'unselect'}[show=='atta']" >简历附件</a>
+			<a ng-show="!resume.id" class="disabled">简历附件</a>
 		</div>
+	</div>
+
+	<div class="mytable" ng-show="show=='baseinfo'">
+		<form id="resumeeditform-baseinfo" name="form">
 		<table>
 			<tbody>
 				<tr>
@@ -38,7 +59,7 @@
 				<tr>
 					<td class="td-odd"><span class="warn">*</span>性别：</td>
 					<td class="td-even">
-						<select name="sex" ng-modle="resume.sex">
+						<select class="form-select" name="sex" ng-model="resume.sex">
 							<option value="男">男</option>
 							<option value="女">女</option>
 						</select>
@@ -56,11 +77,11 @@
 				<tr>
 					<td class="td-odd"><span class="warn">*</span>出生日期：</td>
 					<td class="td-even">
-						<input datepicker name="birthcay" ng-model="resume.birthcay" />
+						<input class="form-input" datepicker name="birthcay" ng-model="resume.birthcay" />
 					</td>
 					<td class="td-odd"><span class="warn">*</span>婚姻状况：</td>
 					<td class="td-even">
-						<select name="marrage" ng-modle="resume.marrage">
+						<select class="form-select" name="marrage" ng-model="resume.marrage">
 							<option value="已婚">已婚</option>
 							<option value="未婚">未婚</option>
 						</select>
@@ -69,21 +90,21 @@
 				<tr>
 					<td class="td-odd"><span class="warn">*</span>手机号码：</td>
 					<td class="td-even">
-						<input name="phone" ng-model="resume.phone" />
+						<input class="form-input" name="phone" ng-model="resume.phone" />
 					</td>
 					<td class="td-odd"><span class="warn">*</span>电子邮箱：</td>
 					<td class="td-even">
-						<input name="email" ng-model="resume.email" />
+						<input class="form-input" name="email" ng-model="resume.email" />
 					</td>
 				</tr>
 				<tr>
 					<td class="td-odd"><span class="warn">*</span>目前年薪：</td>
 					<td class="td-even">
-						<input name="yearPay" ng-model="resume.yearPay" />
+						<input class="form-input" name="yearPay" ng-model="resume.yearPay" />
 					</td>
 					<td class="td-odd"><span class="warn">*</span>工作状态：</td>
 					<td class="td-even">
-						<select name="workState" ng-modle="resume.workState">
+						<select class="form-select" name="workState" ng-model="resume.workState">
 							<option value="在职">在职</option>
 							<option value="离职">离职</option>
 						</select>
@@ -91,104 +112,383 @@
 				</tr>
 				<tr>
 					<td class="td-odd"><span class="warn">*</span>个人简介：</td>
-					<td class="td-even">
-						<input name="desc" ng-model="resume.desc" />
+					<td class="td-even" colspan="3">
+						<textarea class="textarea" name="desc" ng-model="resume.desc"></textarea>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<div class="btn btn-lblue" 
+							ng-show="!isrequest"
+							ng-click="saveBaseinfo();">
+							保存基本信息
+						</div>
+					</td>
+					<td colspan="2">
+						<div class="btn btn-lblue" 
+							ng-show="!isrequest"
+							ng-click="saveBaseInfo(true);">
+							保存基本信息并编辑求职意向
+						</div>
 					</td>
 				</tr>
 			</tbody>
 		</table>
+		</form>
 	</div>
+	<div core-formresult result="formresult"></div>
 	
-	<div class="mytable">
-		<div class="title">
-			<span>
-				求职意向
-			</span>
-		</div>
+	<div class="mytable" ng-show="show=='target'">
+		<form id="resumeeditform-target" name="form">
 		<table>
 			<tbody>
 				<tr>
-					
+					<td>期望工作性质</td>
+					<td colspan="3">
+						<input type="checkbox" ng-model="target.targetType" name="worktype" value="全职" />全职
+						<input type="checkbox" ng-model="target.targetType" name="worktype" value="兼职" />兼职
+						<input type="checkbox" ng-model="target.targetType" name="worktype" value="实习" />实习
+					</td>
+				</tr>
+				<tr>
+					<td>期望工作地点</td>
+					<td colspan="3">
+						<input class="form-input" ng-model="target.targetPlace" name="targetPlace" />
+					</td>
+				</tr>
+				<tr>
+					<td>期望从事职业</td>
+					<td colspan="3">
+						<input class="form-input" ng-model="target.targetJob" name="targetJob" />
+					</td>
+				</tr>
+				<tr>
+					<td>期望从事行业</td>
+					<td colspan="3">
+						<input class="form-input" ng-model="target.targetIndustry" name="targetIndustry" />
+					</td>
+				</tr>
+				<tr>
+					<td>期望月薪</td>
+					<td colspan="3">
+						<select class="form-select" ng-model="target.targetPay"  name="targetPay">
+							<option value="1000元/月以下">1000元/月以下</option>
+							<option value="1000-2000元/月">1000-2000元/月</option>
+							<option value="2001-4000元/月">2001-4000元/月</option>
+							<option value="4001-6000元/月">4001-6000元/月</option>
+							<option value="6001-8000元/月">6001-8000元/月</option>
+							<option value="8001-10000元/月">8001-10000元/月</option>
+							<option value="10001-15000元/月">10001-15000元/月</option>
+							<option value="15000-25000元/月">15000-25000元/月</option>
+							<option value="25000元/月以上">25000元/月以上</option>
+							<option value="面议">面议</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>工作状态</td>
+					<td colspan="3">
+						<select class="form-select" ng-model="target.workState"  name="workState">
+							<option value="我目前处于离职状态，可立即上岗">我目前处于离职状态，可立即上岗</option>
+							<option value="我目前在职，正考虑换个新环境（如有合适的工作机会，到岗时间一个月左右）">我目前在职，正考虑换个新环境（如有合适的工作机会，到岗时间一个月左右）</option>
+							<option value="我对现有工作还算满意，如有更好的工作机会，我也可以考虑。（到岗时间另议）">我对现有工作还算满意，如有更好的工作机会，我也可以考虑。（到岗时间另议）</option>
+							<option value="目前暂无跳槽打算">目前暂无跳槽打算</option>
+							<option value="应届毕业生">应届毕业生</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<div class="btn btn-lblue" 
+							ng-show="!isrequest"
+							ng-click="saveTarget();">
+							保存求职意向
+						</div>
+					</td>
+					<td colspan="2">
+						<div class="btn btn-lblue" 
+							ng-show="!isrequest"
+							ng-click="saveTarget(true);">
+							保存求职意向并编辑工作经历
+						</div>
+					</td>
 				</tr>
 			</tbody>
 		</table>
+		</form>
 	</div>
 	
-	<div class="mytable">
-		<div class="title">
-			<span>
-				工作经历
-			</span>
-		</div>
+	<div class="mytable" ng-show="show=='workhistory'">
+		<form id="resumeeditform-workhistory" name="form">
 		<table>
 			<tbody>
 				<tr>
-					
+					<td>日期</td>
+					<td>内容</td>
+					<td></td>
+				</tr>
+				<tr ng-repeat="work in resumeWorkhistorys">
+					<td>{{work.time_begin}} - {{work.time_end}}</td>
+					<td>{{work.content}}</td>
+					<td>
+						<div class="btn btn-small btn-danger" 
+							ng-show="!isrequest"
+							ng-click="delWorkHistory(work.id);">
+							删除
+						</div>
+					</td>
+				</tr>
+				<tr class="line"><td colspan="4"></td></tr>
+				<tr>
+					<td>工作时间：</td>
+					<td colspan="3">
+						从
+						<input datepicker ng-model="workhistory.timeBegin" />
+						至
+						<input datepicker ng-model="workhistory.timeEnd"/>
+					</td>
+				</tr>
+				<tr>
+					<td>公司名：</td>
+					<td colspan="3">
+						<input class="form-input" ng-model="workhistory.company" />
+					</td>
+				</tr>
+				<tr>
+					<td>内容：</td>
+					<td colspan="3">
+						<textarea class="textarea" ng-model="workhistory.content"></textarea>
+					</td>
+				</tr>
+				
+				<tr>
+					<td colspan="2">
+						<div class="btn btn-lblue" 
+							ng-show="!isrequest"
+							ng-click="saveWorkHistory();">
+							保存工作经历
+						</div>
+					</td>
+					<td colspan="2">
+						<div class="btn btn-lblue" 
+							ng-show="!isrequest"
+							ng-click="saveWorkHistory(true);">
+							保存工作经历并编辑教育培训经历
+						</div>
+					</td>
 				</tr>
 			</tbody>
 		</table>
+		</form>
 	</div>
 	
-	<div class="mytable">
-		<div class="title">
-			<span>
-				教育培训经历
-			</span>
-		</div>
+	<div class="mytable" ng-show="show=='eduhistory'">
+		<form id="resumeeditform-eduhistory" name="form">
 		<table>
 			<tbody>
 				<tr>
-					
+					<td>日期</td>
+					<td>培训机构</td>
+					<td>培训课程</td>
+					<td>培训内容</td>
+					<td></td>
+				</tr>
+				<tr ng-repeat="edu in resumeEdus">
+					<td>{{edu.time_begin}} - {{edu.time_end}}</td>
+					<td>{{edu.org}}</td>
+					<td>{{edu.course}}</td>
+					<td>{{edu.content}}</td>
+					<td>
+						<div class="btn btn-small btn-danger" 
+							ng-show="!isrequest"
+							ng-click="delEduHistory(edu.id);">
+							删除
+						</div>
+					</td>
+				</tr>
+				<tr class="line"><td colspan="4"></td></tr>
+				<tr>
+					<td>培训时间：</td>
+					<td colspan="3">
+						从
+						<input datepicker ng-model="eduhistory.timeBegin" />
+						至
+						<input datepicker ng-model="eduhistory.timeEnd"/>
+					</td>
+				</tr>
+				<tr>
+					<td>培训机构：</td>
+					<td colspan="3">
+						<input class="form-input" ng-model="eduhistory.org" />
+					</td>
+				</tr>
+				<tr>
+					<td>培训课程：</td>
+					<td colspan="3">
+						<input class="form-input" ng-model="eduhistory.course"></textarea>
+					</td>
+				</tr>
+				<tr>
+					<td>培训内容：</td>
+					<td colspan="3">
+						<textarea class="textarea" ng-model="eduhistory.content"></textarea>
+					</td>
+				</tr>
+				
+				<tr>
+					<td colspan="2">
+						<div class="btn btn-lblue" 
+							ng-show="!isrequest"
+							ng-click="saveEduHistory();">
+							保存 教育培训经历
+						</div>
+					</td>
+					<td colspan="2">
+						<div class="btn btn-lblue" 
+							ng-show="!isrequest"
+							ng-click="saveEduHistory(true);">
+							保存 教育培训经历 并编辑 语言能力
+						</div>
+					</td>
 				</tr>
 			</tbody>
 		</table>
+		</form>
 	</div>
 	
-	<div class="mytable">
-		<div class="title">
-			<span>
-				语言能力
-			</span>
-		</div>
+	<div class="mytable" ng-show="show=='language'">
+		<form id="resumeeditform-language" name="form">
 		<table>
 			<tbody>
 				<tr>
-					
+					<td>语种</td>
+					<td>读写能力</td>
+					<td>听说能力</td>
+					<td></td>
+				</tr>
+				<tr ng-repeat="lan in resumeLanguages">
+					<td>{{lan.lan_type}}</td>
+					<td>{{lan.read_ab}}</td>
+					<td>{{lan.listen_ab}}</td>
+					<td>
+						<div class="btn btn-small btn-danger" 
+							ng-show="!isrequest"
+							ng-click="delLanguage(lan.id);">
+							删除
+						</div>
+					</td>
+				</tr>
+				<tr class="line"><td colspan="4"></td></tr>
+				<tr>
+					<td>语种：</td>
+					<td colspan="3">
+						<select class="form-select" name="lanType" ng-model="language.lanType">
+							<option value="">无</option>
+							<option value="英语">英语</option>
+							<option value="其它">其它</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>读写能力：</td>
+					<td colspan="3">
+						<select class="form-select" name="readAb" ng-model="language.readAb">
+							<option value="一般">一般</option>
+							<option value="良好">良好</option>
+							<option value="熟练">熟练</option>
+							<option value="精通">精通</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>听说能力：</td>
+					<td colspan="3">
+						<select class="form-select" name="listenAb" ng-model="language.listenAb">
+							<option value="一般">一般</option>
+							<option value="良好">良好</option>
+							<option value="熟练">熟练</option>
+							<option value="精通">精通</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>培训内容：</td>
+					<td colspan="3">
+						<textarea class="textarea" ng-model="language.content"></textarea>
+					</td>
+				</tr>
+				
+				<tr>
+					<td colspan="2">
+						<div class="btn btn-lblue" 
+							ng-show="!isrequest"
+							ng-click="saveLanguage();">
+							保存 语言能力
+						</div>
+					</td>
+					<td colspan="2">
+						<div class="btn btn-lblue" 
+							ng-show="!isrequest"
+							ng-click="saveLanguage(true);">
+							保存 语言能力 并编辑 个人头像
+						</div>
+					</td>
 				</tr>
 			</tbody>
 		</table>
+		</form>
 	</div>
 	
-	<div class="mytable">
-		<div class="title">
-			<span>
-				个人头像
-			</span>
-		</div>
+	<div class="mytable" ng-show="show=='icon'">
+		<form id="resumeeditform-icon" name="form">
 		<table>
 			<tbody>
 				<tr>
-					
+					<td>个人头像</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<div class="btn btn-lblue" 
+							ng-show="!isrequest"
+							ng-click="saveIcon();">
+							保存 个人头像
+						</div>
+					</td>
+					<td colspan="2">
+						<div class="btn btn-lblue" 
+							ng-show="!isrequest"
+							ng-click="saveIcon(true);">
+							保存 个人头像 并编辑 简历附件
+						</div>
+					</td>
 				</tr>
 			</tbody>
 		</table>
+		</form>
 	</div>
 	
-	<div class="mytable">
-		<div class="title">
-			<span>
-				简历附件
-			</span>
-		</div>
+	<div class="mytable" ng-show="show=='atta'">
+		<form id="resumeeditform-atta" name="form">
 		<table>
 			<tbody>
 				<tr>
-					
+					<td colspan="4">
+						<div core-fileupload ng-model="attas" attas="resumeDatas"></div>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="4">
+						<div class="btn btn-lblue" 
+							ng-show="!isrequest"
+							ng-click="uploadAttas();">
+							保存 附件
+						</div>
+					</td>
 				</tr>
 			</tbody>
 		</table>
+		</form>
 	</div>
 	
 </div>
 
-</form>

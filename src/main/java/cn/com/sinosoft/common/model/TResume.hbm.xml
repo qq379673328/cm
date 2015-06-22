@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated 2015-6-15 21:20:12 by Hibernate Tools 3.2.2.GA -->
+<!-- Generated 2015-6-22 19:41:21 by Hibernate Tools 3.2.2.GA -->
 <hibernate-mapping>
     <class name="cn.com.sinosoft.common.model.TResume" table="t_resume" catalog="cm">
         <id name="id" type="string">
@@ -58,8 +58,8 @@
                 <comment>&#229;&#183;&#165;&#228;&#189;&#156;&#231;&#138;&#182;&#230;&#128;&#129;</comment>
             </column>
         </property>
-        <property name="desc" type="binary">
-            <column name="desc">
+        <property name="resumtDesc" type="string">
+            <column name="resumt_desc" length="500">
                 <comment>&#228;&#184;&#170;&#228;&#186;&#186;&#231;&#174;&#128;&#228;&#187;&#139;</comment>
             </column>
         </property>
@@ -86,6 +86,11 @@
         <property name="lastUpdateUser" type="string">
             <column name="last_update_user" length="40">
                 <comment>&#228;&#184;&#138;&#230;&#172;&#161;&#230;&#155;&#180;&#230;&#150;&#176;&#228;&#186;&#186;</comment>
+            </column>
+        </property>
+        <property name="yearPay" type="string">
+            <column name="year_pay" length="40">
+                <comment>&#231;&#155;&#174;&#229;&#137;&#141;&#229;&#185;&#180;&#232;&#150;&#170;</comment>
             </column>
         </property>
     </class>

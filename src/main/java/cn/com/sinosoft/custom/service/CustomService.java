@@ -14,8 +14,10 @@ import org.hibernate.type.Type;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import cn.com.sinosoft.common.model.TAttachment;
 import cn.com.sinosoft.common.model.TCustom;
 import cn.com.sinosoft.common.model.TCustomCommunication;
+import cn.com.sinosoft.common.model.TCustomData;
 import cn.com.sinosoft.common.model.TCustomTeam;
 import cn.com.sinosoft.common.model.TUser;
 import cn.com.sinosoft.common.util.SqlUtil;
@@ -50,7 +52,7 @@ public class CustomService extends SimpleServiceImpl {
 		TUser user = userUtil.getLoginUser();
 		String userId = user.getId();
 		StringBuffer sb = new StringBuffer(" select tt.* from ( SELECT "
-				+ " t.*,  "
+				+ " t.*, getDictName(t.team) teams_desc,  "
 				+ " CASE "
 				+ "     WHEN t.create_user = ?  "
 				+ "     THEN 'my'  "
@@ -131,7 +133,7 @@ public class CustomService extends SimpleServiceImpl {
 				new Type[]{StringType.INSTANCE}));
 		//附件信息
 		ret.put("attachs", dao.queryListBySql(
-				"select a.path, a.name, a.upload_time, a.type from t_custom_data t "
+				"select a.id, a.path, a.name, a.upload_time, a.type from t_custom_data t "
 				+ "left join t_attachment a on t.attachment_id = a.id "
 				+ " where t.custom_id = ? order by a.upload_time desc",
 				new Object[]{id},
@@ -144,10 +146,11 @@ public class CustomService extends SimpleServiceImpl {
 	 * 编辑客户
 	 * @param custom 客户
 	 * @param commun 沟通记录
+	 * @param attas 附件信息
 	 * @return
 	 */
 	@Transactional
-	public FormResult edit(TCustom custom, String commun) {
+	public FormResult edit(TCustom custom, String commun, String attas) {
 		FormResult ret = new FormResult();
 		if(StrUtils.isNull(custom.getId())){//新增
 			custom.setId(UUID.randomUUID().toString());
@@ -170,6 +173,19 @@ public class CustomService extends SimpleServiceImpl {
 			c.setCustomId(custom.getId());
 			dao.save(c);
 		}
+		//更新附件信息
+		dao.executeDelOrUpdateSql("delete from t_custom_data where custom_id = ? ",
+				new Object[]{custom.getId()},
+				new Type[]{StringType.INSTANCE});
+		if(!StrUtils.isNull(attas)){
+			String[] ids = attas.split(",");
+			List<TCustomData> tAttachments = new ArrayList<TCustomData>();
+			for(String id : ids){
+				tAttachments.add(new TCustomData(UUID.randomUUID().toString(), custom.getId(), id));
+			}
+			dao.getTemplate().saveOrUpdateAll(tAttachments);
+		}
+		
 		//保存执行团队信息
 		dao.executeDelOrUpdateSql("delete from t_custom_team where custom_id = ? ",
 				new Object[]{custom.getId()},
@@ -294,7 +310,8 @@ public class CustomService extends SimpleServiceImpl {
 				new Object[]{id},
 				new Type[]{StringType.INSTANCE}));
 		//客户附件
-		ret.put("attas", dao.queryListBySql("select * from t_custom_data where custom_id = ? ", 
+		ret.put("attas", dao.queryListBySql("select a.* from t_custom_data t right join t_attachment a"
+				+ " on t.attachment_id = a.id where custom_id = ? ", 
 				new Object[]{id},
 				new Type[]{StringType.INSTANCE}));
 		//客户职位

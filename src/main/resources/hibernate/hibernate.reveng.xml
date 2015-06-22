@@ -17,5 +17,7 @@
 	<table-filter match-name="t_resume_edu" match-catalog="cm"></table-filter>
 	<table-filter match-name="t_resume_language" match-catalog="cm"></table-filter>
 	<table-filter match-name="t_resume_workhistory" match-catalog="cm"></table-filter>
+	<table-filter match-name="t_resume_target" match-catalog="cm"></table-filter>
+	<table-filter match-name="t_resume_communication" match-catalog="cm"></table-filter>
 	<table-filter match-name="t_user" match-catalog="cm"></table-filter>
 </hibernate-reverse-engineering>

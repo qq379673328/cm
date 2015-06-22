@@ -1,5 +1,5 @@
 package cn.com.sinosoft.common.model;
-// Generated 2015-6-15 21:19:57 by Hibernate Tools 3.2.2.GA
+// Generated 2015-6-22 19:41:12 by Hibernate Tools 3.2.2.GA
 
 
 
@@ -12,14 +12,27 @@ public class TResumeEdu  implements java.io.Serializable {
      private String id;
      private String resumeId;
      private byte[] content;
+     private String timeBegin;
+     private String timeEnd;
+     private String org;
+     private String course;
 
     public TResumeEdu() {
     }
 
-    public TResumeEdu(String id, String resumeId, byte[] content) {
+	
+    public TResumeEdu(String id, String resumeId) {
+        this.id = id;
+        this.resumeId = resumeId;
+    }
+    public TResumeEdu(String id, String resumeId, byte[] content, String timeBegin, String timeEnd, String org, String course) {
        this.id = id;
        this.resumeId = resumeId;
        this.content = content;
+       this.timeBegin = timeBegin;
+       this.timeEnd = timeEnd;
+       this.org = org;
+       this.course = course;
     }
    
     public String getId() {
@@ -42,6 +55,34 @@ public class TResumeEdu  implements java.io.Serializable {
     
     public void setContent(byte[] content) {
         this.content = content;
+    }
+    public String getTimeBegin() {
+        return this.timeBegin;
+    }
+    
+    public void setTimeBegin(String timeBegin) {
+        this.timeBegin = timeBegin;
+    }
+    public String getTimeEnd() {
+        return this.timeEnd;
+    }
+    
+    public void setTimeEnd(String timeEnd) {
+        this.timeEnd = timeEnd;
+    }
+    public String getOrg() {
+        return this.org;
+    }
+    
+    public void setOrg(String org) {
+        this.org = org;
+    }
+    public String getCourse() {
+        return this.course;
+    }
+    
+    public void setCourse(String course) {
+        this.course = course;
     }
 
 

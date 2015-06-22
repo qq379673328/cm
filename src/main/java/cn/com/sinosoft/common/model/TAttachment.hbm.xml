@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated 2015-6-15 21:20:12 by Hibernate Tools 3.2.2.GA -->
+<!-- Generated 2015-6-22 19:41:21 by Hibernate Tools 3.2.2.GA -->
 <hibernate-mapping>
     <class name="cn.com.sinosoft.common.model.TAttachment" table="t_attachment" catalog="cm">
         <id name="id" type="string">
@@ -9,7 +9,7 @@
             <generator class="assigned" />
         </id>
         <property name="module" type="string">
-            <column name="module" length="100" not-null="true">
+            <column name="module" length="100">
                 <comment>&#233;&#153;&#132;&#228;&#187;&#182;&#230;&#137;&#128;&#229;&#177;&#158;&#230;&#168;&#161;&#229;&#157;&#151;</comment>
             </column>
         </property>
@@ -31,6 +31,17 @@
         <property name="type" type="string">
             <column name="type" length="100" not-null="true">
                 <comment>&#233;&#153;&#132;&#228;&#187;&#182;&#231;&#177;&#187;&#229;&#158;&#139;</comment>
+            </column>
+        </property>
+        <property name="isUse" type="string">
+            <column name="is_use" length="10" not-null="true">
+                <comment>
+                &#230;&#152;&#175;&#229;&#144;&#166;&#230;&#156;&#137;&#230;&#149;&#136;&#239;&#188;&#154;1-&#230;&#156;&#137;&#230;&#149;&#136;&#239;&#188;&#140;0-&#230;&#151;&#160;&#230;&#149;&#136;</comment>
+            </column>
+        </property>
+        <property name="size" type="java.lang.Double">
+            <column name="size" precision="22" scale="0">
+                <comment>&#233;&#153;&#132;&#228;&#187;&#182;&#229;&#164;&#167;&#229;&#176;&#143;</comment>
             </column>
         </property>
     </class>

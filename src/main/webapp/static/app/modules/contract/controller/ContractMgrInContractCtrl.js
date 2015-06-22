@@ -19,6 +19,7 @@ app.controller('ContractMgrInContractCtrl',
 		$http.post("contract/getContractViewById", {id: contractId}).success(function(data){
 			$scope.custom = data.custom;
 			$scope.contract = data.contract;
+			$scope.attachs = data.attachs;
 			$scope.isReady = true;
 		});
 	}
