@@ -125,4 +125,21 @@ public class UserController extends BaseController {
 		return userService.pwdReset(id);
 	}
 
+	/**
+	 * 修改密码
+	 *
+	 * 
+	 * @param oldPwd
+	 * @param newPwd
+	 * @param newPwdRepeat
+	 * @return
+	 * @author <a href="mailto:nytclizy@gmail.com">李志勇</a>
+	 */
+	@RequestMapping("pwdChange")
+	@ResponseBody
+	public FormResult pwdChange(String oldPwd, String newPwd, String newPwdRepeat){
+		return userService.pwdReset(oldPwd, newPwd, newPwdRepeat);
+	}
+
+	
 }

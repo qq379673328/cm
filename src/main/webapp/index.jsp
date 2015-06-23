@@ -25,7 +25,7 @@
 		<div class="top">
 			<div>
 				<span>员工级别</span>
-				<span>退出登录</span>
+				<span><a href="logout">退出登录</a></span>
 			</div>
 			<div>
 				<span>员工姓名</span>

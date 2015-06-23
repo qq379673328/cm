@@ -5,10 +5,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.hibernate.type.Type;
 import org.springframework.stereotype.Service;
 
 import cn.com.sinosoft.common.util.StrUtils;
 import cn.com.sinosoft.core.service.SimpleServiceImpl;
+import cn.com.sinosoft.core.service.model.PageParam;
+import cn.com.sinosoft.core.service.model.PagingResult;
+import cn.com.sinosoft.core.service.model.PagingSrcSql;
 
 @Service
 public class TeamService extends SimpleServiceImpl {
@@ -46,6 +50,29 @@ public class TeamService extends SimpleServiceImpl {
 		ret.put("select", selectUser);
 		ret.put("unSelect", unSelectUser);
 		return ret;
+	}
+
+	/**
+	 * 团队分页查询
+	 * 
+	 * @param params
+	 * @param pageParams
+	 * @return
+	 * @author <a href="mailto:nytclizy@gmail.com">李志勇</a>
+	 */
+	public PagingResult getTeamList(Map<String, String> params,
+			PageParam pageParams) {
+		PagingSrcSql srcSql = new PagingSrcSql();
+		List<Object> values = new ArrayList<Object>();
+		List<Type> types = new ArrayList<Type>();
+		StringBuffer sb = new StringBuffer(" SELECT * from t_user t where 1=1 ");
+		
+		
+		srcSql.setSrcSql(sb.toString());
+		srcSql.setTypes(types.toArray(new Type[0]));
+		srcSql.setValues(values.toArray());
+		
+		return pagingSearch(params, pageParams, srcSql);
 	}
 
 }

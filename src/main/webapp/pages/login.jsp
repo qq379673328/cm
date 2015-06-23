@@ -12,7 +12,7 @@
 <base href="<%=basePath%>" />
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta http-equiv="X-UA-Compatible" content="edge" />
-<title>表单定制系统-用户登陆</title>
+<title>用户登陆</title>
 <style type="text/css">
 body, h1 {
 	margin: 0;

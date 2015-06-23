@@ -124,7 +124,7 @@ app.config([ '$routeProvider', function($routeProvider) {
 		controller : 'UserMgrInUserCtrl'
 	})
 	.when('/usermgr/viewuser/:id', {//用户管理-用户信息
-		templateUrl : fdRouterViewsBasepath + 'custom/views/usermgrviewuser.html',
+		templateUrl : fdRouterViewsBasepath + 'user/views/usermgrviewuser.html',
 		controller : 'UserMgrViewUserCtrl'
 	})
 	

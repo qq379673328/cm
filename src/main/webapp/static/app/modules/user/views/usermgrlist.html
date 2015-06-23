@@ -5,4 +5,94 @@
 	用户管理
 </div>
 <div class="content">
+	<div class="searchzone">
+		<div class="title"><i class="fa fa-users"></i>&nbsp;用户管理</div>
+		<div class="line border-none">
+			<div class="desc">登录名：</div>
+			<div class="vals">
+				<input ng-model="search.username" />
+			</div>
+			<div class="desc">用户名：</div>
+			<div class="vals">
+				<input ng-model="search.name" />
+			</div>
+		</div>
+	</div>
+	
+	
+	<div core-formresult result="formresult"></div>
+	
+	<div class="mytable">
+		<div class="title">
+			<span>总数 ：
+				<span class="highlight">{{queryParams.total}}</span>
+			 	个
+			</span>
+			 
+			<a class="spe" href="#usermgr/inuser">录入新用户</a>
+			 
+		</div>
+		<table class="my-table" ng-table="tableParams">
+			<thead>
+				<tr>
+					<th></th>
+					<th>登录名</th>
+					<th>用户名</th>
+					<th>性别</th>
+					<th>状态</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tr ng-show="!$data"><td colspan="4">加载中...</td></tr>
+			<tr ng-repeat="item in $data">
+				<td>{{ (queryParams.page - 1) * queryParams.rows + $index + 1 }}</td>
+				
+				<td>{{ item.username }}</td>
+				<td>{{ item.NAME }}</td>
+				<td>{{ item.sex == 1 ? "男" : ((item.sex == 2) ? "女" : "") }}</td>
+				<td>{{ item.state }}</td>
+				
+				<td class="handle">
+					<a class="btn btn-small btn-lblue" 
+						href="#usermgr/editcustom/{{ item.id }}"
+						ng-show="!item.ishanding"
+						>编辑</a>
+					
+					<a class="btn btn-small btn-danger"
+						ng-click="item.ishanding==true;disabledUser(item);"
+						ng-show="item.is_disabled == 0 && !item.ishanding"
+						>锁定</a>
+					<a class="btn btn-small btn-success"
+						ng-click="item.ishanding==true;enableUser(item);"
+						ng-show="item.is_disabled == 1 && !item.ishanding"
+						>解锁</a>
+						
+					<a class="btn btn-small btn-success"
+							ng-click="item.prepareDel = !item.prepareDel"
+							>删除</a>
+						
+					<a class="btn btn-small btn-danger btn-4x"
+						ng-click="item.ishanding==true;resetPwd(item);"
+						>重置密码</a>
+						
+					<a class="btn btn-small btn-w4"
+						ng-show="item.ishanding"
+						>操作中...</a>
+					
+					<table ng-show="item.prepareDel">
+							<tr>
+								<td colspan="5"></td>
+								<td>
+									<a class="btn btn-small btn-danger btn-w4"
+										ng-click="item.ishanding==true;delUser(item);"
+										>确认删除</a>
+								</td>
+							</tr>
+						</table>
+					
+				</td>
+			</tr>
+		</table>
+	</div>
+
 </div>

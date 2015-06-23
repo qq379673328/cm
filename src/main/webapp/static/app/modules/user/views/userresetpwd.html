@@ -5,4 +5,51 @@
 	修改密码
 </div>
 <div class="content">
+	<h2>密码修改</h2>
+	<hr/>
+	<div>
+		<form id="user-pwdreset-form">
+			<table class="form-table">
+				<tr>
+					<td colspan="2">
+						<div class="formresult formresult-success not-fix">
+							<p>注意：忘记密码请联系管理员修改</p>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td class="td-r">原始密码：</td>
+					<td class="td-l">
+						<input type="password" class="form-input" name="oldPwd" 
+							ng-model="pwd.oldPwd"
+							placeholder="请输入原始密码"/>
+					</td>
+				</tr>
+				<tr>
+					<td class="td-r">新密码：</td>
+					<td class="td-l">
+						<input type="password" class="form-input" name="newPwd" 
+							ng-model="pwd.newPwd"
+							placeholder="请输入新密码"/>
+					</td>
+				</tr>
+				<tr>
+					<td class="td-r">重复新密码：</td>
+					<td class="td-l">
+						<input type="password" class="form-input" name="newPwdRepeat" 
+							ng-model="pwd.newPwdRepeat"
+							placeholder="请重复输入新密码"/>
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+						<div class="btn btn-lblue" ng-show="!isrequest" ng-click="resetPwd();">提交</div>
+						<div class="btn btn-info" ng-show="isrequest">处理中...</div>
+					</td>
+				</tr>
+			</table>
+		</form>
+		<div core-formresult result="formresult"></div>
+	</div>
 </div>

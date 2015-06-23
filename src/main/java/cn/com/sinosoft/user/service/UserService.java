@@ -29,7 +29,7 @@ import cn.com.sinosoft.core.util.UserUtil;
  * @author	<a href="mailto:nytclizy@gmail.com">李志勇</a>
  * @date	2015-6-15
  */
-@Service
+@Service("userService")
 public class UserService extends SimpleServiceImpl {
 	
 	@Resource
@@ -129,16 +129,21 @@ public class UserService extends SimpleServiceImpl {
 		PagingSrcSql srcSql = new PagingSrcSql();
 		List<Object> values = new ArrayList<Object>();
 		List<Type> types = new ArrayList<Type>();
-		StringBuffer sb = new StringBuffer(" select id,org_code,login_name,user_name," +
-				"comment,department,sex,birthday,user_type,is_disabled" +
+		StringBuffer sb = new StringBuffer(" select id, username," +
+				" NAME, sex, duty, entry_date, state, " +
+				"id_card, np_place, phone, edu_school, " +
+				"edu_date, department, team, user_type, email," +
+				" msn, education, professional, positive_date," +
+				" leave_date, skills, user_create, create_time," +
+				" last_update_user, last_update_time " +
 				" from t_user where 1=1 and user_type <> '1' ");
 		if(!StrUtils.isNull(params.get("username"))){//用户名
-			sb.append(" AND user_name like ? ");
+			sb.append(" AND name like ? ");
 			values.add("%" + params.get("username") + "%");
 			types.add(StringType.INSTANCE);
 		}
 		if(!StrUtils.isNull(params.get("loginname"))){//登录名
-			sb.append(" AND login_name like ? ");
+			sb.append(" AND username like ? ");
 			values.add("%" + params.get("loginname") + "%");
 			types.add(StringType.INSTANCE);
 		}
@@ -179,7 +184,7 @@ public class UserService extends SimpleServiceImpl {
 			user.setCreateTime(new Date());
 			user.setUserCreate(loginUser.getId());
 			//用户类型
-			String loginUserType = loginUser.getUserType();
+			/*String loginUserType = loginUser.getUserType();
 			if(UserUtil.USERTYPE_SUPERADMIN.equals(loginUserType)){//超级管理员
 				userType = UserUtil.USERTYPE_FORMADMIN;//表单管理员
 			}else if(UserUtil.USERTYPE_FORMADMIN.equals(loginUserType)){//表单管理员
@@ -188,6 +193,10 @@ public class UserService extends SimpleServiceImpl {
 				userType = UserUtil.USERTYPE_REPORTUSER;
 			}else{
 				userType = UserUtil.USERTYPE_REPORTUSER;
+			}*/
+			if(!StrUtils.isNull("userType")){
+				//默认用户类型2
+				userType = ("2".equals(userType) || "3".equals(userType)) ? userType : "2";
 			}
 			user.setUserType(userType);//用户类型
 			user.setPassword(UserUtil.DEFAULT_PWD);//默认密码
@@ -251,7 +260,7 @@ public class UserService extends SimpleServiceImpl {
 		if(StrUtils.isNull(loginName)){
 			return true;
 		}
-		return dao.queryListBySql("select * from t_user where login_name = ? ",
+		return dao.queryListBySql("select * from t_user where username = ? ",
 					new Object[]{loginName},
 					new Type[]{StringType.INSTANCE})
 			.size() > 0 ? true : false;
@@ -296,7 +305,7 @@ public class UserService extends SimpleServiceImpl {
 	 */
 	@SuppressWarnings({ "unchecked"})
 	public TUser findUserByLoginName(String loginName) {
-		List<TUser> users = dao.getTemplate().find("from TUser where loginName = ? ",
+		List<TUser> users = dao.getTemplate().find("from TUser where username = ? ",
 				loginName);
 		if(users.size() == 0){
 			return null;

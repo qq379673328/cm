@@ -557,9 +557,13 @@ textarea{
 	text-align: right;
 	font-weight: bold;
 	font-size: 14px;
+	height: 40px;
+	line-height: 40px;
 }
 .form-table .td-l{
 	text-align: left;
+	height: 40px;
+	line-height: 40px;
 }
 hr {
 	margin: 18px 0;
@@ -576,9 +580,12 @@ hr {
 	margin: 5px auto;
 	padding : 5px;
 	line-height: 34px;
-	width: 80%;
+	width: 70%;
 	position: fixed;
 	bottom: 0px;
+}
+.not-fix{
+	position: relative;
 }
 .formresult-success{
 	background-color: #dff0d8;

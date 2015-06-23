@@ -7,5 +7,169 @@
 	录入用户
 </div>
 <div class="content">
-	
+	<h2>{{user.id != null ? "用户编辑" : "用户新增"}}</h2>
+	<hr/>
+	<div>
+		<form id="usermgr-list-form">
+			<input type="hidden" name="id" ng-model="user.id" />
+			<table class="form-table">
+				<tr ng-show="!user.id">
+					<td colspan="2">
+						<div class="formresult formresult-success not-fix">
+							<p>注意：新增用户默认密码为 11111111</p>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td class="td-r">登录名：</td>
+					<td class="td-l">
+						<input class="form-input" name="username" 
+							ng-model="user.username"
+							ng-disabled="user.id != null"
+							placeholder="请输入登录名"/>
+					</td>
+				</tr>
+				<tr>
+					<td class="td-r">用户类型：</td>
+					<td class="td-l">
+						<input type="radio" name="userType" ng-model="user.userType" value="2" />顾问
+						<input type="radio" name="userType" ng-model="user.userType" value="3" />助理
+					</td>
+				</tr>
+				<tr>
+					<td class="td-r">姓名：</td>
+					<td class="td-l">
+						<input class="form-input" name="name" ng-model="user.name"
+							placeholder="请输入用户名"
+						/>
+					</td>
+				</tr>
+				<tr>
+					<td class="td-r">性别：</td>
+					<td class="td-l">
+						<input type="radio" ng-model="user.sex" name="sex" value="1" />
+						男
+						<input type="radio" ng-model="user.sex" name="sex" value="2" />
+						女
+					</td>
+				</tr>
+				<tr>
+					<td class="td-r">职务：</td>
+					<td class="td-l">
+						<input class="form-input" name="name" ng-model="user.duty" />
+					</td>
+				</tr>
+				<tr>
+					<td class="td-r">入职日期：</td>
+					<td class="td-l">
+						<input class="form-input" name="entryDate" datepicker ng-model="user.entryDate" />
+					</td>
+				</tr>
+				<tr>
+					<td class="td-r">状态：</td>
+					<td class="td-l">
+						<input type="radio" ng-model="user.state" name="state" value="在职" />
+						在职
+						<input type="radio" ng-model="user.state" name="state" value="离职" />
+						离职
+						<input type="radio" ng-model="user.state" name="state" value="试用期" />
+						试用期
+					</td>
+				</tr>
+				<tr>
+					<td class="td-r">身份证号：</td>
+					<td class="td-l">
+						<input class="form-input" name="idCard" ng-model="user.idCard" />
+					</td>
+				</tr>
+				<tr>
+					<td class="td-r">籍贯：</td>
+					<td class="td-l">
+						<input class="form-input" name="npPlace" ng-model="user.npPlace" />
+					</td>
+				</tr>
+				<tr>
+					<td class="td-r">电话：</td>
+					<td class="td-l">
+						<input class="form-input" name="phone" ng-model="user.phone" />
+					</td>
+				</tr>
+				<tr>
+					<td class="td-r">毕业院校：</td>
+					<td class="td-l">
+						<input class="form-input" name="eduSchool" ng-model="user.eduSchool" />
+					</td>
+				</tr>
+				<tr>
+					<td class="td-r">毕业时间：</td>
+					<td class="td-l">
+						<input class="form-input" name="eduDate" datepicker ng-model="user.eduDate" />
+					</td>
+				</tr>
+				<tr>
+					<td class="td-r">所属部门：</td>
+					<td class="td-l">
+						<input class="form-input" name="department" ng-model="user.department" />
+					</td>
+				</tr>
+				<tr>
+					<td class="td-r">隶属团队：</td>
+					<td class="td-l">
+						<div core-teamselect bindteam="user.team" teamselect="user.team" single></div>
+					</td>
+				</tr>
+				<tr>
+					<td class="td-r">邮箱：</td>
+					<td class="td-l">
+						<input class="form-input" name="email" ng-model="user.email" />
+					</td>
+				</tr>
+				<tr>
+					<td class="td-r">QQ或者微信：</td>
+					<td class="td-l">
+						<input class="form-input" name="msn" ng-model="user.msn" />
+					</td>
+				</tr>
+				<tr>
+					<td class="td-r">学历：</td>
+					<td class="td-l">
+						<input class="form-input" name="education" ng-model="user.education" />
+					</td>
+				</tr>
+				<tr>
+					<td class="td-r">专业：</td>
+					<td class="td-l">
+						<input class="form-input" name="professional" ng-model="user.professional" />
+					</td>
+				</tr>
+				<tr>
+					<td class="td-r">转正日期：</td>
+					<td class="td-l">
+						<input class="form-input" name="positiveDate" datepicker ng-model="user.positiveDate" />
+					</td>
+				</tr>
+				<tr>
+					<td class="td-r">离职日期：</td>
+					<td class="td-l">
+						<input class="form-input" name="leaveDate" datepicker ng-model="user.leaveDate" />
+					</td>
+				</tr>
+				<tr>
+					<td class="td-r">擅长专业：</td>
+					<td class="td-l">
+						<input class="form-input" name="skills" ng-model="user.skills" />
+					</td>
+				</tr>
+				
+				<tr>
+					<td></td>
+					<td>
+						<div class="btn btn-lblue" ng-show="!isrequest" ng-click="saveUser();">提交</div>
+						<div class="btn btn-info" ng-show="isrequest">处理中...</div>
+					</td>
+				</tr>
+			</table>
+		</form>
+		<div core-formresult result="formresult"></div>
+	</div>
 </div>

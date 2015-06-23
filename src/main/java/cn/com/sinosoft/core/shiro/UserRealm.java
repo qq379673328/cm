@@ -10,7 +10,6 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -19,6 +18,8 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 
 import cn.com.sinosoft.common.model.TUser;
+import cn.com.sinosoft.common.util.spring.SpringUtil;
+import cn.com.sinosoft.user.service.UserService;
 
 /**
  *
@@ -26,7 +27,6 @@ import cn.com.sinosoft.common.model.TUser;
  * @date	2014-12-25
  */
 public class UserRealm extends AuthorizingRealm {
-	
 	/**
 	 * 授权
 	 * 
@@ -45,6 +45,12 @@ public class UserRealm extends AuthorizingRealm {
 		}
 		
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
+        
+        //获取用户类型-角色
+        UserService userService = (UserService)SpringUtil.getBean("userService");
+        String username = (String)principals.getPrimaryPrincipal();
+        TUser user = userService.findUserByLoginName(username);
+        authorizationInfo.addRole(user.getUserType());
         return authorizationInfo;
 	}
 
@@ -59,20 +65,21 @@ public class UserRealm extends AuthorizingRealm {
 	protected AuthenticationInfo doGetAuthenticationInfo(
 			AuthenticationToken token) throws AuthenticationException {
 		
+		UserService userService = (UserService)SpringUtil.getBean("userService");
 		UsernamePasswordToken uToken = (UsernamePasswordToken)token;
 		String username = uToken.getUsername();
-        TUser user = new TUser();
+        TUser user = userService.findUserByLoginName(username);
         if(user == null) {//用户名或者密码错误
             throw new AuthenticationException();
         }
-        if("1".equals(user.getState())) {//用户已锁定
+        /*if("1".equals(user.getIsDisabled())) {//用户已锁定
             throw new LockedAccountException();
-        }
+        }*/
         
         //交给AuthenticatingRealm使用CredentialsMatcher进行密码匹配，如果觉得人家的不好可以自定义实现
         SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
-        		"admin", //用户名
-        		"111", //密码
+        		username, //用户名
+        		user.getPassword(), //密码
                 getName()
         );
         return authenticationInfo;

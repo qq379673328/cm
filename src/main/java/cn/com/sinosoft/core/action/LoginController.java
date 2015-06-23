@@ -34,10 +34,7 @@ public class LoginController {
 	public String login(HttpServletRequest request, 
 			@RequestParam(required=false)String username,
 			@RequestParam(required=false)String password) {
-		username = "admin";
-		password = "111";
-		
-		//password = new Md5PwdEncoder().encodePassword(password);
+		password = new Md5PwdEncoder().encodePassword(password);
 		// 获取当前的Subject
 	    UsernamePasswordToken token = new UsernamePasswordToken(username, password);
 		Subject currentUser = SecurityUtils.getSubject();

@@ -185,7 +185,7 @@ app.config([ '$routeProvider', function($routeProvider) {
 		controller : 'UserMgrInUserCtrl'
 	})
 	.when('/usermgr/viewuser/:id', {//用户管理-用户信息
-		templateUrl : fdRouterViewsBasepath + 'custom/views/usermgrviewuser.html',
+		templateUrl : fdRouterViewsBasepath + 'user/views/usermgrviewuser.html',
 		controller : 'UserMgrViewUserCtrl'
 	})
 	
@@ -218,80 +218,6 @@ app.filter('trustHtml', function ($sce) {
     };
 });
 
-angular.module('datepicker', []).directive('datepicker',[function(){
-    return {
-        restrict: 'A',
-        require : 'ngModel',
-        link: function(scope, element, attrs, ngModelCtrl){
-        	$(function(){
-                element.datepicker({
-                    dateFormat:'yy-mm-dd',
-                    onSelect:function (date) {
-                        scope.$apply(function () {
-                            ngModelCtrl.$setViewValue(date);
-                        });
-                    }
-                });
-            });
-        }
-    };
-}]);
-app.factory('BaseInfoService', ["$http", "ngTableParams", 
-    function($http, ngTableParams) {
-	var userInfo = null;
-	
-	return {
-		//获取登录用户信息
-		getUserInfo: function(cb){
-			if(userInfo){
-				if(data) cb(data);
-			}else{
-				$http.post("getLoginUser").success(function(data){
-					if(data) cb(data);
-				});
-			}
-		},
-		//进行分页查询
-		pageSearch: function(sc){
-			var $scope = sc["$scope"],
-				p = sc["params"],
-				url = sc["url"],
-				page = sc["page"];
-			//每页默认数
-			if(page == undefined){
-				page = 10;
-			}
-			var items = sc["items"];
-			if(!p){
-				$scope[p] = {};
-			}
-			
-			var ret = new ngTableParams({
-				page: 0,
-				count: page
-			}, {
-				total: 0,
-				getData: function($defer, params) {
-					if(!$scope[p].isreload){
-						$scope[p].page = params.page();
-						$scope[p].rows = params.count();
-						$scope[p].total = params.total();
-					}else{
-						$scope[p].isreload = false;
-					}
-					$http.post(url, $scope[p]).success(function(data){
-						var total = data.total;
-						$scope[p].total = total;
-						params.total(total);
-						$defer.resolve(data.rows);
-					});
-				}
-			});
-			return ret;
-		}
-		
-	};
-}]);
 //基础数据加载指令
 app.directive('coreBasedata', ["$http", function($http){
 	var baseData = {
@@ -638,6 +564,80 @@ app.directive('coreTeamselect', ["$http", function($http){
         }
     };
 }]);
+angular.module('datepicker', []).directive('datepicker',[function(){
+    return {
+        restrict: 'A',
+        require : 'ngModel',
+        link: function(scope, element, attrs, ngModelCtrl){
+        	$(function(){
+                element.datepicker({
+                    dateFormat:'yy-mm-dd',
+                    onSelect:function (date) {
+                        scope.$apply(function () {
+                            ngModelCtrl.$setViewValue(date);
+                        });
+                    }
+                });
+            });
+        }
+    };
+}]);
+app.factory('BaseInfoService', ["$http", "ngTableParams", 
+    function($http, ngTableParams) {
+	var userInfo = null;
+	
+	return {
+		//获取登录用户信息
+		getUserInfo: function(cb){
+			if(userInfo){
+				if(data) cb(data);
+			}else{
+				$http.post("getLoginUser").success(function(data){
+					if(data) cb(data);
+				});
+			}
+		},
+		//进行分页查询
+		pageSearch: function(sc){
+			var $scope = sc["$scope"],
+				p = sc["params"],
+				url = sc["url"],
+				page = sc["page"];
+			//每页默认数
+			if(page == undefined){
+				page = 10;
+			}
+			var items = sc["items"];
+			if(!p){
+				$scope[p] = {};
+			}
+			
+			var ret = new ngTableParams({
+				page: 0,
+				count: page
+			}, {
+				total: 0,
+				getData: function($defer, params) {
+					if(!$scope[p].isreload){
+						$scope[p].page = params.page();
+						$scope[p].rows = params.count();
+						$scope[p].total = params.total();
+					}else{
+						$scope[p].isreload = false;
+					}
+					$http.post(url, $scope[p]).success(function(data){
+						var total = data.total;
+						$scope[p].total = total;
+						params.total(total);
+						$defer.resolve(data.rows);
+					});
+				}
+			});
+			return ret;
+		}
+		
+	};
+}]);
 //合同管理-录入合同
 app.controller('ContractMgrInContractCtrl',
 		function($scope, $http, $routeParams, ngTableParams, 
@@ -796,6 +796,200 @@ app.factory('ContractService', [ '$http', function($http) {
 		}
 	};
 }]);
+//客户管理-录入客户
+app.controller('CustomMgrInCustomCtrl',
+		function($scope, $http, $routeParams, ngTableParams,
+				$rootScope, $location) {
+	$rootScope.menu = "custom";
+	
+	var customId = $routeParams.id;
+	$scope.isReady = false;
+	
+	if(customId){//编辑
+		//请求客户信息
+		$http.post("custom/getCustomById", {id: customId}).success(function(data){
+			$scope.custom = data.custom;
+			$scope.communs = data.communs;
+			$scope.attachs = data.attachs;
+			$scope.isReady = true;
+			
+			//请求团队信息
+			$http.post("team/getSelectTeams", {ids: $scope.custom.team}).success(function(data){
+				$scope.teamselect = data;
+			});
+		});
+	}else{//新增
+		$scope.isReady = true;
+		$scope.custom = {state: "潜在客户"};
+		
+		//请求团队信息
+		$http.post("team/getSelectTeams", {}).success(function(data){
+			$scope.teamselect = data;
+		});
+	}
+	
+	//删除沟通记录
+	$scope.delCommun = function(item){
+		$http.post("custom/delCommun", {id: item.id}).success(function(data){
+			$scope.formresult = data;
+			//重新加载沟通记录
+			realodCommun();
+		});
+	};
+	function realodCommun(){
+		//重新加载沟通记录
+		$http.post("custom/getCommuns", {customId: customId}).success(function(data){
+			$scope.communs = data;
+		});
+	}
+	//保存客户信息
+	$scope.save = function(){
+		validFormAndSubmit(function(data){
+			if(data.success == "1"){//成功
+				$location.path("custommgr/list");
+			}
+		});
+	};
+	//保存客户信息并且添加新合同
+	$scope.saveAndAddContract = function(){
+		validFormAndSubmit(function(data){
+			if(data.success == "1"){//成功
+				var customId = data.data;
+				$location.path("contractmgr/incontract/" + customId);
+			}
+		});
+	};
+	
+	//验证表单并提交
+	function validFormAndSubmit(cb){
+		if(validForm()){
+			$scope.isrequest = true;
+			$http.post("custom/edit", $scope.custom).success(function(data){
+				$scope.formresult = data;
+				$scope.isrequest = false;
+				if(cb) cb(data);
+			});
+		}
+
+	};
+	
+	//验证表单
+	function validForm(){
+		return $("#customeditform").isHappy({
+			fields: {
+				//客户名
+				customName: {required: true, maxlength: 100},
+				//所属行业
+				industry: {required: true,maxlength: 200}
+				
+			}
+		});
+	}
+	
+});
+//客户管理-列表页
+app.controller('CustomMgrListCtrl',
+		function($scope, $http, $routeParams, ngTableParams,
+				$rootScope, BaseInfoService) {
+	//菜单
+	$rootScope.menu = "custom";
+	
+	//分页查询
+	var initpage = 1,
+		initrows = 10;
+	$scope.search = {};
+	$scope.queryParams = {rows: initrows};
+	$scope.initParams = function(pageNotChange){
+		var iPage = initpage;
+		if(pageNotChange){
+			iPage = $scope.queryParams.page;
+		}
+		var temp = {
+				page: iPage,
+				rows: $scope.queryParams.rows,
+				isreload: true
+			};
+		angular.extend(temp, $scope.search);
+		angular.extend($scope.queryParams, temp);
+	};
+	$scope.initParams();
+	/*重新加载*/
+	$scope.reload = function(pageNotChange){
+		$scope.initParams(pageNotChange);
+		$scope.tableParams.reload();
+	};
+	$scope.tableParams = new ngTableParams({
+		page: initpage,
+		count: initrows
+	}, {
+		total: 0,
+		getData: function($defer, params) {
+			if(!$scope.queryParams.isreload){
+				$scope.queryParams.page = params.page();
+				$scope.queryParams.rows = params.count();
+				$scope.queryParams.total = params.total();
+			}else{
+				$scope.queryParams.isreload = false;
+			}
+			$http.post("custom/list", $scope.queryParams).success(function(data){
+				var total = data.total;
+				$scope.queryParams.total = total;
+				params.total(total);
+				params.page($scope.queryParams.page);
+				$defer.resolve(data.rows);
+			});
+		}
+	});
+
+	//监控查询条件
+	$scope.$watch('search', function(newValue, oldValue){
+		if(newValue == oldValue) return;
+		$scope.reload();
+	}, true);
+	
+	//删除
+	$scope.del = function(item){
+		$http.post("custom/del", {id: item.id}).success(function(data){
+			$scope.formresult = data;
+			$scope.reload(true);
+		});
+	};
+	
+	$scope.changeSelect = function(target){
+		$(target).siblings().removeClass("select");
+		$(target).addClass("select");
+	}
+	
+});
+//客户管理-客户信息
+app.controller('CustomMgrViewCustomCtrl',
+		function($scope, $http, $routeParams, ngTableParams,
+				$rootScope) {
+	$rootScope.menu = "custom";
+	
+	var customId = $routeParams.id;
+	$scope.isReady = false;
+	
+	//请求客户信息
+	$http.post("custom/getCustomViewById", {id: customId}).success(function(data){
+		$scope.custom = data.custom;
+		$scope.comms = data.comms;
+		$scope.attas = data.attas;
+		$scope.jobs = data.jobs;
+		$scope.teams = data.teams;
+		if(data.contracts && data.contracts.length > 0){
+			$scope.contract = data.contracts[0];
+		}
+		$scope.contractAttas = data.contractAttas;
+		$scope.isReady = true;
+	});
+	
+	//添加沟通记录
+	$scope.addComm = function(){
+		
+	};
+	
+});
 
 //表单数据列表
 app.controller('FormDataListCtrl',function($scope, $http, $routeParams, 
@@ -1312,200 +1506,6 @@ app.factory('FormDesignService', [
 			};
 		} ]);
 
-//客户管理-录入客户
-app.controller('CustomMgrInCustomCtrl',
-		function($scope, $http, $routeParams, ngTableParams,
-				$rootScope, $location) {
-	$rootScope.menu = "custom";
-	
-	var customId = $routeParams.id;
-	$scope.isReady = false;
-	
-	if(customId){//编辑
-		//请求客户信息
-		$http.post("custom/getCustomById", {id: customId}).success(function(data){
-			$scope.custom = data.custom;
-			$scope.communs = data.communs;
-			$scope.attachs = data.attachs;
-			$scope.isReady = true;
-			
-			//请求团队信息
-			$http.post("team/getSelectTeams", {ids: $scope.custom.team}).success(function(data){
-				$scope.teamselect = data;
-			});
-		});
-	}else{//新增
-		$scope.isReady = true;
-		$scope.custom = {state: "潜在客户"};
-		
-		//请求团队信息
-		$http.post("team/getSelectTeams", {}).success(function(data){
-			$scope.teamselect = data;
-		});
-	}
-	
-	//删除沟通记录
-	$scope.delCommun = function(item){
-		$http.post("custom/delCommun", {id: item.id}).success(function(data){
-			$scope.formresult = data;
-			//重新加载沟通记录
-			realodCommun();
-		});
-	};
-	function realodCommun(){
-		//重新加载沟通记录
-		$http.post("custom/getCommuns", {customId: customId}).success(function(data){
-			$scope.communs = data;
-		});
-	}
-	//保存客户信息
-	$scope.save = function(){
-		validFormAndSubmit(function(data){
-			if(data.success == "1"){//成功
-				$location.path("custommgr/list");
-			}
-		});
-	};
-	//保存客户信息并且添加新合同
-	$scope.saveAndAddContract = function(){
-		validFormAndSubmit(function(data){
-			if(data.success == "1"){//成功
-				var customId = data.data;
-				$location.path("contractmgr/incontract/" + customId);
-			}
-		});
-	};
-	
-	//验证表单并提交
-	function validFormAndSubmit(cb){
-		if(validForm()){
-			$scope.isrequest = true;
-			$http.post("custom/edit", $scope.custom).success(function(data){
-				$scope.formresult = data;
-				$scope.isrequest = false;
-				if(cb) cb(data);
-			});
-		}
-
-	};
-	
-	//验证表单
-	function validForm(){
-		return $("#customeditform").isHappy({
-			fields: {
-				//客户名
-				customName: {required: true, maxlength: 100},
-				//所属行业
-				industry: {required: true,maxlength: 200}
-				
-			}
-		});
-	}
-	
-});
-//客户管理-列表页
-app.controller('CustomMgrListCtrl',
-		function($scope, $http, $routeParams, ngTableParams,
-				$rootScope, BaseInfoService) {
-	//菜单
-	$rootScope.menu = "custom";
-	
-	//分页查询
-	var initpage = 1,
-		initrows = 10;
-	$scope.search = {};
-	$scope.queryParams = {rows: initrows};
-	$scope.initParams = function(pageNotChange){
-		var iPage = initpage;
-		if(pageNotChange){
-			iPage = $scope.queryParams.page;
-		}
-		var temp = {
-				page: iPage,
-				rows: $scope.queryParams.rows,
-				isreload: true
-			};
-		angular.extend(temp, $scope.search);
-		angular.extend($scope.queryParams, temp);
-	};
-	$scope.initParams();
-	/*重新加载*/
-	$scope.reload = function(pageNotChange){
-		$scope.initParams(pageNotChange);
-		$scope.tableParams.reload();
-	};
-	$scope.tableParams = new ngTableParams({
-		page: initpage,
-		count: initrows
-	}, {
-		total: 0,
-		getData: function($defer, params) {
-			if(!$scope.queryParams.isreload){
-				$scope.queryParams.page = params.page();
-				$scope.queryParams.rows = params.count();
-				$scope.queryParams.total = params.total();
-			}else{
-				$scope.queryParams.isreload = false;
-			}
-			$http.post("custom/list", $scope.queryParams).success(function(data){
-				var total = data.total;
-				$scope.queryParams.total = total;
-				params.total(total);
-				params.page($scope.queryParams.page);
-				$defer.resolve(data.rows);
-			});
-		}
-	});
-
-	//监控查询条件
-	$scope.$watch('search', function(newValue, oldValue){
-		if(newValue == oldValue) return;
-		$scope.reload();
-	}, true);
-	
-	//删除
-	$scope.del = function(item){
-		$http.post("custom/del", {id: item.id}).success(function(data){
-			$scope.formresult = data;
-			$scope.reload(true);
-		});
-	};
-	
-	$scope.changeSelect = function(target){
-		$(target).siblings().removeClass("select");
-		$(target).addClass("select");
-	}
-	
-});
-//客户管理-客户信息
-app.controller('CustomMgrViewCustomCtrl',
-		function($scope, $http, $routeParams, ngTableParams,
-				$rootScope) {
-	$rootScope.menu = "custom";
-	
-	var customId = $routeParams.id;
-	$scope.isReady = false;
-	
-	//请求客户信息
-	$http.post("custom/getCustomViewById", {id: customId}).success(function(data){
-		$scope.custom = data.custom;
-		$scope.comms = data.comms;
-		$scope.attas = data.attas;
-		$scope.jobs = data.jobs;
-		$scope.teams = data.teams;
-		if(data.contracts && data.contracts.length > 0){
-			$scope.contract = data.contracts[0];
-		}
-		$scope.contractAttas = data.contractAttas;
-		$scope.isReady = true;
-	});
-	
-	//添加沟通记录
-	$scope.addComm = function(){
-		
-	};
-	
-});
 //发票管理-录入发票
 app.controller('InvoiceMgrInInvoiceCtrl',
 		function($scope, $http, $routeParams, ngTableParams,
@@ -1513,31 +1513,20 @@ app.controller('InvoiceMgrInInvoiceCtrl',
 	$rootScope.menu = "invoice";
 	
 });
-
-//
+//发票管理-列表
 app.controller('InvoiceMgrListCtrl',
 		function($scope, $http, $routeParams, ngTableParams,
 				$rootScope) {
 	$rootScope.menu = "invoice";
 	
 });
-//发票管理-发票信息
+//发票管理-发票信息查看
 app.controller('InvoiceMgrViewInvoiceCtrl',
 		function($scope, $http, $routeParams, ngTableParams,
 				$rootScope) {
 	$rootScope.menu = "invoice";
 	
 });
-app.factory('InvoiceService', [ '$http', function($http) {
-	return {
-		//
-		test: function(params, cb){
-			$http.post("formdesign/formdatadel", params).success(function(data){
-				if(cb) cb(data);
-			});
-		}
-	};
-}]);
 //职位管理-录入职位
 app.controller('JobMgrInJobCtrl',
 		function($scope, $http, $routeParams, ngTableParams, 
@@ -1730,6 +1719,31 @@ app.controller('PerformanceMgrListCtrl',
 	
 });
 app.factory('PerformanceService', [ '$http', function($http) {
+	return {
+		//
+		test: function(params, cb){
+			$http.post("formdesign/formdatadel", params).success(function(data){
+				if(cb) cb(data);
+			});
+		}
+	};
+}]);
+//公告管理-录入公告
+app.controller('PubMgrInPubCtrl',
+		function($scope, $http, $routeParams, ngTableParams, 
+				$rootScope) {
+	$rootScope.menu = "pub";
+	
+});
+
+//
+app.controller('PubMgrListCtrl',
+		function($scope, $http, $routeParams, ngTableParams,
+			$rootScope) {
+	$rootScope.menu = "pub";
+	
+});
+app.factory('PubService', [ '$http', function($http) {
 	return {
 		//
 		test: function(params, cb){
@@ -2151,31 +2165,6 @@ app.factory('ResumeService', [ '$http', function($http) {
 		}
 	};
 }]);
-//公告管理-录入公告
-app.controller('PubMgrInPubCtrl',
-		function($scope, $http, $routeParams, ngTableParams, 
-				$rootScope) {
-	$rootScope.menu = "pub";
-	
-});
-
-//
-app.controller('PubMgrListCtrl',
-		function($scope, $http, $routeParams, ngTableParams,
-			$rootScope) {
-	$rootScope.menu = "pub";
-	
-});
-app.factory('PubService', [ '$http', function($http) {
-	return {
-		//
-		test: function(params, cb){
-			$http.post("formdesign/formdatadel", params).success(function(data){
-				if(cb) cb(data);
-			});
-		}
-	};
-}]);
 
 //
 app.controller('TeamMgrListCtrl',
@@ -2191,25 +2180,32 @@ app.controller('TeamMgrMyInfoCtrl',
 	$rootScope.menu = "team";
 	
 });
+app.factory('TeamService', [ '$http', function($http) {
+	return {
+		//
+		test: function(params, cb){
+			$http.post("formdesign/formdatadel", params).success(function(data){
+				if(cb) cb(data);
+			});
+		}
+	};
+}]);
 //用户管理-编辑用户
-app.controller('UserMgrEditUserCtrl',function($scope, $routeParams, $http,
+app.controller('UserMgrInUserCtrl',function($scope, $routeParams, $http,
 		BaseInfoService, $rootScope) {
+	
+	$rootScope.menu = "user";
+	
 	//新增or编辑
 	if($routeParams.id){
-		$rootScope.nav = BaseInfoService.geNav(
-				[["用户管理", "/usermgr/list"], ["用户编辑"]]
-		);
 		$scope.id = $routeParams.id;
 		//请求用户信息
-		$http.post("usermgr/getUserById", {id: $scope.id}).success(function(user){
+		$http.post("user/getUserById", {id: $scope.id}).success(function(user){
 			user.createTime = null;
 			user.updateTime = null;
 			$scope.user = user;
 		});
 	}else{//新增
-		$rootScope.nav = BaseInfoService.geNav(
-				[["用户管理", "/usermgr/list"], ["用户新增"]]
-		);
 		BaseInfoService.getUserInfo(function(userInfo){
 			$scope.user = {
 				userType: (userInfo.userType == "1") ? "2" : "3"
@@ -2235,7 +2231,7 @@ app.controller('UserMgrEditUserCtrl',function($scope, $routeParams, $http,
 		});
 		if(valid){
 			$scope.isrequest = true;
-			$http.post("usermgr/editUser", $scope.user).success(function(data){
+			$http.post("user/editUser", $scope.user).success(function(data){
 				$scope.formresult = data;
 				if(data.data){
 					$scope.user.id = data.data.id;
@@ -2246,42 +2242,35 @@ app.controller('UserMgrEditUserCtrl',function($scope, $routeParams, $http,
 	};
 	
 });
-//用户管理-录入用户
-app.controller('UserMgrInUserCtrl',
-		function($scope, $http, $routeParams, ngTableParams, 
-				$rootScope) {
-	$rootScope.menu = "user";
-	
-});
 //用户管理-列表
 app.controller('UserMgrListCtrl',function($scope, $routeParams,
 		$http, ngTableParams, $rootScope, BaseInfoService) {
 	
-	$rootScope.nav = BaseInfoService.geNav(
-			[["用户管理"]]
-	);
+	debugger;
+	$rootScope.menu = "user";
 	
 	//分页查询
 	var initpage = 1,
 		initrows = 10;
-	
-	$scope.queryParams = {
-		page: initpage,
-		rows: initrows,
-		isreload: true
+	$scope.search = {};
+	$scope.queryParams = {rows: initrows};
+	$scope.initParams = function(pageNotChange){
+		var iPage = initpage;
+		if(pageNotChange){
+			iPage = $scope.queryParams.page;
+		}
+		var temp = {
+				page: iPage,
+				rows: $scope.queryParams.rows,
+				isreload: true
+			};
+		angular.extend(temp, $scope.search);
+		angular.extend($scope.queryParams, temp);
 	};
-	
+	$scope.initParams();
 	/*重新加载*/
-	$scope.reload = function(){
-		$scope.queryParams = {
-			page: $scope.queryParams.page,
-			rows: $scope.queryParams.rows,
-			username: $scope.searchUserName,
-			loginname: $scope.searchLoginName,
-			usertype: $scope.searchUserType,
-			isDisabled: $scope.searchIsDisabled,
-			isreload: true
-		};
+	$scope.reload = function(pageNotChange){
+		$scope.initParams(pageNotChange);
 		$scope.tableParams.reload();
 	};
 	$scope.tableParams = new ngTableParams({
@@ -2297,40 +2286,47 @@ app.controller('UserMgrListCtrl',function($scope, $routeParams,
 			}else{
 				$scope.queryParams.isreload = false;
 			}
-			
-			$http.post("usermgr/getUserList", $scope.queryParams).success(function(data){
+			$http.post("user/getUserList", $scope.queryParams).success(function(data){
 				var total = data.total;
 				$scope.queryParams.total = total;
 				params.total(total);
+				params.page($scope.queryParams.page);
 				$defer.resolve(data.rows);
 			});
 		}
 	});
+
+	//监控查询条件
+	$scope.$watch('search', function(newValue, oldValue){
+		if(newValue == oldValue) return;
+		$scope.reload();
+	}, true);
+	
 	
 	//删除用户
 	$scope.delUser = function(item){
 		if(confirm("确认删除?") === false) return;
-		$http.post("usermgr/delUser", {id: item.id}).success(function(data){
+		$http.post("user/delUser", {id: item.id}).success(function(data){
 			$scope.reload();
 		});
 	};
 	//锁定用户
 	$scope.disabledUser = function(item){
 		if(confirm("确认锁定?") === false) return;
-		$http.post("usermgr/disabledUser", {id: item.id}).success(function(data){
+		$http.post("user/disabledUser", {id: item.id}).success(function(data){
 			$scope.reload();
 		});
 	};
 	//解锁用户
 	$scope.enableUser = function(item){
-		$http.post("usermgr/enableUser", {id: item.id}).success(function(data){
+		$http.post("user/enableUser", {id: item.id}).success(function(data){
 			$scope.reload();
 		});
 	};
 	//重置密码
 	$scope.resetPwd = function(item){
 		if(confirm("确认重置用户密码?") === false) return;
-		$http.post("usermgr/pwdReset", {id: item.id}).success(function(data){
+		$http.post("user/pwdReset", {id: item.id}).success(function(data){
 			$scope.reload();
 			$scope.formresult = data;
 		});
@@ -2345,12 +2341,10 @@ app.controller('UserMgrViewUserCtrl',
 	
 });
 //用户-修改密码
-app.controller('UserPwdResetCtrl',function($scope, $http,
+app.controller('UserResetPwdCtrl',function($scope, $http,
 		BaseInfoService, $rootScope) {
 	
-	$rootScope.nav = BaseInfoService.geNav(
-			[["用户"], ["修改密码"]]
-	);
+	$rootScope.menu = "resetpwd";
 	
 	//重置密码
 	$scope.resetPwd = function(){
@@ -2364,7 +2358,7 @@ app.controller('UserPwdResetCtrl',function($scope, $http,
 		});
 		if(valid){
 			$scope.isrequest = true;
-			$http.post("user/pwdReset", $scope.pwd).success(function(data){
+			$http.post("user/pwdChange", $scope.pwd).success(function(data){
 				$scope.formresult = data;
 				$scope.isrequest = false;
 			});
@@ -2372,146 +2366,3 @@ app.controller('UserPwdResetCtrl',function($scope, $http,
 	};
 	
 });
-
-//
-app.controller('UserResetPwdCtrl',
-		function($scope, $http, $routeParams, ngTableParams, 
-				$rootScope) {
-	$rootScope.menu = "resetpwd";
-	
-});
-app.factory('UserService', [ '$http', function($http) {
-	return {
-		//
-		test: function(params, cb){
-			$http.post("formdesign/formdatadel", params).success(function(data){
-				if(cb) cb(data);
-			});
-		}
-	};
-}]);
-//用户管理-编辑用户
-app.controller('UserMgrEditUserCtrl',function($scope, $routeParams, $http, BaseInfoService) {
-	//新增or编辑
-	if($routeParams.id){
-		$scope.id = $routeParams.id;
-		//请求用户信息
-		$http.post("usermgr/getUserById", {id: $scope.id}).success(function(user){
-			user.createTime = null;
-			user.updateTime = null;
-			$scope.user = user;
-		});
-	}else{//新增
-		BaseInfoService.getUserInfo(function(userInfo){
-			$scope.user = {
-				userType: (userInfo.userType == "1") ? "2" : "3"
-			};
-		});
-	}
-	
-	//保存用户信息
-	$scope.saveUser = function(){
-		$scope.formresult = null;
-		var valid = $("#usermgr-list-form").isHappy({//验证
-			fields: {
-				loginName: {required: true, maxlength: 20},//登录名
-				userName: {required: true, maxlength: 20},//用户名
-				birthday: {dateISO: true},//出生日期
-				orgCode: {maxlength: 40},//所属机构
-				department: {maxlength: 100},//所属科室
-				comment: {maxlength: 100}//备注
-			}
-		});
-		if(valid){
-			$scope.isrequest = true;
-			$http.post("usermgr/editUser", $scope.user).success(function(data){
-				$scope.formresult = data;
-				if(data.data){
-					$scope.user.id = data.data.id;
-				}
-				$scope.isrequest = false;
-			});
-		}
-	};
-	
-});
-//用户管理-列表
-app.controller('UserMgrListCtrl',function($scope, $routeParams, $http, ngTableParams) {
-	//分页查询
-	var initpage = 1,
-		initrows = 10;
-	
-	$scope.queryParams = {
-		page: initpage,
-		rows: initrows,
-		isreload: true
-	};
-	
-	/*重新加载*/
-	$scope.reload = function(){
-		$scope.queryParams = {
-			page: $scope.queryParams.page,
-			rows: $scope.queryParams.rows,
-			username: $scope.searchUserName,
-			loginname: $scope.searchLoginName,
-			usertype: $scope.searchUserType,
-			isDisabled: $scope.searchIsDisabled,
-			isreload: true
-		};
-		$scope.tableParams.reload();
-	};
-	$scope.tableParams = new ngTableParams({
-		page: initpage,
-		count: initrows
-	}, {
-		total: 0,
-		getData: function($defer, params) {
-			if(!$scope.queryParams.isreload){
-				$scope.queryParams.page = params.page();
-				$scope.queryParams.rows = params.count();
-				$scope.queryParams.total = params.total();
-			}else{
-				$scope.queryParams.isreload = false;
-			}
-			
-			$http.post("usermgr/getUserList", $scope.queryParams).success(function(data){
-				var total = data.total;
-				$scope.queryParams.total = total;
-				params.total(total);
-				$defer.resolve(data.rows);
-			});
-		}
-	});
-	
-	//删除用户
-	$scope.delUser = function(item){
-		if(confirm("确认删除?") === false) return;
-		$http.post("usermgr/delUser", {id: item.id}).success(function(data){
-			$scope.reload();
-		});
-	};
-	//锁定用户
-	$scope.disabledUser = function(item){
-		if(confirm("确认锁定?") === false) return;
-		$http.post("usermgr/disabledUser", {id: item.id}).success(function(data){
-			$scope.reload();
-		});
-	};
-	//解锁用户
-	$scope.enableUser = function(item){
-		$http.post("usermgr/enableUser", {id: item.id}).success(function(data){
-			$scope.reload();
-		});
-	};
-	
-});
-app.factory('TeamService', [ '$http', function($http) {
-	return {
-		//
-		test: function(params, cb){
-			$http.post("formdesign/formdatadel", params).success(function(data){
-				if(cb) cb(data);
-			});
-		}
-	};
-}]);
