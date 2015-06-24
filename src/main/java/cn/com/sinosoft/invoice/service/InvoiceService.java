@@ -2,6 +2,7 @@ package cn.com.sinosoft.invoice.service;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -59,8 +60,13 @@ public class InvoiceService extends SimpleServiceImpl {
 	 * @param id
 	 * @return
 	 */
-	public TInvoice getInvoiceById(String id) {
-		return dao.queryById(id, TInvoice.class);
+	public Map<String, Object> getInvoiceViewById(String id) {
+		Map<String, Object> ret = new HashMap<String, Object>();
+		
+		TInvoice invoice = dao.queryById(id, TInvoice.class);
+		ret.put("invoice", invoice);
+		
+		return ret;
 	}
 
 	/**

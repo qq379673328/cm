@@ -3,7 +3,7 @@
 		<div class="team formresult-success">
 			<span class="fa fa-user">&nbsp;</span>
 		</div>
-		<div class="team formresult-success" ng-repeat="selectteam in teamselect.select">
+		<div class="team formresult-success" ng-repeat="selectteam in select track by $index">
 			<span
 				ng-click="removeItem(selectteam, $index);" 
 				class="fa fa-times close">
@@ -14,12 +14,10 @@
 	<span class="btn btn-lblue teams-btn" ng-click="showdialog=true;">添加成员</span>
 	<div class="dialog-wrap" ng-show="showdialog">
 		<div class="dialog">
-			<input class="form-input" ng-model="filter" />
+			<input class="form-input" ng-model="teamsearch" />
 			<div ng-click="showdialog=false;" 
 				class="fa fa-2x fa-times close"></div>
-			<div ng-repeat="team in teamselect.unSelect"
-					ng-show="filter == null || filter == '' || team.name.indexOf(filter) != -1"
-				>
+			<div ng-repeat="team in teams">
 				<span
 					ng-click="addItem(team, $index);"
 					class="fa fa-2x fa-check-circle ok">

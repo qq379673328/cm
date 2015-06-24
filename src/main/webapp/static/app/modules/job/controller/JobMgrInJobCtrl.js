@@ -13,10 +13,6 @@ app.controller('JobMgrInJobCtrl',
 			$scope.custom = data.custom;
 			$scope.isReady = true;
 			
-			//请求团队信息
-			$http.post("team/getSelectTeams", {ids: $scope.job.team}).success(function(data){
-				$scope.teamselect = data;
-			});		
 		});
 	}else{
 		$scope.isReady = true;
@@ -25,11 +21,6 @@ app.controller('JobMgrInJobCtrl',
 				state: "运作",
 				sexLimit: "不限"
 		};
-		
-		//请求团队信息
-		$http.post("team/getSelectTeams", {ids: ""}).success(function(data){
-			$scope.teamselect = data;
-		});
 	}
 	
 	//保存职位信息

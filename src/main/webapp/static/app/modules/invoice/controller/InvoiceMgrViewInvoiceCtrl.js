@@ -4,4 +4,13 @@ app.controller('InvoiceMgrViewInvoiceCtrl',
 				$rootScope) {
 	$rootScope.menu = "invoice";
 	
+	var invoiceId = $routeParams.id;
+	$scope.isReady = false;
+	
+	//请求客户信息
+	$http.post("invoice/getInvoiceViewById", {id: invoiceId}).success(function(data){
+		$scope.invoice = data.invoice;
+		$scope.isReady = true;
+	});
+	
 });

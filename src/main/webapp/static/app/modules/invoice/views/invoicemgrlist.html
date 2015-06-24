@@ -5,4 +5,116 @@
 	发票管理
 </div>
 <div class="content">
+	<div class="searchzone">
+		<div class="title"><i class="fa fa-users"></i>&nbsp;发票管理</div>
+		<div class="line">
+			<div class="desc">客户名称：</div>
+			<div class="vals">
+				<input name="customName" />
+			</div>
+			<div class="desc">回款状态：</div>
+			<div class="vals">
+				<div 
+					core-basedata 
+					type="span"
+					ng-model="search.incomestate"
+					key="incomestate"
+					all-select-name="不限"></div>
+			</div>
+		</div>
+		<div class="line">
+			<div class="desc">发票类型：</div>
+			<div class="vals">
+				<div 
+					core-basedata 
+					type="span"
+					ng-model="search.type"
+					key="invoicetype"
+					all-select-name="不限"></div>
+			</div>
+			<div class="desc">发票状态：</div>
+			<div class="vals">
+				<div 
+					core-basedata 
+					type="span"
+					ng-model="search.invoicestate"
+					key="invoicestate"
+					all-select-name="不限"></div>
+			</div>
+		</div>
+		
+		<div class="line border-none">
+			<div class="desc">申请时间：</div>
+			<div class="vals">
+				<input datepicker ng-model="search.timeStart" />
+				至
+				<input datepicker ng-model="search.timeEnd"/>
+			</div>
+			<div class="desc">申请用户：</div>
+			<div class="vals">
+				<input ng-model="search.name" />
+			</div>
+		</div>
+	</div>
+	
+	<div class="mytable">
+		<div class="title">
+			<span>总数 ：
+				<span class="highlight">{{queryParams.total}}</span>
+			 	个
+			 </span>
+			
+			<a class="spe" href="#invoicemgr/ininvoice">申请发票</a>
+		</div>
+		<table class="my-table" ng-table="tableParams" template-pagination="custom/pager">
+			<thead>
+				<tr>
+					<th>申请人</th>
+					<th>客户名称</th>
+					<th>发票类型</th>
+					<th>发票金额</th>
+					<th>发票状态</th>
+					<th>开票人</th>
+					<th>回款状态</th>
+					<th>申请时间</th>
+					<th>备注</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-show="!$data"><td colspan="4">加载中...</td></tr>
+				<tr ng-repeat="item in $data" ng-class="{true:'tr-odd' , false: 'tr-even'}[$index%2 == 0]">
+					<td>{{ item.apply_user }}</td>
+					<td>{{ item.custom_name }}</td>
+					<td>{{ item.type }}</td>
+					<td>{{ item.total }}</td>
+					<td>{{ item.state }}</td>
+					<td>{{ item.check_user }}</td>
+					<td>{{ item.income_state }}</td>
+					<td>{{ item.apply_time }}</td>
+					<td>{{ item.comment }}</td>
+					
+					<td ng-show="item.ishandling">操作中</td>
+					<td ng-show="!item.ishandling">
+						<a class="btn btn-small btn-lblue" href="#invoicemgr/editcustom/{{item.id}}">编辑</a>
+						<a class="btn btn-small btn-success"
+							ng-click="item.prepareDel = !item.prepareDel"
+							>删除</a>
+						<table ng-show="item.prepareDel">
+							<tr>
+								<td colspan="5"></td>
+								<td>
+									<a class="btn btn-small btn-danger btn-w4"
+										ng-click="del(item);item.ishandling=true;"
+										>确认删除</a>
+								</td>
+							</tr>
+						</table>
+									
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<div core-formresult result="formresult"></div>
+	</div>
 </div>

@@ -10,7 +10,7 @@ app.controller('ContractMgrInContractCtrl',
 	//请求客户信息-直接跳转过来的
 	if(customId){
 		$http.post("custom/getCustomById", {id: customId}).success(function(data){
-			$scope.custom = data;
+			$scope.custom = data.custom;
 			$scope.isReady = true;
 		});
 	}

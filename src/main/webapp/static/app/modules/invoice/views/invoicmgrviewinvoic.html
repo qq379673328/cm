@@ -7,5 +7,62 @@
 	发票信息
 </div>
 <div class="content">
+	<div class="mytable">
+		<div class="title">
+			<span>
+				发票信息
+			</span>
+			
+			<a class="spe" href="#invoicemgr/editcustom/{{invoice.id}}">编辑发票信息</a>
+		</div>
+		<table>
+			<tbody>
+				<tr>
+					<td class="td-odd">申请人：</td>
+					<td class="td-even">{{invoice.applyUser}}</td>
+				</tr>
+				<tr>
+					<td class="td-odd">申请时间：</td>
+					<td class="td-even">{{invoice.applyTime}}</td>
+				</tr>
+				<tr>
+					<td class="td-odd">客户+合同编号：</td>
+					<td class="td-even">{{invoice.customContract}}</td>
+				</tr>
+				<tr>
+					<td class="td-odd">入职人选：</td>
+					<td class="td-even">{{invoice.inUser}}</td>
+				</tr>
+				<tr>
+					<td class="td-odd">发票类型：</td>
+					<td class="td-even">{{invoice.type}}</td>
+				</tr>
+				<tr>
+					<td class="td-odd">发票属性：</td>
+					<td class="td-even">{{invoice.property}}</td>
+				</tr>
+				<tr>
+					<td class="td-odd">发票金额：</td>
+					<td class="td-even">{{invoice.total}}</td>
+				</tr>
+				<tr>
+					<td class="td-odd">发票状态：</td>
+					<td class="td-even">{{invoice.state}}</td>
+				</tr>
+				<tr>
+					<td class="td-odd">开票人：</td>
+					<td class="td-even">{{invoice.checkUser}}</td>
+				</tr>
+				<tr>
+					<td class="td-odd">回款状态：</td>
+					<td class="td-even">{{invoice.incomeState}}</td>
+				</tr>
+				<tr>
+					<td class="td-odd">备注：</td>
+					<td class="td-even">{{invoice.comment}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 	
 </div>

@@ -128,7 +128,7 @@ app.config([ '$routeProvider', function($routeProvider) {
 		templateUrl : fdRouterViewsBasepath + 'contract/views/contractmgrincontract.html',
 		controller : 'ContractMgrInContractCtrl'
 	})
-	.when('/contractmgr/incontract/:contractid', {//合同管理-为指定客户录入合同
+	.when('/contractmgr/incontract/:customId', {//合同管理-为指定客户录入合同
 		templateUrl : fdRouterViewsBasepath + 'contract/views/contractmgrincontract.html',
 		controller : 'ContractMgrInContractCtrl'
 	})
@@ -276,8 +276,53 @@ app.directive('coreBasedata', ["$http", function($http){
 			       ["100-150万", "100-150万"],
 			       ["150-200万", "150-200万"],
 			       ["200万以上", "200万以上"]
-			       ]
+			       ],
+			     //部门
+		   department: [
+			       ["猎头部", "猎头部"],
+			       ["技术部", "技术部"],
+			       ["人力资源部", "人力资源部"],
+			       ["财务部", "财务部"],
+			       ["行政部", "行政部"],
+			       ["市场部", "市场部"],
+			       ["管理中心", "管理中心"]
+			       ],
+			       //担任职务
+		   userduty: [
+			       ["猎头助理", "猎头助理"],
+			       ["猎头顾问", "猎头顾问"],
+			       ["合伙人", "合伙人"],
+			       ["人力资源", "人力资源"],
+			       ["资深顾问", "资深顾问"],
+			       ["财务出纳", "财务出纳"],
+			       ["工程师", "工程师"],
+			       ["助理顾问", "助理顾问"]
+			       ],
+	       //回款状态
+	       incomestate: [
+	                  ["已到账", "已到账"],
+	                  ["未到账", "未到账"]
+	                  ],
+          //发票类型
+          invoicetype: [
+                        ["普通发票", "普通发票"],
+                        ["专用发票", "专用发票"]
+                        ],
+        //发票状态
+        invoicestate: [
+                      ["申请中", "申请中"],
+                      ["已开出", "已开出"],
+                      ["已作废", "已作废"]
+                      ]
+			       
 	};
+	//入职时间
+	baseData.inyear = [];
+	var yearCount = 5;
+	var currentYear= new Date().getFullYear();
+	for(var i = 0; i < yearCount; i++){
+		baseData.inyear.push(["" + (currentYear - i) + "", "" + (currentYear - i) + "年"]);
+	}
 	
     return {
         restrict: 'A',
@@ -530,37 +575,63 @@ app.directive('coreTeamselect', ["$http", function($http){
         restrict: 'A',
         replace: true,
         scope: {
-        	te: "=bindteam",
-        	teamselect: "=teamselect",
+        	teamids: "=teamids",
+        	single: "=single"
         },
+        require: 'ngModel',
         templateUrl: 'static/app/components/directives/core/views/teamselect.html',
-        link: function($scope, $element, attrs) {
-        	/*$scope.selectteams = [];
-        	$scope.teams = [];*/
-        	/*$http.post("team/getSelectTeams", {ids: $scope.te}).success(function(data){
-        		$scope.teams = data.unSelect;
-        		$scope.selectteams = data.select;
-        	});*/
+        link: function($scope, $element, attrs, ngModel) {
+        	function resetTe(){
+        		var arr = [];
+        		var teams = $scope.select;
+        		for(var i in teams){
+        			arr.push(teams[i]["id"]);
+        		}
+        		ngModel.$setViewValue(arr.join(","));
+        	}
+        	
+        	var isSingle = $scope.single ? $scope.single : false;
+        	
+        	var isInit = false;
         	//添加
         	$scope.addItem = function(team, index){
-        		$scope.teamselect.unSelect.splice(index, 1);
-        		$scope.teamselect.select.push(team);
+        		if(!$scope.select){
+        			$scope.select = [];
+        		}
+        		if(isSingle){//单选
+        			$scope.select = [];
+        		}
+        		$scope.select.push(team);
         		resetTe();
         	};
         	//移除
         	$scope.removeItem = function(team, index){
-        		$scope.teamselect.select.splice(index, 1);
-        		$scope.teamselect.unSelect.push(team);
+        		$scope.select.splice(index, 1);
         		resetTe();
         	};
-        	function resetTe(){
-        		var arr = [];
-        		var teams = $scope.teamselect.select;
-        		for(var i in teams){
-        			arr.push(teams[i]["id"]);
+        	//监控团队初始化
+        	$scope.$watch('teamids', function(newValue, oldValue){
+        		if(!newValue){
+        			return;
         		}
-        		$scope.te = arr.join(",");
-        	}
+        		if(isInit){
+        			return;
+        		}else{
+        			isInit = true;
+        			$http.post("team/getSelectTeams",{ids: newValue}).success(function(data){
+    						$scope.select = data;
+                		});
+        		}
+        	}, true);
+        	
+        	//监控查询
+        	$scope.$watch('teamsearch', function(newValue, oldValue){
+        		if(newValue == oldValue) return;
+        		$http.post("team/list",{name: newValue, page: 1, rows: 100}).success(function(data){
+        			$scope.teams = data.rows;
+        		});
+        	}, true);
+        	
         }
     };
 }]);
@@ -650,7 +721,7 @@ app.controller('ContractMgrInContractCtrl',
 	//请求客户信息-直接跳转过来的
 	if(customId){
 		$http.post("custom/getCustomById", {id: customId}).success(function(data){
-			$scope.custom = data;
+			$scope.custom = data.custom;
 			$scope.isReady = true;
 		});
 	}
@@ -813,19 +884,11 @@ app.controller('CustomMgrInCustomCtrl',
 			$scope.attachs = data.attachs;
 			$scope.isReady = true;
 			
-			//请求团队信息
-			$http.post("team/getSelectTeams", {ids: $scope.custom.team}).success(function(data){
-				$scope.teamselect = data;
-			});
 		});
 	}else{//新增
 		$scope.isReady = true;
 		$scope.custom = {state: "潜在客户"};
 		
-		//请求团队信息
-		$http.post("team/getSelectTeams", {}).success(function(data){
-			$scope.teamselect = data;
-		});
 	}
 	
 	//删除沟通记录
@@ -1512,6 +1575,54 @@ app.controller('InvoiceMgrInInvoiceCtrl',
 				$rootScope) {
 	$rootScope.menu = "invoice";
 	
+	var invoiceId = $routeParams.id;
+	$scope.isReady = false;
+	
+	if(invoiceId){//编辑
+		//请求发票信息
+		$http.post("invoice/getInvoiceViewById", {id: invoiceId}).success(function(data){
+			$scope.invoice = data.invoice;
+			$scope.isReady = true;
+		});
+	}else{//新增
+		$scope.isReady = true;
+	}
+	
+	//删除发票
+	$scope.delCommun = function(item){
+		$http.post("invoice/del", {id: item.id}).success(function(data){
+			$scope.formresult = data;
+		});
+	};
+	//保存发票信息
+	$scope.save = function(){
+		validFormAndSubmit(function(data){
+			$scope.formresult = data;
+		});
+	};
+	
+	//验证表单并提交
+	function validFormAndSubmit(cb){
+		if(validForm()){
+			$scope.isrequest = true;
+			$http.post("invoice/edit", $scope.invoice).success(function(data){
+				$scope.formresult = data;
+				$scope.isrequest = false;
+				if(cb) cb(data);
+			});
+		}
+
+	};
+	
+	//验证表单
+	function validForm(){
+		return $("#invoiceeditform").isHappy({
+			fields: {
+				
+			}
+		});
+	}
+	
 });
 //发票管理-列表
 app.controller('InvoiceMgrListCtrl',
@@ -1519,12 +1630,82 @@ app.controller('InvoiceMgrListCtrl',
 				$rootScope) {
 	$rootScope.menu = "invoice";
 	
+	//分页查询
+	var initpage = 1,
+		initrows = 10;
+	$scope.search = {};
+	$scope.queryParams = {rows: initrows};
+	$scope.initParams = function(pageNotChange){
+		var iPage = initpage;
+		if(pageNotChange){
+			iPage = $scope.queryParams.page;
+		}
+		var temp = {
+				page: iPage,
+				rows: $scope.queryParams.rows,
+				isreload: true
+			};
+		angular.extend(temp, $scope.search);
+		angular.extend($scope.queryParams, temp);
+	};
+	$scope.initParams();
+	/*重新加载*/
+	$scope.reload = function(pageNotChange){
+		$scope.initParams(pageNotChange);
+		$scope.tableParams.reload();
+	};
+	$scope.tableParams = new ngTableParams({
+		page: initpage,
+		count: initrows
+	}, {
+		total: 0,
+		getData: function($defer, params) {
+			if(!$scope.queryParams.isreload){
+				$scope.queryParams.page = params.page();
+				$scope.queryParams.rows = params.count();
+				$scope.queryParams.total = params.total();
+			}else{
+				$scope.queryParams.isreload = false;
+			}
+			$http.post("invoice/list", $scope.queryParams).success(function(data){
+				var total = data.total;
+				$scope.queryParams.total = total;
+				params.total(total);
+				params.page($scope.queryParams.page);
+				$defer.resolve(data.rows);
+			});
+		}
+	});
+
+	//监控查询条件
+	$scope.$watch('search', function(newValue, oldValue){
+		if(newValue == oldValue) return;
+		$scope.reload();
+	}, true);
+	
+	//删除
+	$scope.del = function(item){
+		$http.post("invoice/del", {id: item.id}).success(function(data){
+			$scope.formresult = data;
+			$scope.reload(true);
+		});
+	};
+	
 });
 //发票管理-发票信息查看
 app.controller('InvoiceMgrViewInvoiceCtrl',
 		function($scope, $http, $routeParams, ngTableParams,
 				$rootScope) {
 	$rootScope.menu = "invoice";
+	
+	var invoiceId = $routeParams.id;
+	$scope.isReady = false;
+	
+	//请求客户信息
+	$http.post("invoice/getInvoiceViewById", {id: invoiceId}).success(function(data){
+		$scope.invoice = data.invoice;
+		$scope.isReady = true;
+	});
 	
 });
 //职位管理-录入职位
@@ -1542,10 +1723,6 @@ app.controller('JobMgrInJobCtrl',
 			$scope.custom = data.custom;
 			$scope.isReady = true;
 			
-			//请求团队信息
-			$http.post("team/getSelectTeams", {ids: $scope.job.team}).success(function(data){
-				$scope.teamselect = data;
-			});		
 		});
 	}else{
 		$scope.isReady = true;
@@ -1554,11 +1731,6 @@ app.controller('JobMgrInJobCtrl',
 				state: "运作",
 				sexLimit: "不限"
 		};
-		
-		//请求团队信息
-		$http.post("team/getSelectTeams", {ids: ""}).success(function(data){
-			$scope.teamselect = data;
-		});
 	}
 	
 	//保存职位信息
@@ -1717,6 +1889,59 @@ app.controller('PerformanceMgrListCtrl',
 				PerformanceService, $rootScope) {
 	$rootScope.menu = "performance";
 	
+	//分页查询
+	var initpage = 1,
+		initrows = 10;
+	$scope.search = {};
+	$scope.queryParams = {rows: initrows};
+	$scope.initParams = function(pageNotChange){
+		var iPage = initpage;
+		if(pageNotChange){
+			iPage = $scope.queryParams.page;
+		}
+		var temp = {
+				page: iPage,
+				rows: $scope.queryParams.rows,
+				isreload: true
+			};
+		angular.extend(temp, $scope.search);
+		angular.extend($scope.queryParams, temp);
+	};
+	$scope.initParams();
+	/*重新加载*/
+	$scope.reload = function(pageNotChange){
+		$scope.initParams(pageNotChange);
+		$scope.tableParams.reload();
+	};
+	$scope.tableParams = new ngTableParams({
+		page: initpage,
+		count: initrows
+	}, {
+		total: 0,
+		getData: function($defer, params) {
+			if(!$scope.queryParams.isreload){
+				$scope.queryParams.page = params.page();
+				$scope.queryParams.rows = params.count();
+				$scope.queryParams.total = params.total();
+			}else{
+				$scope.queryParams.isreload = false;
+			}
+			$http.post("performance/list", $scope.queryParams).success(function(data){
+				var total = data.total;
+				$scope.queryParams.total = total;
+				params.total(total);
+				params.page($scope.queryParams.page);
+				$defer.resolve(data.rows);
+			});
+		}
+	});
+
+	//监控查询条件
+	$scope.$watch('search', function(newValue, oldValue){
+		if(newValue == oldValue) return;
+		$scope.reload();
+	}, true);
+	
 });
 app.factory('PerformanceService', [ '$http', function($http) {
 	return {
@@ -1735,8 +1960,7 @@ app.controller('PubMgrInPubCtrl',
 	$rootScope.menu = "pub";
 	
 });
-
-//
+//公共管理
 app.controller('PubMgrListCtrl',
 		function($scope, $http, $routeParams, ngTableParams,
 			$rootScope) {
@@ -2165,12 +2389,64 @@ app.factory('ResumeService', [ '$http', function($http) {
 		}
 	};
 }]);
-
-//
+//团队管理
 app.controller('TeamMgrListCtrl',
 		function($scope, $http, $routeParams, ngTableParams, 
 				$rootScope) {
 	$rootScope.menu = "team";
+	
+	//分页查询
+	var initpage = 1,
+		initrows = 12;
+	$scope.search = {};
+	$scope.queryParams = {rows: initrows};
+	$scope.initParams = function(pageNotChange){
+		var iPage = initpage;
+		if(pageNotChange){
+			iPage = $scope.queryParams.page;
+		}
+		var temp = {
+				page: iPage,
+				rows: $scope.queryParams.rows,
+				isreload: true
+			};
+		angular.extend(temp, $scope.search);
+		angular.extend($scope.queryParams, temp);
+	};
+	$scope.initParams();
+	/*重新加载*/
+	$scope.reload = function(pageNotChange){
+		$scope.initParams(pageNotChange);
+		$scope.tableParams.reload();
+	};
+	$scope.tableParams = new ngTableParams({
+		page: initpage,
+		count: initrows
+	}, {
+		total: 0,
+		getData: function($defer, params) {
+			if(!$scope.queryParams.isreload){
+				$scope.queryParams.page = params.page();
+				$scope.queryParams.rows = params.count();
+				$scope.queryParams.total = params.total();
+			}else{
+				$scope.queryParams.isreload = false;
+			}
+			$http.post("team/list", $scope.queryParams).success(function(data){
+				var total = data.total;
+				$scope.queryParams.total = total;
+				params.total(total);
+				params.page($scope.queryParams.page);
+				$defer.resolve(data.rows);
+			});
+		}
+	});
+
+	//监控查询条件
+	$scope.$watch('search', function(newValue, oldValue){
+		if(newValue == oldValue) return;
+		$scope.reload();
+	}, true);
 	
 });
 //团队管理-我的信息
@@ -2180,16 +2456,6 @@ app.controller('TeamMgrMyInfoCtrl',
 	$rootScope.menu = "team";
 	
 });
-app.factory('TeamService', [ '$http', function($http) {
-	return {
-		//
-		test: function(params, cb){
-			$http.post("formdesign/formdatadel", params).success(function(data){
-				if(cb) cb(data);
-			});
-		}
-	};
-}]);
 //用户管理-编辑用户
 app.controller('UserMgrInUserCtrl',function($scope, $routeParams, $http,
 		BaseInfoService, $rootScope) {
@@ -2246,7 +2512,6 @@ app.controller('UserMgrInUserCtrl',function($scope, $routeParams, $http,
 app.controller('UserMgrListCtrl',function($scope, $routeParams,
 		$http, ngTableParams, $rootScope, BaseInfoService) {
 	
-	debugger;
 	$rootScope.menu = "user";
 	
 	//分页查询

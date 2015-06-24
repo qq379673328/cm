@@ -5,4 +5,59 @@
 	绩效管理
 </div>
 <div class="content">
+	<div class="searchzone">
+		<div class="title"><i class="fa fa-users"></i>&nbsp;绩效管理</div>
+		<div class="line border-none">
+			<div class="desc">统计时间：</div>
+			<div class="vals">
+				<input datepicker ng-model="search.timeStart" />
+				至
+				<input datepicker ng-model="search.timeEnd"/>
+			</div>
+			<div class="desc">用户姓名：</div>
+			<div class="vals">
+				<input ng-model="search.name" />
+			</div>
+		</div>
+	</div>
+	
+	<div class="mytable">
+		<div class="title">
+			<span>总数 ：
+				<span class="highlight">{{queryParams.total}}</span>
+			 	个
+			 </span>
+		</div>
+		<table class="my-table" ng-table="tableParams" template-pagination="custom/pager">
+			<thead>
+				<tr>
+					<th>用户名</th>
+					<th>担任职务</th>
+					<th>录入简历</th>
+					<th>BD客户数</th>
+					<th>录入客户</th>
+					<th>发布职位</th>
+					<th>推荐人选</th>
+					<th>客户面试</th>
+					<th>确定OFFER</th>
+					<th>成功入职</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-show="!$data"><td colspan="4">加载中...</td></tr>
+				<tr ng-repeat="item in $data" ng-class="{true:'tr-odd' , false: 'tr-even'}[$index%2 == 0]">
+					<td>{{ item.name }}</td>
+					<td>{{ item. }}</td>
+					<td>{{ item. }}</td>
+					<td>{{ item. }}</td>
+					<td>{{ item. }}</td>
+					<td>{{ item. }}</td>
+					<td>{{ item. }}</td>
+					<td>{{ item. }}</td>
+					<td>{{ item. }}</td>
+					<td>{{ item. }}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 </div>

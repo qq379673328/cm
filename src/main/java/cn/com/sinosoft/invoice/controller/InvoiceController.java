@@ -51,10 +51,10 @@ public class InvoiceController extends BaseController{
 	 * 根据发票id获取发票信息
 	 * @return
 	 */
-	@RequestMapping("getInvoiceById")
+	@RequestMapping("getInvoiceViewById")
 	@ResponseBody
-	public TInvoice getInvoiceById(String id){
-		return invoiceService.getInvoiceById(id);
+	public Object getInvoiceViewById(String id){
+		return invoiceService.getInvoiceViewById(id);
 	}
 	
 	/**

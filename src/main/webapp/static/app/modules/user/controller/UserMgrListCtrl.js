@@ -2,7 +2,6 @@
 app.controller('UserMgrListCtrl',function($scope, $routeParams,
 		$http, ngTableParams, $rootScope, BaseInfoService) {
 	
-	debugger;
 	$rootScope.menu = "user";
 	
 	//分页查询

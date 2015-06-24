@@ -1,10 +1,10 @@
 package cn.com.sinosoft.team.service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.hibernate.type.StringType;
 import org.hibernate.type.Type;
 import org.springframework.stereotype.Service;
 
@@ -23,33 +23,24 @@ public class TeamService extends SimpleServiceImpl {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public Map<String, Object> getSelectTeams(String ids) {
-		List<Map<String, Object>> users = dao.queryListBySql(
-				"select id,name,duty,user_type from t_user where state != '离职' ",
+	public List<Map<String, Object>> getSelectTeams(String ids) {
+		return dao.queryListBySql(
+				"select id,name,duty,user_type from t_user where state != '离职' and id in " 
+						+ createWhereIn(ids) + " ",
 				null,
 				null);
-		ids = StrUtils.isNull(ids) ? "" : ids;
-		String[] sp = ids.split(",");
-		Map<String, Boolean> temp = new HashMap<String, Boolean>();
-		for(String id : sp){
-			temp.put(id, true);
+	}
+	private String createWhereIn(String ins){
+		if(StrUtils.isNull(ins)){
+			return "";
 		}
-		Map<String, Object> ret = new HashMap<String, Object>();
-		List<Map<String, Object>> selectUser = new ArrayList<Map<String,Object>>();
-		List<Map<String, Object>> unSelectUser = new ArrayList<Map<String,Object>>();
-		for(Map<String, Object> user : users){
-			if(temp.get(String.valueOf(user.get("id"))) != null){
-				//已选择的
-				selectUser.add(user);
-			}else{
-				//未选择的
-				unSelectUser.add(user);
-			}
-			
+		StringBuffer sb = new StringBuffer(" ( ");
+		String[] idSp = ins.split(",");
+		for(String id : idSp ){
+			sb.append("'" + id + "',");
 		}
-		ret.put("select", selectUser);
-		ret.put("unSelect", unSelectUser);
-		return ret;
+		sb.toString().endsWith(",");
+		return sb.substring(0, sb.length() - 1) + " ) ";
 	}
 
 	/**
@@ -67,6 +58,11 @@ public class TeamService extends SimpleServiceImpl {
 		List<Type> types = new ArrayList<Type>();
 		StringBuffer sb = new StringBuffer(" SELECT * from t_user t where 1=1 ");
 		
+		if(!StrUtils.isNull(params.get("name"))){//姓名
+			sb.append(" and t.name like ? ");
+			values.add("%" + params.get("name") + "%");
+			types.add(StringType.INSTANCE);
+		}
 		
 		srcSql.setSrcSql(sb.toString());
 		srcSql.setTypes(types.toArray(new Type[0]));

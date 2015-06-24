@@ -756,3 +756,24 @@ hr {
 .fileupload{
 	padding: 5px;
 }
+.my-card{
+	width: 30%;
+	float: left;
+	margin: 5px;
+	border: 1px solid #608BCA;	
+}
+.my-card .icon{
+	width: 100px;
+	height: 100px;
+	float: left;
+}
+.my-card .info{
+	float: left;
+	margin-left: 5px;
+}
+.my-card .info .line{
+	border-bottom: none;
+	line-height: 20px;
+	height: 20px;
+	text-align: left;
+}

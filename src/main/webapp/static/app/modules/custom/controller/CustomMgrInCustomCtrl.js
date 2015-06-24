@@ -15,19 +15,11 @@ app.controller('CustomMgrInCustomCtrl',
 			$scope.attachs = data.attachs;
 			$scope.isReady = true;
 			
-			//请求团队信息
-			$http.post("team/getSelectTeams", {ids: $scope.custom.team}).success(function(data){
-				$scope.teamselect = data;
-			});
 		});
 	}else{//新增
 		$scope.isReady = true;
 		$scope.custom = {state: "潜在客户"};
 		
-		//请求团队信息
-		$http.post("team/getSelectTeams", {}).success(function(data){
-			$scope.teamselect = data;
-		});
 	}
 	
 	//删除沟通记录

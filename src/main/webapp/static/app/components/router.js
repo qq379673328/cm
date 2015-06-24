@@ -67,7 +67,7 @@ app.config([ '$routeProvider', function($routeProvider) {
 		templateUrl : fdRouterViewsBasepath + 'contract/views/contractmgrincontract.html',
 		controller : 'ContractMgrInContractCtrl'
 	})
-	.when('/contractmgr/incontract/:contractid', {//合同管理-为指定客户录入合同
+	.when('/contractmgr/incontract/:customId', {//合同管理-为指定客户录入合同
 		templateUrl : fdRouterViewsBasepath + 'contract/views/contractmgrincontract.html',
 		controller : 'ContractMgrInContractCtrl'
 	})
