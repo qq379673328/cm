@@ -58,6 +58,10 @@ app.config([ '$routeProvider', function($routeProvider) {
 		templateUrl : fdRouterViewsBasepath + 'resume/views/resumemgrviewresume.html',
 		controller : 'ResumeMgrViewResumeCtrl'
 	})
+	.when('/resumemgr/pub/:id', {//简历管理-推荐职位
+		templateUrl : fdRouterViewsBasepath + 'resume/views/resumepublist.html',
+		controller : 'ResumePubListCtrl'
+	})
 	
 	.when('/contractmgr/list', {//合同管理-列表页
 		templateUrl : fdRouterViewsBasepath + 'contract/views/contractmgrlist.html',

@@ -1,0 +1,80 @@
+<div class="navigation">
+	位置：
+	<a href="#">首页</a>
+	&gt;
+	简历推荐
+</div>
+<div class="content">
+	<div class="searchzone">
+		<div class="title"><i class="fa fa-users"></i>&nbsp;简历推荐</div>
+		<div class="line">
+			<div class="desc">公司名称：</div>
+			<div class="vals">
+				<input ng-model="search.companyName" />
+			</div>
+		</div>
+		<div class="line border-none">
+			<div class="desc">推荐状态：</div>
+			<div class="vals">
+				<input type="radio" name="pubstate" value="" ng-model="search.pubstate" />全部
+				<input type="radio" name="pubstate" value="1" ng-model="search.pubstate" />已推荐
+				<input type="radio" name="pubstate" value="0" ng-model="search.pubstate" />未推荐
+			</div>
+		</div>
+	</div>
+	
+	<div class="mytable">
+		<div class="title">
+			<span>总数 ：
+				<span class="highlight">{{queryParams.total}}</span>
+			 	个
+			 </span>
+		</div>
+		<table class="my-table" ng-table="tableParams" template-pagination="custom/pager">
+			<thead>
+				<tr>
+					<th>客户来源</th>
+					<th>公司名称</th>
+					<th>联系人</th>
+					<th>联系电话</th>
+					<th>职位数</th>
+					<th>执行团队</th>
+					<th>客户状态</th>
+					<th>创建时间</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-show="!$data"><td colspan="4">加载中...</td></tr>
+				<tr ng-repeat="item in $data" ng-class="{true:'tr-odd' , false: 'tr-even'}[$index%2 == 0]">
+					<td>{{ item.source }}</td>
+					<td>
+						<a class="link" 
+						href="#custommgr/viewcustom/{{item.id}}">{{ item.custom_name }}</a></td>
+					<td>{{ item.contact_name }}</td>
+					<td>{{ item.contact_cellphone == null ? item.contact_landline : item.contact_cellphone}}</td>
+					<td>待实现</td>
+					<td>{{ item.teams_desc }}</td>
+					<td>{{ item.state }}</td>
+					<td>{{ item.create_time | date : 'yyyy-MM-dd HH:mm '}}</td>
+					<td>
+						<i ng-show="item.beyond=='my'" class="fa fa-user"></i>
+						<i ng-show="item.beyond=='team'" class="fa fa-users"></i>
+						<i ng-show="item.beyond=='other'" class="fa fa-user-plus"></i>
+					</td>
+					
+					<td ng-show="item.ishandling">操作中</td>
+					<td ng-show="!item.ishandling">
+						<a ng-show="item.pubstate=='0'" class="btn btn-small btn-success"
+							ng-click="pub(item);"
+							>推荐</a>
+						<a ng-show="item.pubstate=='1'" class="btn btn-small btn-success"
+							ng-click="canclePub(item);"
+							>取消推荐</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<div core-formresult result="formresult"></div>
+	</div>
+</div>

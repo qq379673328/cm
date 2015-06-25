@@ -109,10 +109,6 @@
 			<span>
 				公司内部团队推荐人选
 			</span>
-			<span>
-				关键词
-				<input ng-model="search.name" />
-			</span>
 		</div>
 		<table>
 			<thead>
@@ -129,6 +125,9 @@
 				</tr>
 			</thead>
 			<tbody>
+				<tr ng-show="!inteams || inteams.length == 0 ">
+					<td>无人选</td>
+				</tr>
 				<tr ng-repeat="item in inteams">
 					<td><input type="checkbox" ng-model="checkpub" /></td>
 					<td>{{item.name}}</td>
@@ -141,9 +140,12 @@
 					<td>{{job.recom_user}}</td>
 				</tr>
 				<tr>
-					<input type="checkbox" />全选
-					<a ng-click="recom(1);">推荐</a>
-					<a ng-click="recom(0);">不合适</a>
+					<td>
+						<input type="checkbox" />全选
+						<a class="btn btn-success" ng-click="recom(1);">推荐</a>
+						&nbsp;
+						<a class="btn btn-error" ng-click="recom(0);">不合适</a>
+					</td>
 				</tr>
 			</tbody>
 		</table>
@@ -171,7 +173,10 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat="item in inteams">
+				<tr ng-show="!pubteams || pubteams.length == 0 ">
+					<td>无人选</td>
+				</tr>
+				<tr ng-repeat="item in pubteams">
 					<td><input type="checkbox" ng-model="checkpub" /></td>
 					<td>{{item.name}}</td>
 					<td>未实现</td>
