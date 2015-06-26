@@ -8,20 +8,16 @@
 		<br />
 		<div>
 			<div class="card">
-				<i class="fa fa-user-md fa-5x"></i>
-				录入客户
+				<a href="#custommgr/incustom"><i class="fa fa-user-md fa-5x"></i>录入客户</a>
 			</div>
 			<div class="card">
-				<i class="fa fa-pencil-square-o fa-5x"></i>
-				录入职位
+				<a href="#jobmgr/injob"><i class="fa fa-pencil-square-o fa-5x"></i>录入职位</a>
 			</div>
 			<div class="card">
-				<i class="fa fa-file-text-o fa-5x"></i>
-				录入简历
+				<a href="#resumemgr/inresume"><i class="fa fa-file-text-o fa-5x"></i>录入简历</a>
 			</div>
 			<div class="card">
-				<i class="fa fa-search fa-5x"></i>
-				搜索简历
+				<a href="#resumemgr/list"><i class="fa fa-search fa-5x"></i>搜索简历</a>
 			</div>
 		</div>
 	</div>
@@ -53,25 +49,42 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr class="tr-odd">
-					<td>工程造价总监</td>
-					<td>运作</td>
-					<td>10-30</td>
-					<td>沈阳</td>
-					<td>总经理</td>
-					<td>李华,周董</td>
-					<td>1</td>
-					<td>2012-11-11</td>
-				</tr>
-				<tr class="tr-even">
-					<td>工程造价总监</td>
-					<td>运作</td>
-					<td>10-30</td>
-					<td>沈阳</td>
-					<td>总经理</td>
-					<td>李华,周董</td>
-					<td>1</td>
-					<td>2012-11-11</td>
+				<tr ng-repeat="item in data.myjobs" ng-class="{true:'tr-odd' , false: 'tr-even'}[$index%2 == 0]">
+					<td>{{ item.source }}</td>
+					<td>
+						<a class="link" 
+						href="#custommgr/viewcustom/{{item.id}}">{{ item.custom_name }}</a></td>
+					<td>{{ item.contact_name }}</td>
+					<td>{{ item.contact_cellphone == null ? item.contact_landline : item.contact_cellphone}}</td>
+					<td>待实现</td>
+					<td>{{ item.teams_desc }}</td>
+					<td>{{ item.state }}</td>
+					<td></td>
+					<td>{{ item.create_time | date : 'yyyy-MM-dd HH:mm '}}</td>
+					<td>
+						<i ng-show="item.beyond=='my'" class="fa fa-user"></i>
+						<i ng-show="item.beyond=='team'" class="fa fa-users"></i>
+						<i ng-show="item.beyond=='other'" class="fa fa-user-plus"></i>
+					</td>
+					
+					<td ng-show="item.ishandling">操作中</td>
+					<td ng-show="!item.ishandling">
+						<a ng-show="item.beyond=='my'" class="btn btn-small btn-lblue" href="#custommgr/editcustom/{{item.id}}">编辑</a>
+						<a ng-show="item.beyond=='my'" class="btn btn-small btn-success"
+							ng-click="item.prepareDel = !item.prepareDel"
+							>删除</a>
+						<table ng-show="item.prepareDel">
+							<tr>
+								<td colspan="5"></td>
+								<td>
+									<a class="btn btn-small btn-danger btn-w4"
+										ng-click="del(item);;item.ishandling=true;"
+										>确认删除</a>
+								</td>
+							</tr>
+						</table>
+									
+					</td>
 				</tr>
 			</tbody>
 		</table>
