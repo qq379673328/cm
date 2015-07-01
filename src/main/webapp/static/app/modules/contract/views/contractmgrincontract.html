@@ -44,17 +44,17 @@
 		<table>
 			<tbody>
 				<tr>
-					<td class="td-odd">合同编号：</td>
+					<td class="td-odd"><span class="warn">*</span>合同编号：</td>
 					<td class="td-even">
 						<input 
 							name="no"
 							ng-model="contract.no"
 							class="form-input" />
 					</td>
-					<td class="td-odd">合同状态：</td>
+					<td class="td-odd"><span class="warn">*</span>合同状态：</td>
 					<td class="td-even">
 						<div
-							name="state"
+							dataname="state"
 							core-basedata 
 							type="select"
 							bind-model="contract.state"
@@ -62,7 +62,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td class="td-odd">签约日期：</td>
+					<td class="td-odd"><span class="warn">*</span>签约日期：</td>
 					<td class="td-even">
 						<input 
 							name="inDate"
@@ -70,7 +70,7 @@
 							datepicker
 							class="form-input" />
 					</td>
-					<td class="td-odd">签约比例：</td>
+					<td class="td-odd"><span class="warn">*</span>签约比例：</td>
 					<td class="td-even">
 						<input 
 							name="inPercentage"
@@ -79,14 +79,14 @@
 					</td>
 				</tr>
 				<tr>
-					<td class="td-odd">支付方式：</td>
+					<td class="td-odd"><span class="warn">*</span>支付方式：</td>
 					<td class="td-even">
 						<input 
 							name="payway"
 							ng-model="contract.payway"
 							class="form-input" />
 					</td>
-					<td class="td-odd">首付款：</td>
+					<td class="td-odd"><span class="warn">*</span>首付款：</td>
 					<td class="td-even">
 						<input 
 							name="firstPay"
@@ -95,7 +95,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td class="td-odd">使用期限：</td>
+					<td class="td-odd"><span class="warn">*</span>期限：</td>
 					<td class="td-even" colspan="3">
 						<input 
 							name="useLimit"

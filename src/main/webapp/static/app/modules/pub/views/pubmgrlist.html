@@ -5,4 +5,78 @@
 	公告管理
 </div>
 <div class="content">
+	<div class="searchzone">
+		<div class="title"><i class="fa fa-users"></i>&nbsp;公告管理</div>
+		<div class="line border-none">
+			<div class="desc">创建时间：</div>
+			<div class="vals">
+				<input datepicker ng-model="search.createTimeStart" />
+				至
+				<input datepicker ng-model="search.createTimeEnd"/>
+			</div>
+		</div>
+	</div>
+	<div>
+		<a class="btn btn-success" ng-click="showadd=!showadd;addcontent=null;" >添加公告</a>
+		<div ng-show="showadd==true">
+			<form id="form-pub">
+				<textarea wrap="hard" name="addcontent" class="textarea" ng-model="addcontent"></textarea>
+				<a class="btn btn-info" ng-click="add();" >保存</a>
+			</form>
+		</div>
+	</div>
+	<div class="mytable">
+		<div class="title">
+			<span>总数 ：
+				<span class="highlight">{{queryParams.total}}</span>
+			 	条
+			 </span>
+		</div>
+		<table class="my-table" ng-table="tableParams" template-pagination="custom/pager">
+			<thead>
+				<tr>
+					<th>创建时间</th>
+					<th>内容</th>
+					<th>发布</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-show="!$data"><td colspan="4">加载中...</td></tr>
+				<tr ng-repeat="item in $data" ng-class="{true:'tr-odd' , false: 'tr-even'}[$index%2 == 0]">
+					<td>{{ item.create_time | date : 'yyyy-MM-dd HH:mm '}}</td>
+					<td>{{ item.content }}</td>
+					<td ng-show="item.state=='已发布'" >{{ item.pub_time | date : 'yyyy-MM-dd HH:mm '}}</td>
+					<td ng-show="item.state=='未发布'" >未发布</td>
+					
+					<td ng-show="item.ishandling">操作中</td>
+					<td ng-show="!item.ishandling">
+						<a class="btn btn-small btn-success"
+							ng-click="pub(item)"
+							ng-show="item.state=='未发布'"
+							>发布</a>
+						<a class="btn btn-small btn-success"
+							ng-click="canclepub(item)"
+							ng-show="item.state=='已发布'"
+							>取消发布</a>
+						<a class="btn btn-small btn-error"
+							ng-click="item.prepareDel = !item.prepareDel"
+							>删除</a>
+						<table ng-show="item.prepareDel">
+							<tr>
+								<td colspan="5"></td>
+								<td>
+									<a class="btn btn-small btn-danger btn-w4"
+										ng-click="del(item);item.ishandling=true;"
+										>确认删除</a>
+								</td>
+							</tr>
+						</table>
+									
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<div core-formresult result="formresult"></div>
+	</div>
 </div>

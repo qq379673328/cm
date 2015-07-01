@@ -112,7 +112,7 @@ textarea{
 .main .top{
 	height: 90px;
 	width: 100%;
-	background-color: #066C91;
+	background: url(../images/top.jpg) no-repeat #68A4EA;
 }
 .main .top .photo{
 	width: 50px;
@@ -120,11 +120,12 @@ textarea{
 }
 .main .top div{
 	float: right;
-	height: 90px;
-	width: 50px;
 	color: #fff;
 	margin-right: 10px;
 	margin-top: 20px;
+}
+.main .top a{
+	color: #fff;
 }
 .main .top span{
 	line-height: 20px;
@@ -195,6 +196,7 @@ textarea{
 }
 .main .body .content{
 	padding: 5px 10px;
+	margin-bottom: 50px;
 }
 
 .searchzone{
@@ -260,7 +262,7 @@ textarea{
 	color: #6C2C2C;
 	font-weight: bold;
 }
-.mytable .textarea{
+.textarea{
 	width: 70%;
 	height: 150px;
 	margin: 5px 3px;
@@ -549,6 +551,7 @@ textarea{
 	-webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
 	margin: 3px;
 	transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+	float: left;
 }
 .form-table td{
 	border: none;
@@ -631,6 +634,7 @@ hr {
 	width: 80%;
 	margin-left: 3px;
 	border-radius: 4px;
+	clear: both;
 }
 /*dialog*/
 .dialog-wrap{
@@ -776,4 +780,9 @@ hr {
 	line-height: 20px;
 	height: 20px;
 	text-align: left;
+}
+.none{
+	width: 0px;
+	height: 0px;
+	border: none;
 }

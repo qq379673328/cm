@@ -8,11 +8,15 @@ import java.util.UUID;
 
 import javax.annotation.Resource;
 
+import org.hibernate.type.DateType;
+import org.hibernate.type.StringType;
+import org.hibernate.type.TimestampType;
 import org.hibernate.type.Type;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import cn.com.sinosoft.common.model.TPub;
+import cn.com.sinosoft.common.util.SqlUtil;
 import cn.com.sinosoft.common.util.StrUtils;
 import cn.com.sinosoft.core.service.SimpleServiceImpl;
 import cn.com.sinosoft.core.service.model.FormResult;
@@ -46,7 +50,20 @@ public class PubService extends SimpleServiceImpl {
 		List<Type> types = new ArrayList<Type>();
 		StringBuffer sb = new StringBuffer(" SELECT * from t_pub t where 1=1 ");
 		
+		if(!StrUtils.isNull(params.get("state"))){//发布状态
+			sb.append(" and t.state = ? ");
+			values.add(params.get("state"));
+			types.add(StringType.INSTANCE);
+		}
 		
+		if(!StrUtils.isNull(params.get("createTimeStart"))){//创建日期-开始
+			sb.append(" AND " + SqlUtil.toDate(params.get("createTimeStart"), 1, 0) + " <= tt.create_time ");
+		}
+		if(!StrUtils.isNull(params.get("createTimeEnd"))){//创建日期-结束
+			sb.append(" AND " + SqlUtil.toDate(params.get("createTimeEnd"), 1, 0) + " >= tt.create_time ");
+		}
+		
+		sb.append(" order by t.create_time desc ");
 		srcSql.setSrcSql(sb.toString());
 		srcSql.setTypes(types.toArray(new Type[0]));
 		srcSql.setValues(values.toArray());
@@ -83,6 +100,40 @@ public class PubService extends SimpleServiceImpl {
 		dao.save(pub);
 		ret.setSuccess(FormResult.SUCCESS);
 		ret.setData(pub.getId());
+		return ret;
+	}
+
+	/**
+	 * 发布公告
+	 * @param id
+	 * @return
+	 */
+	@Transactional
+	public FormResult pub(String id) {
+		FormResult ret = new FormResult();
+		dao.executeDelOrUpdateSql(
+				"update t_pub set state = '已发布', pub_time = ? where id = ? ",
+				new Object[]{new Date(), id},
+				new Type[]{TimestampType.INSTANCE, StringType.INSTANCE});
+		ret.setMessage("发布成功");
+		ret.setSuccess(FormResult.SUCCESS);
+		return ret;
+	}
+	
+	/**
+	 * 取消发布公告
+	 * @param id
+	 * @return
+	 */
+	@Transactional
+	public FormResult canclepub(String id) {
+		FormResult ret = new FormResult();
+		dao.executeDelOrUpdateSql(
+				"update t_pub set state = '未发布', pub_time = null where id = ? ",
+				new Object[]{id},
+				new Type[]{StringType.INSTANCE});
+		ret.setMessage("取消发布成功");
+		ret.setSuccess(FormResult.SUCCESS);
 		return ret;
 	}
 

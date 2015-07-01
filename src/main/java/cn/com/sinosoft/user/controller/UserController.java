@@ -13,6 +13,7 @@ import cn.com.sinosoft.common.model.TUser;
 import cn.com.sinosoft.core.action.BaseController;
 import cn.com.sinosoft.core.service.model.FormResult;
 import cn.com.sinosoft.core.service.model.PageParam;
+import cn.com.sinosoft.core.util.UserUtil;
 import cn.com.sinosoft.user.service.UserService;
 
 @Controller
@@ -21,6 +22,8 @@ public class UserController extends BaseController {
 	
 	@Resource
 	UserService userService;
+	@Resource
+	UserUtil userUtil;
 	
 	/**
 	 * 获取用户列表
@@ -81,6 +84,20 @@ public class UserController extends BaseController {
 		TUser user = userService.getUserById(id);
 		user.setPassword(null);
 		return user;
+	}
+	
+	/**
+	 * 获取登陆用户信息
+	 *
+	 * 
+	 * @param id
+	 * @return
+	 * @author <a href="mailto:nytclizy@gmail.com">李志勇</a>
+	 */
+	@RequestMapping("getLoginUserInfo")
+	@ResponseBody
+	public TUser getLoginUserInfo(String id){
+		return userUtil.getLoginUser();
 	}
 	
 	/**

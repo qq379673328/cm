@@ -1,5 +1,5 @@
 package cn.com.sinosoft.common.model;
-// Generated 2015-6-22 19:41:12 by Hibernate Tools 3.2.2.GA
+// Generated 2015-7-2 1:30:39 by Hibernate Tools 3.2.2.GA
 
 
 import java.util.Date;
@@ -29,7 +29,7 @@ public class TInvoice  implements java.io.Serializable {
     }
 
 	
-    public TInvoice(String id, String applyUser, Date applyTime, String customContract, String type, float total, String state, String checkUser, String createUser, Date createTime) {
+    public TInvoice(String id, String applyUser, Date applyTime, String customContract, String type, float total, String state, String checkUser, String createUser) {
         this.id = id;
         this.applyUser = applyUser;
         this.applyTime = applyTime;
@@ -39,7 +39,6 @@ public class TInvoice  implements java.io.Serializable {
         this.state = state;
         this.checkUser = checkUser;
         this.createUser = createUser;
-        this.createTime = createTime;
     }
     public TInvoice(String id, String applyUser, Date applyTime, String customContract, String inUser, String type, String property, float total, String state, String checkUser, String incomeState, String comment, String createUser, Date createTime) {
        this.id = id;

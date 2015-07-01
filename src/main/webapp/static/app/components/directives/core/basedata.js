@@ -110,8 +110,8 @@ app.directive('coreBasedata', ["$http", function($http){
         	value: "@value",//值
         	type: "@type",
         	key: "@key",
-        	name: "@name",
-        	bindModel: "=bindModel",
+        	name: "@dataname",
+        	bindModel: "=",
         	allSelectName: "@allSelectName"
         },
         templateUrl:'static/app/components/directives/core/views/basedata.html',

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated 2015-6-22 19:41:21 by Hibernate Tools 3.2.2.GA -->
+<!-- Generated 2015-7-2 1:30:40 by Hibernate Tools 3.2.2.GA -->
 <hibernate-mapping>
     <class name="cn.com.sinosoft.common.model.TJob" table="t_job" catalog="cm">
         <id name="id" type="string">
@@ -108,8 +108,8 @@
                 <comment>&#232;&#129;&#140;&#228;&#189;&#141;&#230;&#143;&#143;&#232;&#191;&#176;</comment>
             </column>
         </property>
-        <property name="companyDesc" type="binary">
-            <column name="company_desc">
+        <property name="companyDesc" type="string">
+            <column name="company_desc" length="500">
                 <comment>&#229;&#133;&#172;&#229;&#143;&#184;&#228;&#187;&#139;&#231;&#187;&#141;</comment>
             </column>
         </property>
@@ -119,7 +119,7 @@
             </column>
         </property>
         <property name="createTime" type="timestamp">
-            <column name="create_time" length="19" not-null="true">
+            <column name="create_time" length="19">
                 <comment>&#229;&#136;&#155;&#229;&#187;&#186;&#230;&#151;&#182;&#233;&#151;&#180;</comment>
             </column>
         </property>
@@ -129,7 +129,7 @@
             </column>
         </property>
         <property name="lastUpdateTime" type="timestamp">
-            <column name="last_update_time" length="19" not-null="true">
+            <column name="last_update_time" length="19">
                 <comment>&#228;&#184;&#138;&#230;&#172;&#161;&#230;&#155;&#180;&#230;&#150;&#176;&#230;&#151;&#182;&#233;&#151;&#180;</comment>
             </column>
         </property>

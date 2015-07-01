@@ -6,7 +6,7 @@
 	&gt;
 	申请发票
 </div>
-<form id="invoiceditform" name="form" ng-show="isReady">
+<form id="invoiceeditform" name="form" ng-show="isReady">
 <div class="content">
 	<div class="mytable">
 		<div class="title">
@@ -28,13 +28,13 @@
 				<tr>
 					<td class="td-odd"><span class="warn">*</span>申请时间：</td>
 					<td class="td-even" colspan="3">
-						<input class="form-input" datepicker ng-model="invoice.applyTime" />
+						<input name="applyTime" class="form-input" datepicker ng-model="invoice.applyTime" />
 					</td>
 				</tr>
 				<tr>
 					<td class="td-odd"><span class="warn">*</span>客户+合同编号：</td>
 					<td class="td-even" colspan="3">
-						<input class="form-input" ng-model="invoice.customContract" />
+						<input name="customContract" class="form-input" ng-model="invoice.customContract" />
 					</td>
 				</tr>
 				<tr>
@@ -49,7 +49,7 @@
 				<tr>
 					<td class="td-odd"><span class="warn">*</span>发票属性：</td>
 					<td class="td-even" colspan="3">
-						<select class="form-select" ng-model="invoice.property">
+						<select name="property" class="form-select" ng-model="invoice.property">
 							<option value="服务费">服务费</option>
 							<option value="其它">其它</option>
 						</select>
@@ -65,7 +65,7 @@
 					<td class="td-odd"><span class="warn">*</span>发票状态：</td>
 					<td class="td-even" colspan="3">
 						<div
-							name="state"
+							dataname="state"
 							core-basedata 
 							type="select"
 							bind-model="invoice.state"
@@ -78,6 +78,7 @@
 						<div core-teamselect 
 							ng-model="invoice.checkUser"
 							teamids="invoice.checkUser"
+							dataname="checkUser"
 							single="true"></div>
 					</td>
 				</tr>
@@ -85,7 +86,7 @@
 					<td class="td-odd"><span class="warn">*</span>回款状态：</td>
 					<td class="td-even" colspan="3">
 						<div
-							name="state"
+							dataname="incomeState"
 							core-basedata 
 							type="select"
 							bind-model="invoice.incomeState"

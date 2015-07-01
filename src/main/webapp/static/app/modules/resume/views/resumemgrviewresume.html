@@ -25,8 +25,6 @@
 				<tr>
 					<td class="td-odd">更新时间：</td>
 					<td class="td-even">{{resume.last_update_time | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
-				</tr>
-				<tr>
 					<td class="td-odd">基本概况：</td>
 					<td class="td-even">
 						{{resume.education}} |
@@ -34,6 +32,8 @@
 						{{resume.birthcay}} |
 						{{resume.marrage}}
 					</td>
+				</tr>
+				<tr>
 				</tr>
 			</tbody>
 		</table>
@@ -121,13 +121,15 @@
 		<table>
 			<thead>
 				<tr>
-					<th>日期</th>
+					<th>工作时间</th>
+					<th>公司</th>
 					<th>内容</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr ng-repeat="work in resumeWorkhistorys">
 					<td>{{work.time_begin}} - {{work.time_end}}</td>
+					<td>{{work.company}}</td>
 					<td>{{work.content}}</td>
 				</tr>
 			</tbody>

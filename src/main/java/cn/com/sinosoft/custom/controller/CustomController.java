@@ -1,6 +1,8 @@
 package cn.com.sinosoft.custom.controller;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.annotation.Resource;
 
@@ -10,10 +12,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.com.sinosoft.common.model.TCustom;
+import cn.com.sinosoft.common.model.TCustomCommunication;
 import cn.com.sinosoft.core.action.BaseController;
 import cn.com.sinosoft.core.service.model.FormResult;
 import cn.com.sinosoft.core.service.model.PageParam;
 import cn.com.sinosoft.core.service.model.PagingResult;
+import cn.com.sinosoft.core.util.UserUtil;
 import cn.com.sinosoft.custom.service.CustomService;
 
 /**
@@ -27,6 +31,8 @@ public class CustomController extends BaseController {
 	
 	@Resource
 	CustomService customService;
+	@Resource
+	UserUtil userUtil;
 	
 	/**
 	 * 获取客户列表
@@ -100,5 +106,24 @@ public class CustomController extends BaseController {
 		return customService.getCommuns(customId);
 	}
 	
+	/**
+	 * 添加沟通记录
+	 * @param customId
+	 * @param comm
+	 * @return
+	 */
+	@RequestMapping("addCommun")
+	@ResponseBody
+	public Object addCommun(TCustomCommunication comm){
+		String userId = userUtil.getLoginUser().getId();
+		if(comm.getId() == null){//添加
+			comm.setId(UUID.randomUUID().toString());
+			comm.setCreateTime(new Date());
+			comm.setCreateUser(userId);
+		}else{//修改
+			
+		}
+		return customService.saveBean(comm);
+	}
 	
 }

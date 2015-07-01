@@ -45,7 +45,9 @@ public class InvoiceService extends SimpleServiceImpl {
 		PagingSrcSql srcSql = new PagingSrcSql();
 		List<Object> values = new ArrayList<Object>();
 		List<Type> types = new ArrayList<Type>();
-		StringBuffer sb = new StringBuffer(" SELECT * from t_invoice t where 1=1 ");
+		StringBuffer sb = new StringBuffer(
+				" SELECT t.*,getDictName(t.apply_user) apply_user_desc"
+				+ "  from t_invoice t where 1=1 ");
 		
 		
 		srcSql.setSrcSql(sb.toString());

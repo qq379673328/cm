@@ -56,13 +56,21 @@ public class TeamService extends SimpleServiceImpl {
 		PagingSrcSql srcSql = new PagingSrcSql();
 		List<Object> values = new ArrayList<Object>();
 		List<Type> types = new ArrayList<Type>();
-		StringBuffer sb = new StringBuffer(" SELECT * from t_user t where 1=1 ");
+		StringBuffer sb = new StringBuffer(" SELECT "
+				+ " t.id,t.username,t.name,t.sex,t.duty,t.entry_date,t.state,t.id_card, "
+				+ " t.np_place,t.phone,t.edu_school,t.edu_date,t.department,t.team, "
+				+ " getDictName(t.team) team_desc, "
+				+ " t.user_type, t.email, t.msn, t.education, t.professional,"
+				+ " t.positive_date,t.leave_date,t.skills "
+				+ " from t_user t where 1=1 ");
 		
 		if(!StrUtils.isNull(params.get("name"))){//姓名
 			sb.append(" and t.name like ? ");
 			values.add("%" + params.get("name") + "%");
 			types.add(StringType.INSTANCE);
 		}
+		
+		sb.append(" order by t.last_update_time desc ");
 		
 		srcSql.setSrcSql(sb.toString());
 		srcSql.setTypes(types.toArray(new Type[0]));

@@ -1,5 +1,5 @@
 package cn.com.sinosoft.common.model;
-// Generated 2015-6-22 19:41:12 by Hibernate Tools 3.2.2.GA
+// Generated 2015-7-2 1:30:39 by Hibernate Tools 3.2.2.GA
 
 
 
@@ -11,7 +11,7 @@ public class TResumeWorkhistory  implements java.io.Serializable {
 
      private String id;
      private String resumeId;
-     private byte[] content;
+     private String content;
      private String timeBegin;
      private String timeEnd;
      private String company;
@@ -20,12 +20,12 @@ public class TResumeWorkhistory  implements java.io.Serializable {
     }
 
 	
-    public TResumeWorkhistory(String id, String resumeId, byte[] content) {
+    public TResumeWorkhistory(String id, String resumeId, String content) {
         this.id = id;
         this.resumeId = resumeId;
         this.content = content;
     }
-    public TResumeWorkhistory(String id, String resumeId, byte[] content, String timeBegin, String timeEnd, String company) {
+    public TResumeWorkhistory(String id, String resumeId, String content, String timeBegin, String timeEnd, String company) {
        this.id = id;
        this.resumeId = resumeId;
        this.content = content;
@@ -48,11 +48,11 @@ public class TResumeWorkhistory  implements java.io.Serializable {
     public void setResumeId(String resumeId) {
         this.resumeId = resumeId;
     }
-    public byte[] getContent() {
+    public String getContent() {
         return this.content;
     }
     
-    public void setContent(byte[] content) {
+    public void setContent(String content) {
         this.content = content;
     }
     public String getTimeBegin() {

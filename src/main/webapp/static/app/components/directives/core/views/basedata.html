@@ -1,6 +1,6 @@
 <div>
 <!-- 下拉框类型 -->
-<select class="form-select" ng-show="type=='select'" ng-model="bindModel" name="{{name}}">
+<select class="form-select" ng-if="type=='select'" ng-model="bindModel" name="{{name}}">
 	<option ng-show="allSelectName" value="">{{allSelectName}}</option>
 	<option ng-repeat="item in items" value="{{item[0]}}">
 		{{item[1]}}
@@ -8,7 +8,7 @@
 </select>
 
 <!-- span 类型 -->
-<div ng-show="type=='span'">
+<div ng-if="type=='span'">
 	<a ng-show="allSelectName" ng-click="click('', $event.target);">
 		{{allSelectName}}
 	</a>
@@ -18,7 +18,7 @@
 </div>
 
 <!-- radio 类型 -->
-<div ng-show="type=='radio'">
+<div ng-if="type=='radio'">
 	<span ng-show="allSelectName">
 		<input type="radio" name="{{name}}" value="" ng-click="click('');" />
 		<span>{{allSelectName}}</span>

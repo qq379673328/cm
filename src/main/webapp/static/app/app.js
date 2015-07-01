@@ -49,13 +49,16 @@ var app = angular
 
 				});
 
-app.controller('MainCtrl', function($scope, $location) {
+app.controller('MainCtrl', function($scope, $location, $http) {
+	//跳转链接
 	$scope.to = function(url){
 		$location.path(url);
 	};
 	
-});
-
-app.controller('IndexCtrl', function($scope, $routeParams, $rootScope) {
-	$rootScope.menu = "#";
+	//加载用户基本信息
+	$http.post("user/getLoginUserInfo", {}).success(function(data){
+		$scope.user = data;
+	});
+	
+	
 });

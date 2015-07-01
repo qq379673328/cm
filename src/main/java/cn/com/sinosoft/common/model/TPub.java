@@ -1,5 +1,5 @@
 package cn.com.sinosoft.common.model;
-// Generated 2015-6-22 19:41:12 by Hibernate Tools 3.2.2.GA
+// Generated 2015-7-2 1:30:39 by Hibernate Tools 3.2.2.GA
 
 
 import java.util.Date;
@@ -17,20 +17,19 @@ public class TPub  implements java.io.Serializable {
      private String state;
      private String lastUpdateUser;
      private Date lastUpdateTime;
+     private Date pubTime;
 
     public TPub() {
     }
 
 	
-    public TPub(String id, String content, String createUser, Date createTime, String state, Date lastUpdateTime) {
+    public TPub(String id, String content, String createUser, String state) {
         this.id = id;
         this.content = content;
         this.createUser = createUser;
-        this.createTime = createTime;
         this.state = state;
-        this.lastUpdateTime = lastUpdateTime;
     }
-    public TPub(String id, String content, String createUser, Date createTime, String state, String lastUpdateUser, Date lastUpdateTime) {
+    public TPub(String id, String content, String createUser, Date createTime, String state, String lastUpdateUser, Date lastUpdateTime, Date pubTime) {
        this.id = id;
        this.content = content;
        this.createUser = createUser;
@@ -38,6 +37,7 @@ public class TPub  implements java.io.Serializable {
        this.state = state;
        this.lastUpdateUser = lastUpdateUser;
        this.lastUpdateTime = lastUpdateTime;
+       this.pubTime = pubTime;
     }
    
     public String getId() {
@@ -88,6 +88,13 @@ public class TPub  implements java.io.Serializable {
     
     public void setLastUpdateTime(Date lastUpdateTime) {
         this.lastUpdateTime = lastUpdateTime;
+    }
+    public Date getPubTime() {
+        return this.pubTime;
+    }
+    
+    public void setPubTime(Date pubTime) {
+        this.pubTime = pubTime;
     }
 
 

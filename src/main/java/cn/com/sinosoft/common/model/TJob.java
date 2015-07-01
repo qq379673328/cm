@@ -1,5 +1,5 @@
 package cn.com.sinosoft.common.model;
-// Generated 2015-6-22 19:41:12 by Hibernate Tools 3.2.2.GA
+// Generated 2015-7-2 1:30:39 by Hibernate Tools 3.2.2.GA
 
 
 import java.util.Date;
@@ -31,7 +31,7 @@ public class TJob  implements java.io.Serializable {
      private String eduLimit;
      private String languageLimit;
      private String jobDesc;
-     private byte[] companyDesc;
+     private String companyDesc;
      private String createUser;
      private Date createTime;
      private String lastUpdateUser;
@@ -41,7 +41,7 @@ public class TJob  implements java.io.Serializable {
     }
 
 	
-    public TJob(String id, String customId, String contractId, String name, String state, String team, String createUser, Date createTime, Date lastUpdateTime) {
+    public TJob(String id, String customId, String contractId, String name, String state, String team, String createUser) {
         this.id = id;
         this.customId = customId;
         this.contractId = contractId;
@@ -49,10 +49,8 @@ public class TJob  implements java.io.Serializable {
         this.state = state;
         this.team = team;
         this.createUser = createUser;
-        this.createTime = createTime;
-        this.lastUpdateTime = lastUpdateTime;
     }
-    public TJob(String id, String customId, String contractId, String name, String payMin, String payMax, String state, String team, String workplace, String jobType, String industry, String workYear, Integer requirePeople, String department, String reportObj, Integer ageMin, Integer ageMax, String sexLimit, String eduLimit, String languageLimit, String jobDesc, byte[] companyDesc, String createUser, Date createTime, String lastUpdateUser, Date lastUpdateTime) {
+    public TJob(String id, String customId, String contractId, String name, String payMin, String payMax, String state, String team, String workplace, String jobType, String industry, String workYear, Integer requirePeople, String department, String reportObj, Integer ageMin, Integer ageMax, String sexLimit, String eduLimit, String languageLimit, String jobDesc, String companyDesc, String createUser, Date createTime, String lastUpdateUser, Date lastUpdateTime) {
        this.id = id;
        this.customId = customId;
        this.contractId = contractId;
@@ -228,11 +226,11 @@ public class TJob  implements java.io.Serializable {
     public void setJobDesc(String jobDesc) {
         this.jobDesc = jobDesc;
     }
-    public byte[] getCompanyDesc() {
+    public String getCompanyDesc() {
         return this.companyDesc;
     }
     
-    public void setCompanyDesc(byte[] companyDesc) {
+    public void setCompanyDesc(String companyDesc) {
         this.companyDesc = companyDesc;
     }
     public String getCreateUser() {

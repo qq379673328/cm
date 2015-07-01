@@ -54,7 +54,24 @@ app.controller('ContractMgrInContractCtrl',
 	function validForm(){
 		return $("#contracteditform").isHappy({
 			fields: {
-				
+				//客户名
+				customName:{required: true},
+				//合同编号
+				no:{required: true, maxlength: 100},
+				//合同状态
+				state:{required: true, maxlength: 50},
+				//签约日期
+				inDate:{required: true, date: true},
+				//签约比例
+				inPercentage:{required: true, maxlength: 100},
+				//支付方式
+				payway:{required: true, maxlength: 100},
+				//首付款
+				firstPay:{required: true, number: true},
+				//使用期限
+				useLimit:{required: true, maxlength: 50},
+				//其他要求
+				otherRequire:{maxlength: 500}
 			}
 		});
 	}

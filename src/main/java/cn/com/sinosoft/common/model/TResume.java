@@ -1,5 +1,5 @@
 package cn.com.sinosoft.common.model;
-// Generated 2015-6-22 19:41:12 by Hibernate Tools 3.2.2.GA
+// Generated 2015-7-2 1:30:39 by Hibernate Tools 3.2.2.GA
 
 
 import java.util.Date;
@@ -33,13 +33,11 @@ public class TResume  implements java.io.Serializable {
     }
 
 	
-    public TResume(String id, String name, String sex, String createUser, Date createTime, Date lastUpdateTime) {
+    public TResume(String id, String name, String sex, String createUser) {
         this.id = id;
         this.name = name;
         this.sex = sex;
         this.createUser = createUser;
-        this.createTime = createTime;
-        this.lastUpdateTime = lastUpdateTime;
     }
     public TResume(String id, String name, String address, String sex, String education, Date birthcay, String marrage, String phone, String email, String currentWage, String workState, String resumtDesc, String headImage, String createUser, Date createTime, Date lastUpdateTime, String lastUpdateUser, String yearPay) {
        this.id = id;

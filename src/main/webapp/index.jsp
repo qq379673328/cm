@@ -24,16 +24,16 @@
 	<div class="main" ng-controller="MainCtrl">
 		<div class="top">
 			<div>
-				<span>员工级别</span>
-				<span><a href="logout">退出登录</a></span>
+				<span>{{ user.name }}</span>
+				<br/>
+				<span>{{ user.duty }}</span>
 			</div>
 			<div>
-				<span>员工姓名</span>
-				<span>公司主页</span>
+				<span><a href="logout"><i class="fa fa-power-off"></i>退出</a></span>
 			</div>
-			<div class="photo">
+			<!-- <div class="photo">
 				<img width="50px" height="50px" alt="员工图片" src="">
-			</div>
+			</div> -->
 		</div>
 		<div class="right">
 			<div class="body">

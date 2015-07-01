@@ -60,6 +60,7 @@
 					<td class="td-odd"><span class="warn">*</span>性别：</td>
 					<td class="td-even">
 						<select class="form-select" name="sex" ng-model="resume.sex">
+							<option value=""></option>
 							<option value="男">男</option>
 							<option value="女">女</option>
 						</select>
@@ -67,8 +68,8 @@
 					<td class="td-odd"><span class="warn">*</span>最高学历：</td>
 					<td class="td-even">
 						<div
-							name="education"
-							core-basedata 
+							dataname="education"
+							core-basedata
 							type="select"
 							bind-model="resume.education"
 							key="edu"></div>
@@ -82,6 +83,7 @@
 					<td class="td-odd"><span class="warn">*</span>婚姻状况：</td>
 					<td class="td-even">
 						<select class="form-select" name="marrage" ng-model="resume.marrage">
+							<option value=""></option>
 							<option value="已婚">已婚</option>
 							<option value="未婚">未婚</option>
 						</select>
@@ -113,14 +115,14 @@
 				<tr>
 					<td class="td-odd"><span class="warn">*</span>个人简介：</td>
 					<td class="td-even" colspan="3">
-						<textarea class="textarea" name="desc" ng-model="resume.desc"></textarea>
+						<textarea class="textarea" name="desc" ng-model="resume.resumtDesc"></textarea>
 					</td>
 				</tr>
 				<tr>
 					<td colspan="2">
 						<div class="btn btn-lblue" 
 							ng-show="!isrequest"
-							ng-click="saveBaseinfo();">
+							ng-click="saveBaseInfo(false);">
 							保存基本信息
 						</div>
 					</td>
@@ -145,9 +147,9 @@
 				<tr>
 					<td>期望工作性质</td>
 					<td colspan="3">
-						<input type="checkbox" ng-model="target.targetType" name="worktype" value="全职" />全职
-						<input type="checkbox" ng-model="target.targetType" name="worktype" value="兼职" />兼职
-						<input type="checkbox" ng-model="target.targetType" name="worktype" value="实习" />实习
+						<input type="checkbox" ng-model="target.targetTypeA.all" name="worktype" value="全职" />全职
+						<input type="checkbox" ng-model="target.targetTypeA.part" name="worktype" value="兼职" />兼职
+						<input type="checkbox" ng-model="target.targetTypeA.learn" name="worktype" value="实习" />实习
 					</td>
 				</tr>
 				<tr>
@@ -223,12 +225,14 @@
 		<table>
 			<tbody>
 				<tr>
-					<td>日期</td>
+					<td>工作时间</td>
+					<td>公司名</td>
 					<td>内容</td>
 					<td></td>
 				</tr>
 				<tr ng-repeat="work in resumeWorkhistorys">
 					<td>{{work.time_begin}} - {{work.time_end}}</td>
+					<td>{{work.company}}</td>
 					<td>{{work.content}}</td>
 					<td>
 						<div class="btn btn-small btn-danger" 
@@ -243,21 +247,21 @@
 					<td>工作时间：</td>
 					<td colspan="3">
 						从
-						<input datepicker ng-model="workhistory.timeBegin" />
+						<input class="form-input" style="width: 30%;" name="timeBegin" datepicker ng-model="workhistory.timeBegin" />
 						至
-						<input datepicker ng-model="workhistory.timeEnd"/>
+						<input class="form-input" style="width: 30%;" name="timeEnd" datepicker ng-model="workhistory.timeEnd"/>
 					</td>
 				</tr>
 				<tr>
 					<td>公司名：</td>
 					<td colspan="3">
-						<input class="form-input" ng-model="workhistory.company" />
+						<input name="company" class="form-input" ng-model="workhistory.company" />
 					</td>
 				</tr>
 				<tr>
 					<td>内容：</td>
 					<td colspan="3">
-						<textarea class="textarea" ng-model="workhistory.content"></textarea>
+						<textarea name="content" class="textarea" ng-model="workhistory.content"></textarea>
 					</td>
 				</tr>
 				
@@ -311,27 +315,27 @@
 					<td>培训时间：</td>
 					<td colspan="3">
 						从
-						<input datepicker ng-model="eduhistory.timeBegin" />
+						<input class="form-input" style="width: 30%;" name="timeBegin" datepicker ng-model="eduhistory.timeBegin" />
 						至
-						<input datepicker ng-model="eduhistory.timeEnd"/>
+						<input class="form-input" style="width: 30%;" name="timeEnd" datepicker ng-model="eduhistory.timeEnd"/>
 					</td>
 				</tr>
 				<tr>
 					<td>培训机构：</td>
 					<td colspan="3">
-						<input class="form-input" ng-model="eduhistory.org" />
+						<input name="org" class="form-input" ng-model="eduhistory.org" />
 					</td>
 				</tr>
 				<tr>
 					<td>培训课程：</td>
 					<td colspan="3">
-						<input class="form-input" ng-model="eduhistory.course"></textarea>
+						<input name="course" class="form-input" ng-model="eduhistory.course"></textarea>
 					</td>
 				</tr>
 				<tr>
 					<td>培训内容：</td>
 					<td colspan="3">
-						<textarea class="textarea" ng-model="eduhistory.content"></textarea>
+						<textarea name="content" class="textarea" ng-model="eduhistory.content"></textarea>
 					</td>
 				</tr>
 				
@@ -412,9 +416,9 @@
 					</td>
 				</tr>
 				<tr>
-					<td>培训内容：</td>
+					<td>内容：</td>
 					<td colspan="3">
-						<textarea class="textarea" ng-model="language.content"></textarea>
+						<textarea name="content" class="textarea" ng-model="language.content"></textarea>
 					</td>
 				</tr>
 				
@@ -438,7 +442,7 @@
 		</table>
 		</form>
 	</div>
-	
+	<!--
 	<div class="mytable" ng-show="show=='icon'">
 		<form id="resumeeditform-icon" name="form">
 		<table>
@@ -466,7 +470,7 @@
 		</table>
 		</form>
 	</div>
-	
+  	-->
 	<div class="mytable" ng-show="show=='atta'">
 		<form id="resumeeditform-atta" name="form">
 		<table>

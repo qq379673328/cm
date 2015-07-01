@@ -5,7 +5,8 @@ app.directive('coreTeamselect', ["$http", function($http){
         replace: true,
         scope: {
         	teamids: "=teamids",
-        	single: "=single"
+        	single: "=single",
+        	name: "@dataname"
         },
         require: 'ngModel',
         templateUrl: 'static/app/components/directives/core/views/teamselect.html',
@@ -16,6 +17,7 @@ app.directive('coreTeamselect', ["$http", function($http){
         		for(var i in teams){
         			arr.push(teams[i]["id"]);
         		}
+        		$scope.selectteamsFlag = arr.join(",");
         		ngModel.$setViewValue(arr.join(","));
         	}
         	
@@ -49,6 +51,11 @@ app.directive('coreTeamselect', ["$http", function($http){
         			isInit = true;
         			$http.post("team/getSelectTeams",{ids: newValue}).success(function(data){
     						$scope.select = data;
+    						var arr = [];
+    						for(var i in data){
+    		        			arr.push(data[i]["id"]);
+    		        		}
+    		        		$scope.selectteamsFlag = arr.join(",");
                 		});
         		}
         	}, true);

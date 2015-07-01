@@ -1,5 +1,5 @@
 package cn.com.sinosoft.common.model;
-// Generated 2015-6-22 19:41:12 by Hibernate Tools 3.2.2.GA
+// Generated 2015-7-2 1:30:39 by Hibernate Tools 3.2.2.GA
 
 
 import java.util.Date;
@@ -15,23 +15,25 @@ public class TCustomCommunication  implements java.io.Serializable {
      private String commuDate;
      private String content;
      private Date createTime;
+     private String createUser;
 
     public TCustomCommunication() {
     }
 
 	
-    public TCustomCommunication(String id, String customId, String content, Date createTime) {
+    public TCustomCommunication(String id, String customId, String content, String createUser) {
         this.id = id;
         this.customId = customId;
         this.content = content;
-        this.createTime = createTime;
+        this.createUser = createUser;
     }
-    public TCustomCommunication(String id, String customId, String commuDate, String content, Date createTime) {
+    public TCustomCommunication(String id, String customId, String commuDate, String content, Date createTime, String createUser) {
        this.id = id;
        this.customId = customId;
        this.commuDate = commuDate;
        this.content = content;
        this.createTime = createTime;
+       this.createUser = createUser;
     }
    
     public String getId() {
@@ -68,6 +70,13 @@ public class TCustomCommunication  implements java.io.Serializable {
     
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+    public String getCreateUser() {
+        return this.createUser;
+    }
+    
+    public void setCreateUser(String createUser) {
+        this.createUser = createUser;
     }
 
 

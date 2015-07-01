@@ -2,7 +2,7 @@
 	位置：
 	<a href="#">首页</a>
 	&gt;
-	<a href="#custommgrlist">客户管理</a>
+	<a href="#custommgr/list">客户管理</a>
 	&gt;
 	录入客户
 </div>
@@ -35,7 +35,7 @@
 					<td class="td-odd"><span class="warn">*</span>所属行业：</td>
 					<td class="td-even" colspan="3">
 						<div
-							name="industry"
+							dataname="industry"
 							core-basedata 
 							type="select"
 							bind-model="custom.industry"
@@ -46,7 +46,7 @@
 					<td class="td-odd">客户来源：</td>
 					<td class="td-even">
 						<div
-							name="source"
+							dataname="source"
 							core-basedata 
 							type="select"
 							bind-model="custom.source"
@@ -85,7 +85,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td class="td-odd"><span class="warn">*</span>座机号码：</td>
+					<td class="td-odd">座机号码：</td>
 					<td class="td-even">
 						<input 
 									name="contactLandline"
@@ -220,7 +220,7 @@
 					<td class="td-odd">沟通记录：</td>
 					<td class="td-even" colspan="3">
 						<textarea 	class="textarea"
-									name=companyProfile
+									name="commun"
 									ng-model="custom.commun"></textarea>
 					</td>
 				</tr>

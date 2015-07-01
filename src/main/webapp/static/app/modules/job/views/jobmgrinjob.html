@@ -9,7 +9,7 @@
 <div ng-show="!isReady">
 	加载中...
 </div>
-<form id="jobditform" name="form" ng-show="isReady">
+<form id="jobeditform" name="form" ng-show="isReady">
 <div class="content">
 	<div class="mytable">
 		<div class="title">
@@ -42,17 +42,17 @@
 						<input
 							name="payMin"
 							ng-model="job.payMin"
-							class="form-input"/>
-						至
+							class="form-input" style="width: 30%"/>万元
+						&nbsp;&nbsp;至
 						<input
 							name="payMax"
 							ng-model="job.payMax"
-							class="form-input"/>
+							class="form-input" style="width: 30%"/>万元
 					</td>
-					<td class="td-odd">职位状态：</td>
+					<td class="td-odd"><span class="warn">*</span>职位状态：</td>
 					<td class="td-even">
 						<div
-							name="state"
+							dataname="state"
 							core-basedata 
 							type="select"
 							ng-model="job.state"
@@ -130,12 +130,12 @@
 						<input 
 									name="ageMin"
 									ng-model="job.ageMin"
-									class="form-input" />
+									class="form-input" style="width: 30%"/>
 						至
 						<input 
 									name="ageMax"
 									ng-model="job.ageMax"
-									class="form-input" />
+									class="form-input" style="width: 30%"/>
 					</td>
 					<td class="td-odd">性别要求：</td>
 					<td class="td-even">
@@ -150,7 +150,7 @@
 					<td class="td-odd">学历要求：</td>
 					<td class="td-even">
 						<div
-							name="eduLimit"
+							dataname="eduLimit"
 							core-basedata 
 							type="select"
 							bind-model="job.eduLimit"

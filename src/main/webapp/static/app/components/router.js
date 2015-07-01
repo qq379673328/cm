@@ -33,6 +33,10 @@ app.config([ '$routeProvider', function($routeProvider) {
 		templateUrl : fdRouterViewsBasepath + 'job/views/jobmgrinjob.html',
 		controller : 'JobMgrInJobCtrl'
 	})
+	.when('/jobmgr/injob/:customId', {//职位管理-为客户录入职位
+		templateUrl : fdRouterViewsBasepath + 'job/views/jobmgrinjob.html',
+		controller : 'JobMgrInJobCtrl'
+	})
 	.when('/jobmgr/editjob/:id', {//职位管理-编辑职位
 		templateUrl : fdRouterViewsBasepath + 'job/views/jobmgrinjob.html',
 		controller : 'JobMgrInJobCtrl'

@@ -14,7 +14,6 @@ import org.hibernate.type.Type;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import cn.com.sinosoft.common.model.TAttachment;
 import cn.com.sinosoft.common.model.TCustom;
 import cn.com.sinosoft.common.model.TCustomCommunication;
 import cn.com.sinosoft.common.model.TCustomData;
@@ -152,16 +151,17 @@ public class CustomService extends SimpleServiceImpl {
 	@Transactional
 	public FormResult edit(TCustom custom, String commun, String attas) {
 		FormResult ret = new FormResult();
+		String userId = userUtil.getLoginUser().getId();
 		if(StrUtils.isNull(custom.getId())){//新增
 			custom.setId(UUID.randomUUID().toString());
 			custom.setCreateTime(new Date());
-			custom.setCreateUser(userUtil.getLoginUser().getId());
+			custom.setCreateUser(userId);
 			custom.setLastUpdateTime(new Date());
-			custom.setLastUpdateUser(userUtil.getLoginUser().getId());
+			custom.setLastUpdateUser(userId);
 			dao.save(custom);
 		}else{//更新
 			custom.setLastUpdateTime(new Date());
-			custom.setLastUpdateUser(userUtil.getLoginUser().getId());
+			custom.setLastUpdateUser(userId);
 			dao.update(custom);
 		}
 		//保存沟通记录
@@ -171,6 +171,7 @@ public class CustomService extends SimpleServiceImpl {
 			c.setContent(commun);
 			c.setCreateTime(new Date());
 			c.setCustomId(custom.getId());
+			c.setCreateUser(userId);
 			dao.save(c);
 		}
 		//更新附件信息
@@ -291,7 +292,9 @@ public class CustomService extends SimpleServiceImpl {
 	public Object getCommuns(String customId) {
 		//沟通信息
 		return dao.queryListBySql(
-						"select * from t_custom_communication where custom_id = ? order by create_time desc",
+						"select t.*, getDictName(create_user) create_user_desc "
+						+ "from t_custom_communication t "
+						+ "where t.custom_id = ? order by t.create_time desc",
 						new Object[]{customId},
 						new Type[]{StringType.INSTANCE});
 	}
@@ -306,7 +309,10 @@ public class CustomService extends SimpleServiceImpl {
 		//客户主表
 		ret.put("custom", dao.queryById(id, TCustom.class));
 		//客户沟通记录
-		ret.put("comms", dao.queryListBySql("select * from t_custom_communication where custom_id = ? ", 
+		ret.put("comms", dao.queryListBySql(
+				"select t.*,getDictName(t.create_user) create_user_desc "
+				+ " from t_custom_communication t where t.custom_id = ? "
+				+ " order by create_time desc ", 
 				new Object[]{id},
 				new Type[]{StringType.INSTANCE}));
 		//客户附件
@@ -315,7 +321,8 @@ public class CustomService extends SimpleServiceImpl {
 				new Object[]{id},
 				new Type[]{StringType.INSTANCE}));
 		//客户职位
-		ret.put("jobs", dao.queryListBySql("select * from t_job where custom_id = ? ", 
+		ret.put("jobs", dao.queryListBySql("select * from t_job where custom_id = ? "
+				+ " order by create_time desc ", 
 				new Object[]{id},
 				new Type[]{StringType.INSTANCE}));
 		//客户执行团队
@@ -324,7 +331,8 @@ public class CustomService extends SimpleServiceImpl {
 				new Object[]{id},
 				new Type[]{StringType.INSTANCE}));
 		//客户合同
-		ret.put("contracts", dao.queryListBySql("select * from t_contract where custom_id = ? ", 
+		ret.put("contracts", dao.queryListBySql(
+				"select * from t_contract where custom_id = ? order by in_date desc ", 
 				new Object[]{id},
 				new Type[]{StringType.INSTANCE}));
 		//客户合同附件

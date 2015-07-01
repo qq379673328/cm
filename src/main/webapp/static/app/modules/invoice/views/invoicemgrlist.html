@@ -84,7 +84,7 @@
 			<tbody>
 				<tr ng-show="!$data"><td colspan="4">加载中...</td></tr>
 				<tr ng-repeat="item in $data" ng-class="{true:'tr-odd' , false: 'tr-even'}[$index%2 == 0]">
-					<td>{{ item.apply_user }}</td>
+					<td>{{ item.apply_user_desc }}</td>
 					<td>{{ item.custom_name }}</td>
 					<td>{{ item.type }}</td>
 					<td>{{ item.total }}</td>

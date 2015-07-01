@@ -7,6 +7,14 @@ app.controller('ResumeMgrInResumeCtrl',
 	var resumeId = $routeParams.id;
 	$scope.isReady = false;
 	
+	$scope.target = {
+			targetTypeA:{
+				all: false,
+				part: false,
+				learn: false
+			}
+	};
+	
 	if(resumeId){//编辑
 		//请求简历信息
 		$http.post("resume/getResumeViewById", {id: resumeId}).success(function(data){
@@ -24,6 +32,22 @@ app.controller('ResumeMgrInResumeCtrl',
 					targetPay: tar.target_pay,
 					workState: tar.work_state
 				};
+				if(tar.target_type){
+					$scope.target .targetTypeA = {
+						all: false,
+						part: false,
+						learn: false
+					};
+					if(tar.target_type.indexOf("全职") != -1){
+						$scope.target.targetTypeA.all = true;
+					}
+					if(tar.target_type.indexOf("兼职") != -1){
+						$scope.target.targetTypeA.part = true;
+					}
+					if(tar.target_type.indexOf("实习") != -1){
+						$scope.target.targetTypeA.learn = true;
+					}
+				}
 			}
 			$scope.resumeDatas = data.resumeDatas;
 			$scope.resumeEdus = data.resumeEdus;
@@ -42,16 +66,39 @@ app.controller('ResumeMgrInResumeCtrl',
 	$scope.saveBaseInfo = function(next){
 		if($("#resumeeditform-baseinfo").isHappy({
 			fields: {
-				
+				//姓名
+				name: {required: true, maxlength: 100},
+				//居住地址
+				address: {required: true, maxlength: 200},
+				//性别
+				sex: {required: true, maxlength: 10},
+				//最高学历
+				education: {required: true, maxlength: 100},
+				//出生日期
+				birthcay: {required: true, date: true},
+				//婚姻状况
+				marrage: {required: true, maxlength: 20},
+				//手机号码
+				phone: {required: true, maxlength: 100},
+				//电子邮箱
+				email: {required: true, maxlength: 100},
+				//目前年薪
+				yearPay: {required: true, number: true},
+				//工作状态
+				workState: {required: true, maxlength: 50},
+				//个人简介
+				desc: {required: true, maxlength: 500}
 			}
 		})){
 			$scope.isrequest = true;
 			$http.post("resume/saveBaseinfo", $scope.resume).success(function(data){
 				$scope.formresult = data;
 				$scope.isrequest = false;
-				if(data.success == "1" && next){//成功
-					$scope.show = "target";
-					$scope.resume = data.data;
+				if(data.success == "1"){//成功
+					$scope.resume.id = data.data.id;
+					if(next){
+						$scope.show = "target";
+					}
 				}
 			});
 		}
@@ -61,16 +108,44 @@ app.controller('ResumeMgrInResumeCtrl',
 	$scope.saveTarget = function(next){
 		if($("#resumeeditform-target").isHappy({
 			fields: {
-				
+				//期望工作性质
+				worktype: {maxlength: 100},
+				//期望工作地点
+				targetPlace: {maxlength: 100},
+				//期望从事职业
+				targetJob: {maxlength: 100},
+				//期望从事行业
+				targetIndustry: {maxlength: 100},
+				//期望月薪
+				targetPay: {maxlength: 100},
+				//工作状态
+				workState: {maxlength: 100}
 			}
 		})){
 			$scope.isrequest = true;
 			$scope.target["resumeId"] = $scope.resume.id;
+			
+			//工作性质
+			var targetType = "";
+			if($scope.target.targetTypeA.all){
+				targetType += "全职,";
+			}
+			if($scope.target.targetTypeA.part){
+				targetType += "兼职,";
+			}
+			if($scope.target.targetTypeA.learn){
+				targetType += "实习,";
+			}
+			$scope.target.targetType = targetType;
+			
 			$http.post("resume/saveTarget", $scope.target).success(function(data){
 				$scope.formresult = data;
 				$scope.isrequest = false;
-				if(data.success == "1" && next){//成功
-					$scope.show = "workhistory";
+				if(data.success == "1"){//成功
+					$scope.target.id = data.data.id;
+					if(next){
+						$scope.show = "workhistory";
+					}
 				}
 			});
 		}
@@ -91,7 +166,14 @@ app.controller('ResumeMgrInResumeCtrl',
 	$scope.saveWorkHistory = function(next){
 		if($("#resumeeditform-workhistory").isHappy({
 			fields: {
-				
+				//工作时间-从
+				timeBegin: {required: true},
+				//工作时间-到
+				timeEnd: {required: true},
+				//公司名
+				company: {required: true, maxlength: 100},
+				//内容
+				content: {required: true, maxlength: 500}
 			}
 		})){
 			$scope.isrequest = true;
@@ -131,7 +213,14 @@ app.controller('ResumeMgrInResumeCtrl',
 	$scope.saveEduHistory = function(next){
 		if($("#resumeeditform-eduhistory").isHappy({
 			fields: {
-				
+				//培训时间-从
+				timeBegin: {required: true},
+				//培训时间-到
+				timeEnd: {required: true},
+				//培训机构
+				org: {required: true, maxlength: 100},
+				//课程
+				course: {required: true, maxlength: 500}
 			}
 		})){
 			$scope.isrequest = true;
@@ -175,7 +264,14 @@ app.controller('ResumeMgrInResumeCtrl',
 	$scope.saveLanguage = function(next){
 		if($("#resumeeditform-language").isHappy({
 			fields: {
-				
+				//语种
+				lanType: {required: true, maxlength: 100},
+				//读写能力
+				readAb: {required: true, maxlength: 100},
+				//听说能力
+				listenAb: {required: true, maxlength: 100},
+				//内容
+				content: {required: true, maxlength: 500}
 			}
 		})){
 			$scope.isrequest = true;

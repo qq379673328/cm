@@ -1,5 +1,5 @@
 package cn.com.sinosoft.common.model;
-// Generated 2015-6-22 19:41:12 by Hibernate Tools 3.2.2.GA
+// Generated 2015-7-2 1:30:39 by Hibernate Tools 3.2.2.GA
 
 
 import java.util.Date;
@@ -36,15 +36,13 @@ public class TCustom  implements java.io.Serializable {
     }
 
 	
-    public TCustom(String id, String customName, String team, String state, String contactName, String createUser, Date createTime, Date lastUpdateTime) {
+    public TCustom(String id, String customName, String team, String state, String contactName, String createUser) {
         this.id = id;
         this.customName = customName;
         this.team = team;
         this.state = state;
         this.contactName = contactName;
         this.createUser = createUser;
-        this.createTime = createTime;
-        this.lastUpdateTime = lastUpdateTime;
     }
     public TCustom(String id, String customName, String industry, String team, String source, String state, String contactName, String contactDuty, String contactLandline, String contactCellphone, String contactFax, String contactEmail, String contactQq, String contactWeixin, String contactAddress, String contactWebsite, String companyProfile, String createUser, Date createTime, String lastUpdateUser, Date lastUpdateTime) {
        this.id = id;

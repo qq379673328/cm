@@ -138,7 +138,7 @@
 			<span>
 				合作职位情况
 			</span>
-			<a class="spe" href="#jobmgr/injob/{{custom.id}}">发布新职位</a>
+			<a class="spe" href="#/jobmgr/injob/{{custom.id}}">发布新职位</a>
 		</div>
 		<table>
 			<thead>
@@ -184,7 +184,7 @@
 			</thead>
 			<tbody>
 				<tr ng-repeat="comm in comms">
-					<td>{{comm.create_user}}</td>
+					<td>{{comm.create_user_desc}}</td>
 					<td>{{comm.content}}</td>
 					<td>{{comm.create_time | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
 				</tr>
@@ -202,7 +202,9 @@
 			<tbody>
 				<tr>
 					<td>
-						<textarea class="textarea"></textarea>
+						<form id="addCommForm">
+							<textarea name="addContent" ng-model="addContent" class="textarea"></textarea>
+						</form>
 					</td>
 				</tr>
 				<tr>
@@ -213,5 +215,5 @@
 			</tbody>
 		</table>
 	</div>
-	
+	<div core-formresult result="formresult"></div>
 </div>

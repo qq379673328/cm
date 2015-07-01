@@ -101,10 +101,6 @@ public class JobService extends SimpleServiceImpl {
 	 * @param Job
 	 * @return
 	 */
-	/**
-	 * @param job
-	 * @return
-	 */
 	@Transactional
 	public FormResult edit(TJob job) {
 		FormResult ret = new FormResult();

@@ -1,5 +1,5 @@
 package cn.com.sinosoft.common.model;
-// Generated 2015-6-22 19:41:12 by Hibernate Tools 3.2.2.GA
+// Generated 2015-7-2 1:30:39 by Hibernate Tools 3.2.2.GA
 
 
 import java.util.Date;
@@ -21,11 +21,10 @@ public class TResumeCommunication  implements java.io.Serializable {
     }
 
 	
-    public TResumeCommunication(String id, String resumeId, String content, Date createTime, String createUser) {
+    public TResumeCommunication(String id, String resumeId, String content, String createUser) {
         this.id = id;
         this.resumeId = resumeId;
         this.content = content;
-        this.createTime = createTime;
         this.createUser = createUser;
     }
     public TResumeCommunication(String id, String resumeId, String commuDate, String content, Date createTime, String createUser) {

@@ -26,7 +26,7 @@ import cn.com.sinosoft.core.util.UserUtil;
 @Service
 public class IndexService extends SimpleServiceImpl {
 	
-	private static final int INDEX_COUNT = 10;
+	private static final int INDEX_COUNT = 5;
 	
 	@Resource
 	UserUtil userUtil;
@@ -55,29 +55,39 @@ public class IndexService extends SimpleServiceImpl {
 				new Object[]{userId},
 				new Type[]{StringType.INSTANCE}));
 		//我的工作绩效
-		ret.put("mycustoms", dao.queryListBySql(
+		ret.put("myscore", dao.queryListBySql(
 				  " SELECT  "
-				+ " -- 服务客户 "
-				+ " ( SELECT COUNT(1) FROM t_custom t WHERE t.create_user = '1' ) AS custom_serv,  "
-				+ " -- 签约客户 "
-				+ " ( SELECT COUNT(1) FROM t_custom t WHERE t.create_user = '1' AND t.state = '已签约' ) AS custom_in,  "
-				+ " -- 录入职位 "
-				+ " ( SELECT COUNT(1) FROM t_job t WHERE t.create_user = '1' ) AS job_in,  "
-				+ " -- 客户评语 "
-				+ " ( SELECT COUNT(1) FROM t_custom_communication t WHERE t.create_user = '1' ) AS custom_comm,  "
-				+ " -- 新增简历 "
-				+ " ( SELECT COUNT(1) FROM t_resume t WHERE t.create_user = '1' ) AS resume_add,  "
-				+ " -- 推荐人选 "
-				+ " ( SELECT COUNT(1) FROM t_resume_pub t WHERE t.create_user = '1' ) AS resume_pub, "
-				+ " -- 简历评语 "
-				+ " ( SELECT COUNT(1) FROM t_resume_comm t WHERE t.create_user = '1' ) AS resume_comm, "
-				+ " -- 合作职位 "
-				+ " ( SELECT COUNT(1) FROM t_job t WHERE t.create_user = (SELECT team  FROM t_user WHERE id = '1' ) ) AS job_team,  "
-				+ " -- 上岗人数 "
-				+ " ( SELECT COUNT(1) FROM t_job t WHERE t.t_resume_pub = '1' AND t.state = '已上岗') AS job_team,  "
+				//+ " -- 服务客户 "
+				+ " ( SELECT COUNT(1) FROM t_custom t WHERE t.create_user = ? ) AS custom_serv,  "
+				//+ " -- 签约客户 "
+				+ " ( SELECT COUNT(1) FROM t_custom t WHERE t.create_user = ? AND t.state = '已签约' ) AS custom_in,  "
+				//+ " -- 录入职位 "
+				+ " ( SELECT COUNT(1) FROM t_job t WHERE t.create_user = ? ) AS job_in,  "
+				//+ " -- 客户评语 "
+				+ " ( SELECT COUNT(1) FROM t_custom_communication t WHERE t.create_user = ? ) AS custom_comm,  "
+				//+ " -- 新增简历 "
+				+ " ( SELECT COUNT(1) FROM t_resume t WHERE t.create_user = ? ) AS resume_add,  "
+				//+ " -- 推荐人选 "
+				+ " ( SELECT COUNT(1) FROM t_resume_job t WHERE t.create_user = ? ) AS resume_pub, "
+				//+ " -- 简历评语 "
+				+ " ( SELECT COUNT(1) FROM t_resume_communication t WHERE t.create_user = ? ) AS resume_comm, "
+				//+ " -- 合作职位 "
+				+ " ( SELECT COUNT(1) FROM t_job t WHERE t.create_user = (SELECT team  FROM t_user WHERE id = ? ) ) AS job_team,  "
+				//+ " -- 上岗人数 "
+				+ " ( SELECT COUNT(1) FROM t_resume_job t WHERE t.create_user = ? AND t.recom_state = '已上岗') AS job_work  "
 				+ " FROM dual ",
-				new Object[]{userId},
-				new Type[]{StringType.INSTANCE}));
+				new Object[]{userId, userId, userId, userId, userId, userId, userId, userId, userId},
+				new Type[]{StringType.INSTANCE, StringType.INSTANCE, StringType.INSTANCE, StringType.INSTANCE, StringType.INSTANCE
+						, StringType.INSTANCE, StringType.INSTANCE, StringType.INSTANCE, StringType.INSTANCE}));
+		
+		//公告
+		ret.put("pubs", dao.queryListBySql(
+				" select * from t_pub t "
+				+ "where t.state = '已发布' "
+				+ "order by t.pub_time desc ",
+				new Object[]{},
+				new Type[]{}));
+		
 		return ret;
 	}
 	

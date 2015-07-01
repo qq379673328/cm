@@ -271,7 +271,7 @@ a:hover {
 						<li><span class="login-form-username"></span> <input
 							id="username" name="username" value="admin" type="text"
 							autocomplete="off" class="input-text-style-3" placeholder="用户名"
-							value=""></li>
+							></li>
 						<li><span class="login-form-password"></span> <input
 							id="password" name="password" value="11111111" type="password"
 							autocomplete="off" class="input-text-style-3" placeholder="密码">
