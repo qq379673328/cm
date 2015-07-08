@@ -94,6 +94,8 @@
 				
 	</div>
 	
+	<div core-formresult result="ajaxerror"></div>
+	
 	<!-- jq -->
 	<script type="text/javascript" src="static/app/bower_components/jquery/dist/jquery.min.js"></script>
 	<script type="text/javascript" src="static/app/components/3rd/jquery_ext/jquery.ishappy.js"></script>

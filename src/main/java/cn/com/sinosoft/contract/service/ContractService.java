@@ -113,6 +113,13 @@ public class ContractService extends SimpleServiceImpl {
 	@Transactional
 	public FormResult edit(TContract contract, String attas) {
 		FormResult ret = new FormResult();
+		
+		if(isNoExist(contract.getNo())){//验证合同编号
+			ret.setSuccess(FormResult.ERROR);
+			ret.setMessage("合同编号已存在");
+			return ret;
+		}
+		
 		if(StrUtils.isNull(contract.getId())){//新增
 			contract.setId(UUID.randomUUID().toString());
 			contract.setInDate(new Date());
@@ -137,6 +144,20 @@ public class ContractService extends SimpleServiceImpl {
 		ret.setSuccess(FormResult.SUCCESS);
 		ret.setData(contract.getId());
 		return ret;
+	}
+	
+	/**
+	 * 验证合同编号是否存在
+	 *
+	 * 
+	 * @param no
+	 * @return
+	 * @author <a href="mailto:nytclizy@gmail.com">李志勇</a>
+	 */
+	private boolean isNoExist(String no){
+		return dao.queryCountBySql("select count(1) from t_contract where no = ? ",
+				new Object[]{no},
+				new Type[]{StringType.INSTANCE}) == 0 ? false : true;
 	}
 
 }

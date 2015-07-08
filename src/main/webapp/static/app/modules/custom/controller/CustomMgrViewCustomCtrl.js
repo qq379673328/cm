@@ -21,7 +21,7 @@ app.controller('CustomMgrViewCustomCtrl',
 			$scope.contractAttas = data.contractAttas;
 			$scope.isReady = true;
 		});
-	}
+	};
 	
 	//请求客户信息
 	$scope.reload();

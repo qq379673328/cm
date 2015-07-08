@@ -579,8 +579,8 @@ hr {
 	text-align: center;
 	padding-right: 35px;
 	margin-bottom: 20px;
+	margin-right: 20px;
 	border: 1px solid transparent;
-	margin: 5px auto;
 	padding : 5px;
 	line-height: 34px;
 	width: 70%;
@@ -643,7 +643,7 @@ hr {
 	right: 0px;
 	height: 100%;
 	z-index: 999;
-	background-color: #666262;
+	background-color: #5C7EAB;
     filter:Alpha(opacity=50);
     *zoom:1;
     padding: 10px;

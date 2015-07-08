@@ -321,7 +321,8 @@ public class CustomService extends SimpleServiceImpl {
 				new Object[]{id},
 				new Type[]{StringType.INSTANCE}));
 		//客户职位
-		ret.put("jobs", dao.queryListBySql("select * from t_job where custom_id = ? "
+		ret.put("jobs", dao.queryListBySql("select t.*,getDictName(t.team) team_desc" +
+				" from t_job t where t.custom_id = ? "
 				+ " order by create_time desc ", 
 				new Object[]{id},
 				new Type[]{StringType.INSTANCE}));

@@ -27,7 +27,7 @@ public class PerformanceController extends BaseController{
 	PerformanceService performanceService;
 	
 	/**
-	 * 获取客户列表
+	 * 获取绩效列表
 	 * @return
 	 */
 	@RequestMapping("list")

@@ -157,7 +157,7 @@ public class CommonAction extends BaseController {
 	@RequestMapping("download/{id}")
     public void fileDownload(HttpServletResponse response, HttpServletRequest request,
     		@PathVariable("id") String id){
-		ServletContext servletContext = request.getServletContext();
+		ServletContext servletContext = request.getSession().getServletContext();
         //获取网站部署路径(通过ServletContext对象)，用于确定下载文件位置，从而实现下载  
         String path = servletContext.getRealPath("/");
         TAttachment atta = commonService.getFile(id);

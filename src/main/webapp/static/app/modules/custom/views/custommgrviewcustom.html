@@ -45,10 +45,6 @@
 					<td class="td-even">{{custom.contactWeixin}}</td>
 				</tr>
 				<tr>
-					<td class="td-odd">创建时间：</td>
-					<td colspan="3" class="td-even">{{custom.createTime | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
-				</tr>
-				<tr>
 					<td class="td-odd">公司地址：</td>
 					<td class="td-even">{{custom.contactAddress}}</td>
 					<td class="td-odd">网址：</td>
@@ -78,6 +74,10 @@
 						</span>
 					</td>
 				</tr>
+				<tr>
+					<td class="td-odd">创建时间：</td>
+					<td colspan="3" class="td-even">{{custom.createTime | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+				</tr>
 			</tbody>
 		</table>
 	</div>
@@ -99,26 +99,26 @@
 			<tbody>
 				<tr>
 					<td class="td-odd">签约日期：</td>
-					<td class="td-even">{{contract.inDate | date : 'yyyy-MM-dd'}}</td>
+					<td class="td-even">{{contract.in_date | date : 'yyyy-MM-dd'}}</td>
 					<td class="td-odd">签约比例：</td>
-					<td class="td-even">{{contract.inPercentage}}</td>
+					<td class="td-even">{{contract.in_percentage}}</td>
 				</tr>
 				<tr>
 					<td class="td-odd">支付方式：</td>
 					<td class="td-even">{{contract.payway}}</td>
 					<td class="td-odd">保用期限：</td>
-					<td class="td-even">{{contract.useLimit}}</td>
+					<td class="td-even">{{contract.use_limit}}</td>
 				</tr>
 				<tr>
 					<td class="td-odd">首付款：</td>
 					<td colspan="3" class="td-even">
-						{{contract.firstPay}}
+						{{contract.first_pay}}
 					</td>
 				</tr>
 				<tr>
 					<td class="td-odd">其他要求：</td>
 					<td colspan="3" class="td-even">
-						{{contract.otherRequire}}
+						{{contract.other_require}}
 					</td>
 				</tr>
 				<tr>
@@ -157,16 +157,17 @@
 				<tr ng-repeat="job in jobs">
 					<td>{{job.name}}</td>
 					<td>{{job.state}}</td>
-					<td>{{job.payMin}} - {{job.payMin}} 万</td>
+					<td>{{job.pay_min}} - {{job.pay_max}} 万</td>
 					<td>{{job.workplace}}</td>
-					<td>{{job.reportObj}}</td>
-					<td>{{job.team}}</td>
-					<td>{{job.requirePeople}}</td>
-					<td>{{job.createTime | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+					<td>{{job.report_obj}}</td>
+					<td>{{job.team_desc}}</td>
+					<td>{{job.require_people}}</td>
+					<td>{{job.create_time | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
 				</tr>
 			</tbody>
 		</table>
 	</div>
+	<hr />
 	
 	<div class="mytable">
 		<div class="title">
@@ -191,6 +192,7 @@
 			</tbody>
 		</table>
 	</div>
+	<hr />
 	
 	<div class="mytable">
 		<div class="title">
