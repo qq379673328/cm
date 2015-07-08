@@ -583,7 +583,7 @@ hr {
 	border: 1px solid transparent;
 	padding : 5px;
 	line-height: 34px;
-	width: 70%;
+	width: 100%;
 	position: fixed;
 	bottom: 0px;
 }

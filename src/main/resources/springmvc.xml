@@ -112,29 +112,26 @@
 	</bean>
 
 	<!-- 全局异常配置 start -->
-	<!-- <bean id="exceptionResolver"
-		class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+	<bean id="exceptionResolver"
+		class="cn.com.sinosoft.core.exception.CustomSimpleMappingExceptionResolver">
 		<property name="exceptionMappings">
 			<props>
-				<prop key="java.lang.Exception">500</prop>
-				<prop key="java.lang.Throwable">500</prop>
+				<!-- hibernate验证异常 -->
+				<prop key="javax.validation.ConstraintViolationException">405</prop>
+				<!-- 未认证 -->
 				<prop key="org.apache.shiro.authz.AuthorizationException">403</prop>
 			</props>
 		</property>
 		<property name="statusCodes">
 			<props>
-				<prop key="500">500</prop>
-				<prop key="404">404</prop>
 				<prop key="403">403</prop>
-				<prop key="401">401</prop>
+				<prop key="405">405</prop>
 			</props>
 		</property>
-		设置日志输出级别，不定义则默认不输出警告等错误日志信息
 		<property name="warnLogCategory" value="WARN"></property>
-		默认错误页面，当找不到上面mappings中指定的异常对应视图时，使用本默认配置
-		<property name="defaultErrorView" value="500"></property>
-		默认HTTP状态码
+		<property name="exceptionAttribute" value="ex"></property>
+		<!-- <property name="defaultErrorView" value="500"></property> -->
 		<property name="defaultStatusCode" value="500"></property>
-	</bean> -->
+	</bean>
 
 </beans>
