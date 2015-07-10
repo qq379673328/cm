@@ -128,6 +128,10 @@ app.directive('coreBasedata', ["$http", function($http){
         			$target.addClass("select");
         		}
         	};
+        	
+        	$scope.select = function(t){
+        		$scope.bindModel = t.bindModel;
+        	};
         }
     };
 }]);

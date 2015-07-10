@@ -1,10 +1,15 @@
 <div>
 <!-- 下拉框类型 -->
-<select class="form-select" ng-if="type=='select'" ng-model="bindModel" name="{{name}}">
-	<option ng-show="allSelectName" value="">{{allSelectName}}</option>
-	<option ng-repeat="item in items" value="{{item[0]}}">
-		{{item[1]}}
-	</option>
+	<input ng-model="bindModel" />
+	<div ng-if="type=='select'">
+		<select
+			class="form-select"
+			ng-model="bindModel"
+			ng-options="option[0] as option[1] for option in items"
+			ng-change="select(this);"
+			name="{{name}}">
+			<option value="">-- 请选择 --</option>
+	</div>
 </select>
 
 <!-- span 类型 -->
