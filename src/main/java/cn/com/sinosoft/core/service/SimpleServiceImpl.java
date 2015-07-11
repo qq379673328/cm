@@ -34,6 +34,7 @@ import cn.com.sinosoft.core.service.model.PageParam;
 import cn.com.sinosoft.core.service.model.PagingResult;
 import cn.com.sinosoft.core.service.model.PagingSql;
 import cn.com.sinosoft.core.service.model.PagingSrcSql;
+import cn.com.sinosoft.core.util.UserUtil;
 
 /**
  *
@@ -47,6 +48,8 @@ public class SimpleServiceImpl{
 	
 	@Resource
 	protected SimpleBaseDao dao;
+	@Resource
+	protected UserUtil userUtil;
 	private final static String dbConfigFilePath = "db.properties";
 	private static String CUR_DIALECT = DbDialect.MYSQL;
 	
@@ -390,6 +393,14 @@ public class SimpleServiceImpl{
 		return new ObjectMapper().getJsonFactory()
 			.createJsonParser(jsonData)
 			.readValueAs(ExtListData.class);
+	}
+	
+	/**
+	 * 获取登陆用户id
+	 * @return
+	 */
+	public String getLoginUserId(){
+		return userUtil.getLoginUser().getId();
 	}
 	
 }

@@ -5,6 +5,7 @@ app.controller('ResumePubListCtrl',
 	$rootScope.menu = "resume";
 	
 	var resumeId = $routeParams.id;
+	$scope.resumeId = resumeId;
 	
 	//分页查询
 	var initpage = 1,
@@ -43,7 +44,7 @@ app.controller('ResumePubListCtrl',
 			}else{
 				$scope.queryParams.isreload = false;
 			}
-			$http.post("custom/list", $scope.queryParams).success(function(data){
+			$http.post("resume/getCustomList", $scope.queryParams).success(function(data){
 				var total = data.total;
 				$scope.queryParams.total = total;
 				params.total(total);
@@ -61,14 +62,14 @@ app.controller('ResumePubListCtrl',
 	
 	//推荐
 	$scope.pub = function(item){
-		$http.post("resume/pub", {resumeId: resumeId, customId: item.id}).success(function(data){
+		$http.post("resume/pub", {resumeId: resumeId, jobId: item.id}).success(function(data){
 			$scope.formresult = data;
 			$scope.reload(true);
 		});
 	};
 	//取消推荐
 	$scope.canclePub = function(item){
-		$http.post("resume/canclePub", {resumeId: resumeId, customId: item.id}).success(function(data){
+		$http.post("resume/canclePub", {resumeId: resumeId, jobId: item.id}).success(function(data){
 			$scope.formresult = data;
 			$scope.reload(true);
 		});

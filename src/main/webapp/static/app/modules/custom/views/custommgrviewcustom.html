@@ -154,7 +154,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat="job in jobs">
+				<tr ng-repeat="job in jobs" ng-class="{true:'tr-odd' , false: 'tr-even'}[$index%2 == 0]">
 					<td>{{job.name}}</td>
 					<td>{{job.state}}</td>
 					<td>{{job.pay_min}} - {{job.pay_max}} 万</td>
@@ -184,10 +184,10 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat="comm in comms">
-					<td>{{comm.create_user_desc}}</td>
-					<td>{{comm.content}}</td>
-					<td>{{comm.create_time | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+				<tr ng-repeat="comm in comms" ng-class="{true:'tr-odd' , false: 'tr-even'}[$index%2 == 0]">
+					<td style="width: 100px;">{{comm.create_user_desc}}</td>
+					<td style="width: auto;">{{comm.content}}</td>
+					<td style="width: 200px;">{{comm.create_time | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
 				</tr>
 			</tbody>
 		</table>

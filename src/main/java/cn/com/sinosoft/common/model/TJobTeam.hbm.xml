@@ -3,7 +3,7 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!-- Generated 2015-7-11 12:12:27 by Hibernate Tools 3.2.2.GA -->
 <hibernate-mapping>
-    <class name="cn.com.sinosoft.common.model.TCustomTeam" table="t_custom_team" catalog="cm">
+    <class name="cn.com.sinosoft.common.model.TJobTeam" table="t_job_team" catalog="cm">
         <id name="id" type="string">
             <column name="id" length="40" />
             <generator class="assigned" />
@@ -13,9 +13,9 @@
                 <comment>&#229;&#155;&#162;&#233;&#152;&#159;id</comment>
             </column>
         </property>
-        <property name="customId" type="string">
-            <column name="custom_id" length="40" not-null="true">
-                <comment>&#229;&#174;&#162;&#230;&#136;&#183;id</comment>
+        <property name="jobId" type="string">
+            <column name="job_id" length="40" not-null="true">
+                <comment>&#232;&#129;&#140;&#228;&#189;&#141;id</comment>
             </column>
         </property>
     </class>

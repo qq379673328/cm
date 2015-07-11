@@ -22,7 +22,7 @@
 			</div>
 		</div>
 	</div>
-	
+	<a class="btn btn-success" href="#resumemgr/viewresume/{{resumeId}}">查看简历</a>
 	<div class="mytable">
 		<div class="title">
 			<span>总数 ：
@@ -33,13 +33,9 @@
 		<table class="my-table" ng-table="tableParams" template-pagination="custom/pager">
 			<thead>
 				<tr>
-					<th>客户来源</th>
-					<th>公司名称</th>
-					<th>联系人</th>
-					<th>联系电话</th>
-					<th>职位数</th>
-					<th>执行团队</th>
-					<th>客户状态</th>
+					<th>状态</th>
+					<th>职位名</th>
+					<th>客户名</th>
 					<th>创建时间</th>
 					<th></th>
 				</tr>
@@ -47,28 +43,22 @@
 			<tbody>
 				<tr ng-show="!$data"><td colspan="4">加载中...</td></tr>
 				<tr ng-repeat="item in $data" ng-class="{true:'tr-odd' , false: 'tr-even'}[$index%2 == 0]">
-					<td>{{ item.source }}</td>
-					<td>
-						<a class="link" 
-						href="#custommgr/viewcustom/{{item.id}}">{{ item.custom_name }}</a></td>
-					<td>{{ item.contact_name }}</td>
-					<td>{{ item.contact_cellphone == null ? item.contact_landline : item.contact_cellphone}}</td>
-					<td>待实现</td>
-					<td>{{ item.teams_desc }}</td>
-					<td>{{ item.state }}</td>
-					<td>{{ item.create_time | date : 'yyyy-MM-dd HH:mm '}}</td>
 					<td>
 						<i ng-show="item.beyond=='my'" class="fa fa-user"></i>
 						<i ng-show="item.beyond=='team'" class="fa fa-users"></i>
 						<i ng-show="item.beyond=='other'" class="fa fa-user-plus"></i>
-					</td>
+						
+						{{ item.state }}</td>
+					<td>{{ item.name }}</td>
+					<td>{{ item.custom_name }}</td>
+					<td>{{ item.create_time | date : 'yyyy-MM-dd HH:mm '}}</td>
 					
 					<td ng-show="item.ishandling">操作中</td>
 					<td ng-show="!item.ishandling">
-						<a ng-show="item.pubstate=='0'" class="btn btn-small btn-success"
+						<a ng-show="item.ispub=='0'" class="btn btn-small btn-success"
 							ng-click="pub(item);"
 							>推荐</a>
-						<a ng-show="item.pubstate=='1'" class="btn btn-small btn-success"
+						<a ng-show="item.ispub=='1'" class="btn btn-small btn-danger"
 							ng-click="canclePub(item);"
 							>取消推荐</a>
 					</td>

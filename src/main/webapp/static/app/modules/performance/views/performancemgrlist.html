@@ -10,9 +10,9 @@
 		<div class="line border-none">
 			<div class="desc">统计时间：</div>
 			<div class="vals">
-				<input datepicker ng-model="search.timeStart" />
+				<input datepicker ng-model="search.createTimeStart" />
 				至
-				<input datepicker ng-model="search.timeEnd"/>
+				<input datepicker ng-model="search.createTimeEnd"/>
 			</div>
 			<div class="desc">用户姓名：</div>
 			<div class="vals">
@@ -47,14 +47,14 @@
 				<tr ng-show="!$data"><td colspan="4">加载中...</td></tr>
 				<tr ng-repeat="item in $data" ng-class="{true:'tr-odd' , false: 'tr-even'}[$index%2 == 0]">
 					<td>{{ item.name }}</td>
-					<td>{{ item. }}</td>
+					<td>{{ item.duty }}</td>
 					<td>{{ item.resume_add }}</td>
-					<td>{{ item. }}</td>
+					<td>{{ item.custom_bd }}</td>
 					<td>{{ item.custom_serv }}</td>
 					<td>{{ item.job_in }}</td>
 					<td>{{ item.resume_pub }}</td>
-					<td>{{ item. }}</td>
-					<td>{{ item. }}</td>
+					<td>{{ item.job_mianshi }}</td>
+					<td>{{ item.job_offer }}</td>
 					<td>{{ item.job_work }}</td>
 				</tr>
 			</tbody>

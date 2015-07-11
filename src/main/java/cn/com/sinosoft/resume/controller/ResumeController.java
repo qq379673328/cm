@@ -230,4 +230,38 @@ public class ResumeController extends BaseController {
 		return resumeService.delById(id, "t_resume_communication");
 	}
 	
+	/**
+	 * 简历推荐-推荐简历
+	 * @return
+	 */
+	@RequestMapping("pub")
+	@ResponseBody
+	public FormResult pub(String resumeId, String jobId){
+		return resumeService.pub(resumeId, jobId);
+	}
+	
+	/**
+	 * 简历推荐-取消推荐简历
+	 * @return
+	 */
+	@RequestMapping("canclePub")
+	@ResponseBody
+	public FormResult canclePub(String resumeId, String jobId){
+		return resumeService.canclePub(resumeId, jobId);
+	}
+	
+	/**
+	 * 获取简历客户列表
+	 * @param params
+	 * @param pageParams
+	 * @return
+	 */
+	@RequestMapping("getCustomList")
+	@ResponseBody
+	public PagingResult getCustomList(
+			@RequestParam Map<String ,String> params,
+			PageParam pageParams){
+		return resumeService.getCustomList(params, pageParams);
+	}
+	
 }

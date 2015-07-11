@@ -16,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import cn.com.sinosoft.common.model.TResume;
 import cn.com.sinosoft.common.model.TResumeDate;
+import cn.com.sinosoft.common.model.TResumeJob;
+import cn.com.sinosoft.common.model.TUser;
 import cn.com.sinosoft.common.util.StrUtils;
 import cn.com.sinosoft.core.service.SimpleServiceImpl;
 import cn.com.sinosoft.core.service.model.FormResult;
@@ -176,6 +178,99 @@ public class ResumeService extends SimpleServiceImpl {
 			
 		}
 		
+		return ret;
+	}
+	
+	
+	/**
+	 * 获取某份简历的客户-分页
+	 * @param params
+	 * @param pageParams
+	 * @return
+	 */
+	public PagingResult getCustomList(Map<String, String> params, PageParam pageParams) {
+		
+		PagingSrcSql srcSql = new PagingSrcSql();
+		List<Object> values = new ArrayList<Object>();
+		List<Type> types = new ArrayList<Type>();
+		TUser user = userUtil.getLoginUser();
+		String userId = user.getId();
+		StringBuffer sb = new StringBuffer(
+				"select tt.* from ( select j.id,j.state, j.name,j.create_time, "
+				+ " (SELECT c.custom_name FROM t_custom c WHERE c.id = j.custom_id) AS custom_name,  "
+				+ " CASE "
+				+ "     WHEN j.create_user = ?  "
+				+ "     THEN 'my'  "
+				+ "      WHEN ? IN ( "
+				+ " 	     SELECT u.id FROM  t_user u WHERE  "
+				+ " 	     (u.team IN ( SELECT m.user_id FROM t_job_team m WHERE m.job_id = j.id)) "
+				+ " 	     OR "
+				+ " 	     (u.id IN ( SELECT m.user_id FROM t_job_team m WHERE m.job_id = j.id)) "
+				+ "      ) "
+				+ "     THEN 'team'  "
+				+ "     ELSE 'other'  "
+				+ "   END AS beyond , "
+				+ " CASE WHEN r.id IS NULL THEN '0' ELSE '1' END AS ispub  "
+
+				+ " FROM t_job j LEFT JOIN t_resume_job r ON j.id = r.job_id ) tt "
+				+ " WHERE 1=1 and (tt.beyond = 'team' or tt.beyond = 'my') ");
+		values.add(userId);
+		types.add(StringType.INSTANCE);
+		values.add(userId);
+		types.add(StringType.INSTANCE);
+		
+		sb.append(" ORDER BY tt.ispub desc,tt.create_time DESC ");
+		
+		srcSql.setSrcSql(sb.toString());
+		srcSql.setTypes(types.toArray(new Type[0]));
+		srcSql.setValues(values.toArray());
+		
+		return pagingSearch(params, pageParams, srcSql);
+	}
+
+	/**
+	 * 推荐简历
+	 * @param resumeId
+	 * @param customId
+	 * @return
+	 */
+	@Transactional
+	public FormResult pub(String resumeId, String jobId) {
+		FormResult ret = new FormResult();
+		//删除旧推荐-防止重复推荐
+		dao.executeDelOrUpdateSql(
+				"delete from t_resume_job where job_id = ? and resume_id = ? ",
+				new Object[]{jobId, resumeId}, 
+				new Type[]{StringType.INSTANCE, StringType.INSTANCE});
+		TResumeJob resumeJob = new TResumeJob();
+		resumeJob.setId(UUID.randomUUID().toString());
+		resumeJob.setJobId(jobId);
+		resumeJob.setResumeId(resumeId);
+		resumeJob.setRecomState("待处理");
+		resumeJob.setRecomTime(new Date());
+		resumeJob.setRecomUser(getLoginUserId());
+		resumeJob.setCreateUser(getLoginUserId());
+		resumeJob.setVerifyState("审核中");
+		dao.save(resumeJob);
+		ret.setSuccess(FormResult.SUCCESS);
+		return ret;
+	}
+	
+	/**
+	 * 取消推荐简历
+	 * @param resumeId
+	 * @param customId
+	 * @return
+	 */
+	@Transactional
+	public FormResult canclePub(String resumeId, String jobId) {
+		FormResult ret = new FormResult();
+		//删除旧推荐-防止重复推荐
+		dao.executeDelOrUpdateSql(
+				"delete from t_resume_job where job_id = ? and resume_id = ? ",
+				new Object[]{jobId, resumeId}, 
+				new Type[]{StringType.INSTANCE, StringType.INSTANCE});
+		ret.setSuccess(FormResult.SUCCESS);
 		return ret;
 	}
 

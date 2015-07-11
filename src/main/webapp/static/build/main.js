@@ -2067,31 +2067,141 @@ app.controller('JobMgrViewJobCtrl',
 	$scope.isReady = false;
 	
 	//请求职位信息
-	$http.post("job/getJobViewById", {id: jobId}).success(function(data){
-		$scope.job = data.job;
-		$scope.custom = data.custom;
-		$scope.inteamresumes = data.inteamresumes;
-		$scope.pubresumes = data.pubresumes;
-		$scope.isReady = true;
-	});
+	var loadViewInfo = function(){
+		$http.post("job/getJobViewById", {id: jobId}).success(function(data){
+			$scope.job = data.job;
+			$scope.custom = data.custom;
+			$scope.inteams = data.inteamresumes;
+			$scope.pubresumes = data.pubresumes;
+			$scope.jobcomms = data.jobcomms;
+			$scope.isReady = true;
+		});
+	};
+	loadViewInfo();
 	
-	//向企业推荐人选
-	$scope.updateInteamsResumes = function(ids){
-		
+	//向企业投递简历
+	$scope.pubResume = function(id){
+		$http.post("job/pubResume", {rjId: id}).success(function(data){
+			$scope.formresult = data;
+			if(data.success == 1){
+				loadViewInfo();
+			}
+		});
+	};
+	//取消投递简历
+	$scope.cancleResume = function(id){
+		$http.post("job/cancleResume", {rjId: id}).success(function(data){
+			$scope.formresult = data;
+			if(data.success == 1){
+				loadViewInfo();
+			}
+		});
 	};
 	
 	//审核向企业投递的简历
-	$scope.updatePubResumes = function(ids){
-		
+	$scope.verify = function(id, status){
+		$http.post("job/verifyResume", {rjId: id, status: status})
+			.success(function(data){
+				$scope.formresult = data;
+				if(data.success == 1){
+					loadViewInfo();
+				}
+		});
 	};
 	
 	//添加交流信息
 	$scope.addComm = function(){
-		
+		$http.post("job/editJobComm", {jobId: jobId, content: $scope.addcomm})
+			.success(function(data){
+				$scope.formresult = data;
+				if(data.success == 1){
+					loadViewInfo();
+				}
+		});
+	};
+	//删除交流信息
+	$scope.delComm = function(id){
+		$http.post("job/delJobComm", {id: id})
+		.success(function(data){
+			$scope.formresult = data;
+			if(data.success == 1){
+				loadViewInfo();
+			}
+		});
 	};
 	
 });
 app.factory('JobService', [ '$http', function($http) {
+	return {
+		//
+		test: function(params, cb){
+			$http.post("formdesign/formdatadel", params).success(function(data){
+				if(cb) cb(data);
+			});
+		}
+	};
+}]);
+//绩效管理
+app.controller('PerformanceMgrListCtrl',
+		function($scope, $http, $routeParams, ngTableParams,
+				PerformanceService, $rootScope) {
+	$rootScope.menu = "performance";
+	
+	//分页查询
+	var initpage = 1,
+		initrows = 10;
+	$scope.search = {};
+	$scope.queryParams = {rows: initrows};
+	$scope.initParams = function(pageNotChange){
+		var iPage = initpage;
+		if(pageNotChange){
+			iPage = $scope.queryParams.page;
+		}
+		var temp = {
+				page: iPage,
+				rows: $scope.queryParams.rows,
+				isreload: true
+			};
+		angular.extend(temp, $scope.search);
+		angular.extend($scope.queryParams, temp);
+	};
+	$scope.initParams();
+	/*重新加载*/
+	$scope.reload = function(pageNotChange){
+		$scope.initParams(pageNotChange);
+		$scope.tableParams.reload();
+	};
+	$scope.tableParams = new ngTableParams({
+		page: initpage,
+		count: initrows
+	}, {
+		total: 0,
+		getData: function($defer, params) {
+			if(!$scope.queryParams.isreload){
+				$scope.queryParams.page = params.page();
+				$scope.queryParams.rows = params.count();
+				$scope.queryParams.total = params.total();
+			}else{
+				$scope.queryParams.isreload = false;
+			}
+			$http.post("performance/list", $scope.queryParams).success(function(data){
+				var total = data.total;
+				$scope.queryParams.total = total;
+				params.total(total);
+				params.page($scope.queryParams.page);
+				$defer.resolve(data.rows);
+			});
+		}
+	});
+
+	//监控查询条件
+	$scope.$watch('search', function(newValue, oldValue){
+		if(newValue == oldValue) return;
+		$scope.reload();
+	}, true);
+	
+});
+app.factory('PerformanceService', [ '$http', function($http) {
 	return {
 		//
 		test: function(params, cb){
@@ -2217,76 +2327,6 @@ app.factory('PubService', [ '$http', function($http) {
 		}
 	};
 }]);
-//绩效管理
-app.controller('PerformanceMgrListCtrl',
-		function($scope, $http, $routeParams, ngTableParams,
-				PerformanceService, $rootScope) {
-	$rootScope.menu = "performance";
-	
-	//分页查询
-	var initpage = 1,
-		initrows = 10;
-	$scope.search = {};
-	$scope.queryParams = {rows: initrows};
-	$scope.initParams = function(pageNotChange){
-		var iPage = initpage;
-		if(pageNotChange){
-			iPage = $scope.queryParams.page;
-		}
-		var temp = {
-				page: iPage,
-				rows: $scope.queryParams.rows,
-				isreload: true
-			};
-		angular.extend(temp, $scope.search);
-		angular.extend($scope.queryParams, temp);
-	};
-	$scope.initParams();
-	/*重新加载*/
-	$scope.reload = function(pageNotChange){
-		$scope.initParams(pageNotChange);
-		$scope.tableParams.reload();
-	};
-	$scope.tableParams = new ngTableParams({
-		page: initpage,
-		count: initrows
-	}, {
-		total: 0,
-		getData: function($defer, params) {
-			if(!$scope.queryParams.isreload){
-				$scope.queryParams.page = params.page();
-				$scope.queryParams.rows = params.count();
-				$scope.queryParams.total = params.total();
-			}else{
-				$scope.queryParams.isreload = false;
-			}
-			$http.post("performance/list", $scope.queryParams).success(function(data){
-				var total = data.total;
-				$scope.queryParams.total = total;
-				params.total(total);
-				params.page($scope.queryParams.page);
-				$defer.resolve(data.rows);
-			});
-		}
-	});
-
-	//监控查询条件
-	$scope.$watch('search', function(newValue, oldValue){
-		if(newValue == oldValue) return;
-		$scope.reload();
-	}, true);
-	
-});
-app.factory('PerformanceService', [ '$http', function($http) {
-	return {
-		//
-		test: function(params, cb){
-			$http.post("formdesign/formdatadel", params).success(function(data){
-				if(cb) cb(data);
-			});
-		}
-	};
-}]);
 //简历管理-录入简历
 app.controller('ResumeMgrInResumeCtrl',
 		function($scope, $http, $routeParams, ngTableParams,
@@ -2349,6 +2389,13 @@ app.controller('ResumeMgrInResumeCtrl',
 		});
 	}else{//新增
 		$scope.isReady = true;
+		
+		$scope.target = {};
+		$scope.resumeDatas = [];
+		$scope.resumeEdus = [];
+		$scope.resumeJobs = [];
+		$scope.resumeLanguages = [];
+		$scope.resumeWorkhistorys = [];
 	}
 	
 	//提交基本信息
@@ -2477,7 +2524,8 @@ app.controller('ResumeMgrInResumeCtrl',
 						resume_id: item.resumeId,
 						time_begin: item.timeBegin,
 						time_end: item.timeEnd,
-						content: item.content
+						content: item.content,
+						company: item.company
 					});
 					$scope.workhistory = {};
 					if(next){
@@ -2580,7 +2628,7 @@ app.controller('ResumeMgrInResumeCtrl',
 					});
 					$scope.language = {};
 					if(next){
-						$scope.show = "icon";
+						$scope.show = "atta";
 					}
 				}
 			});
@@ -2792,6 +2840,7 @@ app.controller('ResumePubListCtrl',
 	$rootScope.menu = "resume";
 	
 	var resumeId = $routeParams.id;
+	$scope.resumeId = resumeId;
 	
 	//分页查询
 	var initpage = 1,
@@ -2830,7 +2879,7 @@ app.controller('ResumePubListCtrl',
 			}else{
 				$scope.queryParams.isreload = false;
 			}
-			$http.post("custom/list", $scope.queryParams).success(function(data){
+			$http.post("resume/getCustomList", $scope.queryParams).success(function(data){
 				var total = data.total;
 				$scope.queryParams.total = total;
 				params.total(total);
@@ -2848,14 +2897,14 @@ app.controller('ResumePubListCtrl',
 	
 	//推荐
 	$scope.pub = function(item){
-		$http.post("resume/pub", {resumeId: resumeId, customId: item.id}).success(function(data){
+		$http.post("resume/pub", {resumeId: resumeId, jobId: item.id}).success(function(data){
 			$scope.formresult = data;
 			$scope.reload(true);
 		});
 	};
 	//取消推荐
 	$scope.canclePub = function(item){
-		$http.post("resume/canclePub", {resumeId: resumeId, customId: item.id}).success(function(data){
+		$http.post("resume/canclePub", {resumeId: resumeId, jobId: item.id}).success(function(data){
 			$scope.formresult = data;
 			$scope.reload(true);
 		});

@@ -61,4 +61,54 @@ public class JobController extends BaseController {
 		return jobService.edit(Job);
 	}
 	
+	/**
+	 * 向企业投递简历
+	 * @return
+	 */
+	@RequestMapping("pubResume")
+	@ResponseBody
+	public FormResult pubResume(String rjId){
+		return jobService.pubResume(rjId);
+	}
+	
+	/**
+	 * 取消向企业投递简历
+	 * @return
+	 */
+	@RequestMapping("cancleResume")
+	@ResponseBody
+	public FormResult cancleResume(String rjId){
+		return jobService.cancleResume(rjId);
+	}
+	
+	/**
+	 * 审核向企业投递简历
+	 * @return
+	 */
+	@RequestMapping("verifyResume")
+	@ResponseBody
+	public FormResult verifyResume(String rjId, String status){
+		return jobService.verifyResume(rjId, status);
+	}
+	
+	/**
+	 * 操作职位沟通记录-新增或者编辑
+	 * @return
+	 */
+	@RequestMapping("editJobComm")
+	@ResponseBody
+	public FormResult editJobComm(String id, String jobId, String content){
+		return jobService.editJobComm(id, jobId, content);
+	}
+	
+	/**
+	 * 操作职位沟通记录-删除
+	 * @return
+	 */
+	@RequestMapping("delJobComm")
+	@ResponseBody
+	public FormResult delJobComm(String id){
+		return jobService.delJobComm(id);
+	}
+	
 }

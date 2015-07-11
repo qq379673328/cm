@@ -60,6 +60,13 @@ app.controller('ResumeMgrInResumeCtrl',
 		});
 	}else{//新增
 		$scope.isReady = true;
+		
+		$scope.target = {};
+		$scope.resumeDatas = [];
+		$scope.resumeEdus = [];
+		$scope.resumeJobs = [];
+		$scope.resumeLanguages = [];
+		$scope.resumeWorkhistorys = [];
 	}
 	
 	//提交基本信息
@@ -188,7 +195,8 @@ app.controller('ResumeMgrInResumeCtrl',
 						resume_id: item.resumeId,
 						time_begin: item.timeBegin,
 						time_end: item.timeEnd,
-						content: item.content
+						content: item.content,
+						company: item.company
 					});
 					$scope.workhistory = {};
 					if(next){
@@ -291,7 +299,7 @@ app.controller('ResumeMgrInResumeCtrl',
 					});
 					$scope.language = {};
 					if(next){
-						$scope.show = "icon";
+						$scope.show = "atta";
 					}
 				}
 			});

@@ -10,12 +10,16 @@ import java.util.UUID;
 import javax.annotation.Resource;
 
 import org.hibernate.type.StringType;
+import org.hibernate.type.TimestampType;
 import org.hibernate.type.Type;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import cn.com.sinosoft.common.model.TCustom;
 import cn.com.sinosoft.common.model.TJob;
+import cn.com.sinosoft.common.model.TJobCommunication;
+import cn.com.sinosoft.common.model.TJobTeam;
+import cn.com.sinosoft.common.model.TResumeCommunication;
 import cn.com.sinosoft.common.util.StrUtils;
 import cn.com.sinosoft.core.service.SimpleServiceImpl;
 import cn.com.sinosoft.core.service.model.FormResult;
@@ -81,14 +85,32 @@ public class JobService extends SimpleServiceImpl {
 			ret.put("custom", dao.queryById(job.getCustomId(), TCustom.class));
 			//向企业投递的简历
 			ret.put("pubresumes", dao.queryListBySql(
-					"select * from t_resume_job where job_id = ? and recom_state = '已推荐' ",
+					"select t.*,j.recom_state,j.verify_state,"
+					+ "j.id as jid,j.recom_time, j.verify_time, "
+					+ " getDictName(j.recom_user) recom_user_desc"
+					+ " from t_resume t,t_resume_job j"
+					+ " where t.id = j.resume_id and j.job_id = ?"
+					+ " and j.recom_state = '已推荐' ",
 					new Object[]{id},
 					new Type[]{StringType.INSTANCE}));
 			//内部推荐
 			ret.put("inteamresumes", dao.queryListBySql(
-					"select * from t_resume_job where job_id = ? ",
+					"select t.*,j.recom_state,j.verify_state,"
+					+ "j.id as jid,j.recom_time, j.verify_time, "
+					+ " getDictName(j.recom_user) recom_user_desc "
+					+ " from t_resume t,t_resume_job j"
+					+ " where t.id = j.resume_id and j.job_id = ? ",
 					new Object[]{id},
 					new Type[]{StringType.INSTANCE}));
+			//职位交流信息
+			ret.put("jobcomms", dao.queryListBySql(
+					"select t.*,"
+					+ " getDictName(t.create_user) create_user_desc "
+					+ " from t_job_communication t"
+					+ " where t.job_id = ? ",
+					new Object[]{id},
+					new Type[]{StringType.INSTANCE}));
+			
 		}
 		return ret;
 	}
@@ -104,6 +126,27 @@ public class JobService extends SimpleServiceImpl {
 	@Transactional
 	public FormResult edit(TJob job) {
 		FormResult ret = new FormResult();
+		
+		//保存执行团队信息
+		dao.executeDelOrUpdateSql("delete from t_job_team where job_id = ? ",
+				new Object[]{job.getId()},
+				new Type[]{StringType.INSTANCE});
+		if(!StrUtils.isNull(job.getTeam())){
+			List<TJobTeam> ts = new ArrayList<TJobTeam>();
+			String teams = job.getTeam();
+			String[] tIds = teams.split(",");
+			for(String tId : tIds){
+				ts.add(
+						new TJobTeam(
+								UUID.randomUUID().toString(),
+								tId,
+								job.getId()));
+			}
+			if(ts.size() > 0){
+				dao.batchSave(ts);
+			}
+		}
+		
 		if(StrUtils.isNull(job.getId())){//新增
 			job.setId(UUID.randomUUID().toString());
 			job.setCreateUser(userUtil.getLoginUser().getId());
@@ -145,6 +188,95 @@ public class JobService extends SimpleServiceImpl {
 		}else{
 			return String.valueOf(items.get(0).get("id"));
 		}
+	}
+
+	/**
+	 * 向企业投递简历
+	 * @return
+	 */
+	@Transactional
+	public FormResult pubResume(String rjId) {
+		FormResult ret = new FormResult();
+		dao.executeDelOrUpdateSql(
+				"update t_resume_job set recom_state = ?, recom_time = ? where id = ?",
+				new Object[]{"已推荐", new Date(), rjId},
+				new Type[]{StringType.INSTANCE, TimestampType.INSTANCE, StringType.INSTANCE});
+		ret.setMessage("简历投递成功");
+		ret.setSuccess(FormResult.SUCCESS);
+		return ret;
+	}
+	
+	/**
+	 * 取消向企业投递简历
+	 * @return
+	 */
+	@Transactional
+	public FormResult cancleResume(String rjId) {
+		FormResult ret = new FormResult();
+		dao.executeDelOrUpdateSql(
+				"update t_resume_job set recom_state = ?, recom_time = ?"
+				+ ", verify_state = ? , verify_time = ? where id = ?",
+				new Object[]{null, null, null, null, rjId},
+				new Type[]{StringType.INSTANCE, TimestampType.INSTANCE,
+						StringType.INSTANCE, TimestampType.INSTANCE,
+						StringType.INSTANCE});
+		ret.setMessage("简历取消投递成功");
+		ret.setSuccess(FormResult.SUCCESS);
+		return ret;
+	}
+	
+	/**
+	 * 审核向企业投递的简历
+	 * @return
+	 */
+	@Transactional
+	public FormResult verifyResume(String rjId, String status) {
+		FormResult ret = new FormResult();
+		dao.executeDelOrUpdateSql(
+				"update t_resume_job set "
+				+ " verify_state = ?, verify_time = ?, verify_user = ? "
+				+ " where id = ?",
+				new Object[]{status, new Date(), getLoginUserId() , rjId},
+				new Type[]{StringType.INSTANCE, TimestampType.INSTANCE,
+						StringType.INSTANCE, StringType.INSTANCE});
+		ret.setSuccess(FormResult.SUCCESS);
+		return ret;
+	}
+	
+	/**
+	 * 操作职位沟通记录-新增或者编辑
+	 * @return
+	 */
+	@Transactional
+	public FormResult editJobComm(String id, String jobId, String content) {
+		FormResult ret = new FormResult();
+		TJobCommunication comm = new TJobCommunication();
+		if(StrUtils.isNull(id)){
+			id = UUID.randomUUID().toString();
+		}
+		comm.setId(id);
+		comm.setJobId(jobId);
+		comm.setContent(content);
+		comm.setCreateTime(new Date());
+		comm.setCreateUser(getLoginUserId());
+		dao.getTemplate().saveOrUpdate(comm);
+		ret.setSuccess(FormResult.SUCCESS);
+		return ret;
+	}
+	
+	/**
+	 * 操作职位沟通记录-删除
+	 * @return
+	 */
+	@Transactional
+	public FormResult delJobComm(String id) {
+		FormResult ret = new FormResult();
+		dao.executeDelOrUpdateSql(
+				"delete from t_job_communication where id = ? ",
+				new Object[]{id},
+				new Type[]{StringType.INSTANCE});
+		ret.setSuccess(FormResult.SUCCESS);
+		return ret;
 	}
 
 }

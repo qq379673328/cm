@@ -27,9 +27,9 @@
 			<a class="item" ng-show="resume.id" ng-click="show='language'"
 				ng-class="{true: 'select', false: 'unselect'}[show=='language']" >语言能力</a>
 			<a ng-show="!resume.id" class="disabled">语言能力</a>
-			<a class="item" ng-show="resume.id" ng-click="show='icon'"
+			<!-- <a class="item" ng-show="resume.id" ng-click="show='icon'"
 				ng-class="{true: 'select', false: 'unselect'}[show=='icon']" >个人头像</a>
-			<a ng-show="!resume.id" class="disabled">个人头像</a>
+			<a ng-show="!resume.id" class="disabled">个人头像</a> -->
 			<a class="item" ng-show="resume.id" ng-click="show='atta'"
 				ng-class="{true: 'select', false: 'unselect'}[show=='atta']" >简历附件</a>
 			<a ng-show="!resume.id" class="disabled">简历附件</a>
@@ -368,12 +368,14 @@
 					<td>语种</td>
 					<td>读写能力</td>
 					<td>听说能力</td>
+					<td>内容</td>
 					<td></td>
 				</tr>
 				<tr ng-repeat="lan in resumeLanguages">
 					<td>{{lan.lan_type}}</td>
 					<td>{{lan.read_ab}}</td>
 					<td>{{lan.listen_ab}}</td>
+					<td>{{lan.content}}</td>
 					<td>
 						<div class="btn btn-small btn-danger" 
 							ng-show="!isrequest"
@@ -434,7 +436,7 @@
 						<div class="btn btn-lblue" 
 							ng-show="!isrequest"
 							ng-click="saveLanguage(true);">
-							保存 语言能力 并编辑 个人头像
+							保存 语言能力 并编辑 简历附件
 						</div>
 					</td>
 				</tr>

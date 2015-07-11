@@ -127,10 +127,10 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat="work in resumeWorkhistorys">
-					<td>{{work.time_begin}} - {{work.time_end}}</td>
-					<td>{{work.company}}</td>
-					<td>{{work.content}}</td>
+				<tr ng-repeat="work in resumeWorkhistorys" ng-class="{true:'tr-odd' , false: 'tr-even'}[$index%2 == 0]">
+					<td style="width: 200px;">{{work.time_begin}} - {{work.time_end}}</td>
+					<td style="width: 300px;">{{work.company}}</td>
+					<td style="width: auto;">{{work.content}}</td>
 				</tr>
 			</tbody>
 		</table>
@@ -152,7 +152,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat="edu in resumeEdus">
+				<tr ng-repeat="edu in resumeEdus" ng-class="{true:'tr-odd' , false: 'tr-even'}[$index%2 == 0]">
 					<td>{{edu.time_begin}} - {{edu.time_end}}</td>
 					<td>{{edu.org}}</td>
 					<td>{{edu.course}}</td>
@@ -177,7 +177,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat="lan in resumeLanguages">
+				<tr ng-repeat="lan in resumeLanguages" ng-class="{true:'tr-odd' , false: 'tr-even'}[$index%2 == 0]">
 					<td>{{lan.lan_type}}</td>
 					<td>{{lan.read_ab}}</td>
 					<td>{{lan.listen_ab}}</td>
@@ -218,10 +218,10 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat="comm in resumeComms">
-					<td>{{comm.create_time | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
-					<td>{{comm.content}}</td>
-					<td>
+				<tr ng-repeat="comm in resumeComms" ng-class="{true:'tr-odd' , false: 'tr-even'}[$index%2 == 0]">
+					<td style="width: 200px;">{{comm.create_time | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+					<td style="width: auto;">{{comm.content}}</td>
+					<td style="width: 200px;">
 						<a class="btn btn-small btn-success"
 							ng-click="comm.prepareDel = !comm.prepareDel"
 							>删除</a>

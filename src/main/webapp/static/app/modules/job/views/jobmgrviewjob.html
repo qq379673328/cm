@@ -113,7 +113,6 @@
 		<table>
 			<thead>
 				<tr>
-					<th>操作</th>
 					<th>人选姓名</th>
 					<th>最近所在公司</th>
 					<th>当前职务</th>
@@ -122,29 +121,33 @@
 					<th>推荐时间</th>
 					<th>评语或沟通记录</th>
 					<th>推荐人</th>
+					<th>&nbsp;</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr ng-show="!inteams || inteams.length == 0 ">
 					<td>无人选</td>
 				</tr>
-				<tr ng-repeat="item in inteams">
-					<td><input type="checkbox" ng-model="checkpub" /></td>
+				<tr ng-repeat="item in inteams" ng-class="{true:'tr-odd' , false: 'tr-even'}[$index%2 == 0]">
 					<td>{{item.name}}</td>
 					<td>未实现</td>
 					<td>未实现</td>
-					<td>{{job.phone}}</td>
-					<td>{{job.recom_state}}</td>
-					<td>{{job.recom_time | date : 'yyyy-Mm-dd Hh:mm:ss'}}</td>
-					<td>{{job.comm}}</td>
-					<td>{{job.recom_user}}</td>
-				</tr>
-				<tr>
+					<td>{{item.phone}}</td>
+					<td>{{item.recom_state}}</td>
+					<td>{{item.recom_time | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+					<td>{{item.comm}}</td>
+					<td>{{item.recom_user}}</td>
 					<td>
-						<input type="checkbox" />全选
-						<a class="btn btn-success" ng-click="recom(1);">推荐</a>
-						&nbsp;
-						<a class="btn btn-error" ng-click="recom(0);">不合适</a>
+						<a
+							ng-show="item.recom_state == '待处理' || !item.recom_state "
+							class="btn btn-small btn-success btn-w4"
+							ng-click="pubResume(item.jid)"
+							>投递</a>
+						<a 
+							ng-show="item.recom_state == '已推荐' "
+							class="btn btn-small btn-success btn-w4"
+							ng-click="cancleResume(item.jid)"
+							>取消投递</a>
 					</td>
 				</tr>
 			</tbody>
@@ -160,7 +163,6 @@
 		<table>
 			<thead>
 				<tr>
-					<th>操作</th>
 					<th>人选姓名</th>
 					<th>最近所在公司</th>
 					<th>当前职务</th>
@@ -170,40 +172,114 @@
 					<th>评语或沟通记录</th>
 					<th>投递时间</th>
 					<th>推荐人</th>
+					<th>当前状态</th>
+					<th></th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr ng-show="!pubteams || pubteams.length == 0 ">
+				<tr ng-show="!pubresumes || pubresumes.length == 0 ">
 					<td>无人选</td>
 				</tr>
-				<tr ng-repeat="item in pubteams">
-					<td><input type="checkbox" ng-model="checkpub" /></td>
+				<tr ng-repeat="item in pubresumes" ng-class="{true:'tr-odd' , false: 'tr-even'}[$index%2 == 0]">
 					<td>{{item.name}}</td>
 					<td>未实现</td>
 					<td>未实现</td>
-					<td>{{job.phone}}</td>
+					<td>{{item.phone}}</td>
 					<td>未实现</td>
 					<td>未实现</td>
-					<td>{{job.verify_time | date : 'yyyy-Mm-dd Hh:mm:ss'}}</td>
-					<td>{{job.recom_user}}</td>
-				</tr>
-				<tr>
-					<input type="checkbox" />全选
-					<a ng-click="verify(1);">初试</a>
-					<a ng-click="verify(2);">复试</a>
-					<a ng-click="verify(3);">终试</a>
-					<a ng-click="verify(4);">offer</a>
-					<a ng-click="verify(5);">入职</a>
-					<a ng-click="verify(6);">审核不通过</a>
-					<a ng-click="verify(7);">面试不通过</a>
-					<a ng-click="verify(8);">候选人放弃</a>
-					<a ng-click="verify(9);">离职</a>
+					<td>未实现</td>
+					<td>{{item.verify_time | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+					<td>{{item.recom_user}}</td>
+					<td>
+						<span>{{item.verify_state}}</span>
+						<span>{{item.verify_time | date : 'yyyy-MM-dd'}}</span>
+					</td>
+					<td>
+						<a class="btn btn-small btn-success"
+							ng-click="item.prepareHandle = !item.prepareHandle"
+							>操作</a>
+						<table ng-show="item.prepareHandle">
+							<tr>
+								<td colspan="5"></td>
+								<td>
+									<a class="btn btn-small btn-success"
+										ng-click="verify(item.jid, '初试');item.ishandling=true;"
+										>初试</a>
+									<a class="btn btn-small btn-success"
+										ng-click="verify(item.jid,'复试');item.ishandling=true;"
+										>复试</a>
+									<a class="btn btn-small btn-success"
+										ng-click="verify(item.jid,'终试');item.ishandling=true;"
+										>终试</a>
+									<br/>
+									<a class="btn btn-small btn-info"
+										ng-click="verify(item.jid,'offer');item.ishandling=true;"
+										>offer</a>
+									<a class="btn btn-small btn-info"
+										ng-click="verify(item.jid,'入职');item.ishandling=true;"
+										>入职</a>
+									<br/>
+									<a class="btn btn-small btn-danger btn-w4"
+										ng-click="verify(item.jid,'审核不通过');item.ishandling=true;"
+										>审核不通过</a>
+									<a class="btn btn-small btn-danger btn-w4"
+										ng-click="verify(item.jid,'面试不通过');item.ishandling=true;"
+										>面试不通过</a>
+									<a class="btn btn-small btn-danger btn-w4"
+										ng-click="verify(item.jid,'候选人放弃');item.ishandling=true;"
+										>候选人放弃</a>
+									<br/>
+									<a class="btn btn-small btn-danger"
+										ng-click="verify(item.jid,'离职');item.ishandling=true;"
+										>离职</a>
+								</td>
+							</tr>
+						</table>
+					</td>
 				</tr>
 			</tbody>
 		</table>
 	</div>
 	
-	
+	<div class="mytable">
+		<div class="title">
+			<span>
+				职位沟通记录
+			</span>
+		</div>
+		<table>
+			<thead>
+				<tr>
+					<th>操作人</th>
+					<th>内容</th>
+					<th>时间</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="comm in jobcomms"  ng-class="{true:'tr-odd' , false: 'tr-even'}[$index%2 == 0]">
+					<td style="width:100px;">{{comm.create_user_desc}}</td>
+					<td style="width:auto;">{{comm.content}}</td>
+					<td style="width:200px;;">{{comm.create_time | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+					<td style="width:100px;">
+						<a class="btn btn-small btn-success btn-w4"
+							ng-click="item.prepareDel = !item.prepareDel"
+							>删除</a>
+						<table ng-show="item.prepareDel">
+							<tr>
+								<td colspan="5"></td>
+								<td>
+									<a class="btn btn-small btn-danger btn-w4"
+										ng-click="delComm(comm.id);"
+										>确认删除</a>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 	
 	<div class="mytable">
 		<div class="title">
@@ -226,5 +302,5 @@
 			</tbody>
 		</table>
 	</div>
-	
+	<div core-formresult result="formresult"></div>
 </div>

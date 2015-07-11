@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-7-11 12:12:27 by Hibernate Tools 3.2.2.GA -->
+<hibernate-mapping>
+    <class name="cn.com.sinosoft.common.model.TResumeJob" table="t_resume_job" catalog="cm">
+        <id name="id" type="string">
+            <column name="id" length="40" />
+            <generator class="assigned" />
+        </id>
+        <property name="resumeId" type="string">
+            <column name="resume_id" length="40" not-null="true">
+                <comment>&#231;&#174;&#128;&#229;&#142;&#134;id</comment>
+            </column>
+        </property>
+        <property name="jobId" type="string">
+            <column name="job_id" length="40" not-null="true">
+                <comment>&#232;&#129;&#140;&#228;&#189;&#141;id</comment>
+            </column>
+        </property>
+        <property name="verifyState" type="string">
+            <column name="verify_state" length="40">
+                <comment>&#229;&#174;&#161;&#230;&#160;&#184;&#231;&#138;&#182;&#230;&#128;&#129;</comment>
+            </column>
+        </property>
+        <property name="recomState" type="string">
+            <column name="recom_state" length="40">
+                <comment>&#230;&#142;&#168;&#232;&#141;&#144;&#231;&#138;&#182;&#230;&#128;&#129;</comment>
+            </column>
+        </property>
+        <property name="createTime" type="timestamp">
+            <column name="create_time" length="19">
+                <comment>&#229;&#136;&#155;&#229;&#187;&#186;&#230;&#151;&#182;&#233;&#151;&#180;</comment>
+            </column>
+        </property>
+        <property name="createUser" type="string">
+            <column name="create_user" length="40" not-null="true">
+                <comment>&#229;&#136;&#155;&#229;&#187;&#186;&#228;&#186;&#186;</comment>
+            </column>
+        </property>
+        <property name="recomTime" type="timestamp">
+            <column name="recom_time" length="19">
+                <comment>&#230;&#142;&#168;&#232;&#141;&#144;&#230;&#151;&#182;&#233;&#151;&#180;</comment>
+            </column>
+        </property>
+        <property name="verifyTime" type="timestamp">
+            <column name="verify_time" length="19">
+                <comment>&#229;&#174;&#161;&#230;&#160;&#184;&#230;&#151;&#182;&#233;&#151;&#180;</comment>
+            </column>
+        </property>
+        <property name="recomUser" type="string">
+            <column name="recom_user" length="40">
+                <comment>&#230;&#142;&#168;&#232;&#141;&#144;&#228;&#186;&#186;</comment>
+            </column>
+        </property>
+        <property name="verifyUser" type="string">
+            <column name="verify_user" length="40">
+                <comment>&#229;&#174;&#161;&#230;&#160;&#184;&#228;&#186;&#186;</comment>
+            </column>
+        </property>
+    </class>
+</hibernate-mapping>

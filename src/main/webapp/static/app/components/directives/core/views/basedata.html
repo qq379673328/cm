@@ -1,6 +1,5 @@
 <div>
 <!-- 下拉框类型 -->
-	<input ng-model="bindModel" />
 	<div ng-if="type=='select'">
 		<select
 			class="form-select"
@@ -9,29 +8,29 @@
 			ng-change="select(this);"
 			name="{{name}}">
 			<option value="">-- 请选择 --</option>
+		</select>
 	</div>
-</select>
 
-<!-- span 类型 -->
-<div ng-if="type=='span'">
-	<a ng-show="allSelectName" ng-click="click('', $event.target);">
-		{{allSelectName}}
-	</a>
-	<a ng-repeat="item in items" value="{{item[0]}}" ng-class="" ng-click="click(item[0], $event.target);">
-		{{item[1]}}
-	</a>
-</div>
+	<!-- span 类型 -->
+	<div ng-if="type=='span'">
+		<a ng-show="allSelectName" ng-click="click('', $event.target);">
+			{{allSelectName}}
+		</a>
+		<a ng-repeat="item in items" value="{{item[0]}}" ng-class="" ng-click="click(item[0], $event.target);">
+			{{item[1]}}
+		</a>
+	</div>
 
-<!-- radio 类型 -->
-<div ng-if="type=='radio'">
-	<span ng-show="allSelectName">
-		<input type="radio" name="{{name}}" value="" ng-click="click('');" />
-		<span>{{allSelectName}}</span>
-	</span>
-	<span ng-repeat="item in items">
-		<input type="radio" name="{{name}}" value="{{item[0]}}" ng-click="click(item[0]);" />
-		<span>{{item[1]}}</span>
-	</span>
-</div>
+	<!-- radio 类型 -->
+	<div ng-if="type=='radio'">
+		<span ng-show="allSelectName">
+			<input type="radio" name="{{name}}" value="" ng-click="click('');" />
+			<span>{{allSelectName}}</span>
+		</span>
+		<span ng-repeat="item in items">
+			<input type="radio" name="{{name}}" value="{{item[0]}}" ng-click="click(item[0]);" />
+			<span>{{item[1]}}</span>
+		</span>
+	</div>
 
 </div>

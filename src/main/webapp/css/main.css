@@ -206,10 +206,10 @@ textarea{
 .searchzone .title{
 	height: 40px;
 	line-height: 40px;
-	border-bottom: 1px solid #B7B7B7;
 	padding-left: 10px;
-	background-color: #F3F2F2;
+	background-color: #4396DB;
 	font-weight: bold;
+	color: #fff;
 }
 .searchzone .line{
 	width: 95%;
@@ -269,7 +269,6 @@ textarea{
 }
 .mytable .title{
 	background-color: #608BCA;
-	border: 1px solid #627FA8;
 	height: 35px;
 	line-height: 35px;
 	padding: 3px 20px;
@@ -320,11 +319,13 @@ textarea{
 }
 .mytable table thead{}
 .mytable table thead tr{
-	background-color: #D5D3D3;
+	background-color: #4396DB;
 	height: 40px;
 	line-height: 40px;
 	text-align: center;
 	font-weight: bold;
+	color: #fff;
+	font-size: 14px;
 }
 .mytable table thead tr th{}
 .mytable table tbody{}
@@ -761,10 +762,14 @@ hr {
 	padding: 5px;
 }
 .my-card{
-	width: 30%;
+	width: 300px;
 	float: left;
-	margin: 5px;
+	margin: 10px;
 	border: 1px solid #608BCA;	
+	color: #464549;
+	-webkit-box-shadow:0 0 10px rgba(96, 139, 202, 1);  
+	-moz-box-shadow:0 0 10px rgba(96, 139, 202, 1);  
+	box-shadow:0 0 10px rgba(96, 139, 202, 1);  
 }
 .my-card .icon{
 	width: 100px;
@@ -777,8 +782,8 @@ hr {
 }
 .my-card .info .line{
 	border-bottom: none;
-	line-height: 20px;
-	height: 20px;
+	line-height: 30px;
+	height: 30px;
 	text-align: left;
 }
 .none{
