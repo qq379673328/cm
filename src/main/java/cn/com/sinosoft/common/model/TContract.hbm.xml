@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated 2015-7-11 12:12:27 by Hibernate Tools 3.2.2.GA -->
+<!-- Generated 2015-7-12 11:28:58 by Hibernate Tools 3.2.2.GA -->
 <hibernate-mapping>
     <class name="cn.com.sinosoft.common.model.TContract" table="t_contract" catalog="cm">
         <id name="id" type="string">
@@ -51,6 +51,26 @@
         <property name="otherRequire" type="string">
             <column name="other_require" length="500">
                 <comment>&#229;&#133;&#182;&#228;&#187;&#150;&#232;&#166;&#129;&#230;&#177;&#130;</comment>
+            </column>
+        </property>
+        <property name="createTime" type="timestamp">
+            <column name="create_time" length="19">
+                <comment>&#229;&#136;&#155;&#229;&#187;&#186;&#230;&#151;&#182;&#233;&#151;&#180;</comment>
+            </column>
+        </property>
+        <property name="createUser" type="string">
+            <column name="create_user" length="40">
+                <comment>&#229;&#136;&#155;&#229;&#187;&#186;&#228;&#186;&#186;</comment>
+            </column>
+        </property>
+        <property name="updateTime" type="timestamp">
+            <column name="update_time" length="19">
+                <comment>&#230;&#155;&#180;&#230;&#150;&#176;&#230;&#151;&#182;&#233;&#151;&#180;</comment>
+            </column>
+        </property>
+        <property name="updateUser" type="string">
+            <column name="update_user" length="40">
+                <comment>&#230;&#155;&#180;&#230;&#150;&#176;&#228;&#186;&#186;</comment>
             </column>
         </property>
     </class>

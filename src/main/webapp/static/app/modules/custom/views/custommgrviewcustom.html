@@ -13,7 +13,7 @@
 				客户详情（客户编号：{{custom.id}}）
 			</span>
 			
-			<a class="spe" href="#custommgr/editcustom/{{custom.id}}">编辑客户信息</a>
+			<a ng-if="beyond=='my'" class="spe" href="#custommgr/editcustom/{{custom.id}}">编辑客户信息</a>
 		</div>
 		<table>
 			<tbody>
@@ -94,6 +94,8 @@
 			<span>
 				合同详情（合同编号：{{contract.id}}）
 			</span>
+			
+			<a ng-if="beyond=='my'" class="spe" href="#jobmgr/injob/{{custom.id}}">发布职位</a>
 		</div>
 		<table>
 			<tbody>
@@ -133,12 +135,12 @@
 		</table>
 	</div>
 	
-	<div class="mytable">
+	<div class="mytable" ng-if="custom.state=='签约运作'">
 		<div class="title">
 			<span>
 				合作职位情况
 			</span>
-			<a class="spe" href="#/jobmgr/injob/{{custom.id}}">发布新职位</a>
+			<a ng-if="beyond=='my'" class="spe" href="#/jobmgr/injob/{{custom.id}}">发布新职位</a>
 		</div>
 		<table>
 			<thead>
@@ -194,7 +196,7 @@
 	</div>
 	<hr />
 	
-	<div class="mytable">
+	<div class="mytable" ng-if="beyond=='my'">
 		<div class="title">
 			<span>
 				添加沟通记录

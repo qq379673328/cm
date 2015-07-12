@@ -62,6 +62,16 @@ public class JobController extends BaseController {
 	}
 	
 	/**
+	 * 编辑职位信息-删除
+	 * @return
+	 */
+	@RequestMapping("del")
+	@ResponseBody
+	public FormResult del(String id){
+		return jobService.del(id);
+	}
+	
+	/**
 	 * 向企业投递简历
 	 * @return
 	 */

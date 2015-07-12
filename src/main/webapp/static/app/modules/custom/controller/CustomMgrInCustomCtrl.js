@@ -40,7 +40,7 @@ app.controller('CustomMgrInCustomCtrl',
 	$scope.save = function(){
 		validFormAndSubmit(function(data){
 			if(data.success == "1"){//成功
-				$location.path("custommgr/list");
+				$location.path("custommgr/viewcustom/" + customId);
 			}
 		});
 	};
@@ -84,11 +84,11 @@ app.controller('CustomMgrInCustomCtrl',
 				//座机号码
 				contactLandline: {maxlength: 100},
 				//手机号码
-				contactCellphone: {maxlength: 100},
+				contactCellphone: {required: true,maxlength: 100},
 				//fax传真
 				contactFax: {maxlength: 100},
 				//电子邮件
-				contactEmail: {maxlength: 100},
+				contactEmail: {required: true,maxlength: 100},
 				//qq
 				contactQq: {maxlength: 100},
 				//微信

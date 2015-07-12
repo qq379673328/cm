@@ -49,7 +49,7 @@ public class ContractService extends SimpleServiceImpl {
 		List<Object> values = new ArrayList<Object>();
 		List<Type> types = new ArrayList<Type>();
 		StringBuffer sb = new StringBuffer(" SELECT t.*, cus.custom_name,"
-				+ " getDictName(cus.create_user) create_user, "
+				+ " getDictName(t.create_user) create_user_desc, "
 				+ " IFNULL(atta.cou, 0) attacou "
 				+ " from t_contract t "
 				+ " left join  t_custom cus on t.custom_id = cus.id "
@@ -123,8 +123,12 @@ public class ContractService extends SimpleServiceImpl {
 		if(StrUtils.isNull(contract.getId())){//新增
 			contract.setId(UUID.randomUUID().toString());
 			contract.setInDate(new Date());
+			contract.setCreateTime(new Date());
+			contract.setCreateUser(getLoginUserId());
 			dao.save(contract);
 		}else{//更新
+			contract.setUpdateTime(new Date());
+			contract.setUpdateUser(getLoginUserId());
 			dao.update(contract);
 		}
 		

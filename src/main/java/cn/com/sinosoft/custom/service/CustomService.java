@@ -120,7 +120,9 @@ public class CustomService extends SimpleServiceImpl {
 	 */
 	public Object getCustomById(String id) {
 		Map<String, Object> ret = new HashMap<String, Object>();
-		if(StrUtils.isNull(id)){
+		if(StrUtils.isNull(id) 
+				|| !getCustomType(id).equals(CUSTOMTYPE_MY)//非本人发布-无权编辑
+				){
 			return ret;
 		}
 		//客户信息
@@ -148,10 +150,14 @@ public class CustomService extends SimpleServiceImpl {
 	 * @param attas 附件信息
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	@Transactional
 	public FormResult edit(TCustom custom, String commun, String attas) {
 		FormResult ret = new FormResult();
 		String userId = userUtil.getLoginUser().getId();
+		
+		//原始状态
+		String oldState = null;
 		if(StrUtils.isNull(custom.getId())){//新增
 			custom.setId(UUID.randomUUID().toString());
 			custom.setCreateTime(new Date());
@@ -160,9 +166,20 @@ public class CustomService extends SimpleServiceImpl {
 			custom.setLastUpdateUser(userId);
 			dao.save(custom);
 		}else{//更新
+			//获取原始客户状态
+			TCustom oldCustom = dao.queryById(custom.getId(), TCustom.class);
+			oldState = oldCustom.getState();
+			if(oldCustom != null && 
+					(("签约终止".equals(oldState) || "签约暂停".equals(oldState)) 
+							&& "潜在客户".equals(custom.getState()))){
+				ret.setSuccess(FormResult.ERROR);
+				ret.setMessage("'签约终止'、'签约暂停'运作状态不能修改为'潜在运行'状态");
+				return ret;
+			}
+			
 			custom.setLastUpdateTime(new Date());
 			custom.setLastUpdateUser(userId);
-			dao.update(custom);
+			dao.getTemplate().merge(custom);
 		}
 		//保存沟通记录
 		if(!StrUtils.isNull(commun)){
@@ -204,6 +221,44 @@ public class CustomService extends SimpleServiceImpl {
 			}
 			if(ts.size() > 0){
 				dao.batchSave(ts);
+			}
+		}
+		
+		//修改客户状态
+		if(oldState != null && !oldState.equals(custom.getState())){
+			//合同状态
+			String contractState = null;
+			String jobState = null;
+			if("签约暂停".equals(custom.getState())){
+				contractState = "暂停";
+				jobState = "暂停";
+			}
+			if("签约终止".equals(custom.getState())){
+				contractState = "终止";
+				jobState = "结束";
+			}
+			//更新最新合同状态
+			if(contractState != null){
+				//获取最新合同
+				List<Map<String, String>> items = dao.queryListBySql(
+						 "SELECT id FROM t_contract "
+						+ "WHERE custom_id = ? "
+						+ "ORDER BY create_time DESC LIMIT 1",
+						new Object[]{custom.getId()},
+						new Type[]{StringType.INSTANCE});
+				if(items.size() > 0){
+					String contractId = items.get(0).get("id");
+					//更新合同状态
+					dao.executeDelOrUpdateSql(
+							"UPDATE t_contract SET state = ? WHERE id = ? ", 
+									new Object[]{contractState, contractId},
+									new Type[]{StringType.INSTANCE, StringType.INSTANCE});
+					//更新职位状态
+					dao.executeDelOrUpdateSql(
+							"UPDATE t_job SET state = ? WHERE custom_id = ? and contract_id = ? ", 
+									new Object[]{jobState, custom.getId(), contractId},
+									new Type[]{StringType.INSTANCE, StringType.INSTANCE, StringType.INSTANCE});
+				}
 			}
 		}
 		
@@ -342,7 +397,56 @@ public class CustomService extends SimpleServiceImpl {
 				+ " att.id = data.attachment_id and data.contract_id = con.id and con.custom_id = ? ", 
 				new Object[]{id},
 				new Type[]{StringType.INSTANCE}));
+		//客户归属-本人？团队？
+		ret.put("beyond", getCustomType(id));
+		
 		return ret;
+	}
+	
+	/**
+	 * 客户类型-自己
+	 */
+	public static final String CUSTOMTYPE_MY = "my";
+	/**
+	 * 客户类型-团队
+	 */
+	public static final String CUSTOMTYPE_TEAM = "team";
+	/**
+	 * 客户类型-其他
+	 */
+	public static final String CUSTOMTYPE_OTHER = "other";
+	/**
+	 * 获取客户类型-用于决定是否具有权限
+	 * @param customId
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	private String getCustomType(String customId){
+		String userId = getLoginUserId();
+		StringBuilder sb = new StringBuilder();
+		List<Map<String, String>> items = dao.queryListBySql(
+				" select "
+				+ " CASE "
+				+ "     WHEN t.create_user = ?  "
+				+ "     THEN 'my'  "
+				+ "      WHEN ? IN ( "
+				+ " 	     SELECT u.id FROM  t_user u WHERE  "
+				+ " 	     (u.team IN ( SELECT m.user_id FROM t_custom_team m WHERE m.custom_id = t.id)) "
+				+ " 	     OR "
+				+ " 	     (u.id IN ( SELECT m.user_id FROM t_custom_team m WHERE m.custom_id = t.id)) "
+				+ "      ) "
+				+ "     THEN 'team'  "
+				+ "     ELSE 'other'  "
+				+ "   END AS beyond"
+				+ " from t_custom t where id = ? ",
+				new Object[]{userId, userId, customId},
+				new Type[]{StringType.INSTANCE, StringType.INSTANCE, StringType.INSTANCE});
+		if(items.size() > 0){
+			return items.get(0).get("beyond");
+		}else{
+			return CUSTOMTYPE_OTHER;
+		}
+		
 	}
 	
 }

@@ -35,7 +35,9 @@ app.directive('coreCustomselect', ["$http", function($http){
         	//监控查询
         	$scope.$watch('customsearch', function(newValue, oldValue){
         		if(newValue == oldValue) return;
-        		$http.post("custom/list",{companyName: newValue, page: 1, rows: 100}).success(function(data){
+        		$http.post("custom/list",
+        				{companyName: newValue, page: 1, rows: 100, customStatus: "签约运作"})
+        				.success(function(data){
 						$scope.customs = data.rows;
         		});
         	}, true);

@@ -1,7 +1,7 @@
 //职位管理-录入职位
 app.controller('JobMgrInJobCtrl',
 		function($scope, $http, $routeParams, ngTableParams, 
-				$rootScope) {
+				$rootScope, $location) {
 	$rootScope.menu = "job";
 	
 	var jobId = $routeParams.id;
@@ -35,7 +35,11 @@ app.controller('JobMgrInJobCtrl',
 	$scope.save = function(){
 		validFormAndSubmit(function(data){
 			if(data.success == "1"){//成功
-				$location.path("jobmgr/list");
+				if(customId){
+					$location.path("custommgr/viewcustom/" + customId);
+				}else{
+					$location.path("jobmgr/list");
+				}
 			}
 		});
 	};

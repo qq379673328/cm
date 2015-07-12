@@ -15,6 +15,7 @@ app.controller('CustomMgrViewCustomCtrl',
 			$scope.attas = data.attas;
 			$scope.jobs = data.jobs;
 			$scope.teams = data.teams;
+			$scope.beyond = data.beyond;
 			if(data.contracts && data.contracts.length > 0){
 				$scope.contract = data.contracts[0];
 			}

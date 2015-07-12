@@ -1,5 +1,5 @@
 package cn.com.sinosoft.common.model;
-// Generated 2015-7-11 12:12:25 by Hibernate Tools 3.2.2.GA
+// Generated 2015-7-12 11:28:57 by Hibernate Tools 3.2.2.GA
 
 
 import java.util.Date;
@@ -20,6 +20,10 @@ public class TContract  implements java.io.Serializable {
      private String firstPay;
      private String useLimit;
      private String otherRequire;
+     private Date createTime;
+     private String createUser;
+     private Date updateTime;
+     private String updateUser;
 
     public TContract() {
     }
@@ -32,7 +36,7 @@ public class TContract  implements java.io.Serializable {
         this.state = state;
         this.inDate = inDate;
     }
-    public TContract(String id, String customId, String no, String state, Date inDate, String inPercentage, String payway, String firstPay, String useLimit, String otherRequire) {
+    public TContract(String id, String customId, String no, String state, Date inDate, String inPercentage, String payway, String firstPay, String useLimit, String otherRequire, Date createTime, String createUser, Date updateTime, String updateUser) {
        this.id = id;
        this.customId = customId;
        this.no = no;
@@ -43,6 +47,10 @@ public class TContract  implements java.io.Serializable {
        this.firstPay = firstPay;
        this.useLimit = useLimit;
        this.otherRequire = otherRequire;
+       this.createTime = createTime;
+       this.createUser = createUser;
+       this.updateTime = updateTime;
+       this.updateUser = updateUser;
     }
    
     public String getId() {
@@ -114,6 +122,34 @@ public class TContract  implements java.io.Serializable {
     
     public void setOtherRequire(String otherRequire) {
         this.otherRequire = otherRequire;
+    }
+    public Date getCreateTime() {
+        return this.createTime;
+    }
+    
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+    public String getCreateUser() {
+        return this.createUser;
+    }
+    
+    public void setCreateUser(String createUser) {
+        this.createUser = createUser;
+    }
+    public Date getUpdateTime() {
+        return this.updateTime;
+    }
+    
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+    public String getUpdateUser() {
+        return this.updateUser;
+    }
+    
+    public void setUpdateUser(String updateUser) {
+        this.updateUser = updateUser;
     }
 
 

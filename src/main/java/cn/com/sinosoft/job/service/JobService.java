@@ -19,7 +19,6 @@ import cn.com.sinosoft.common.model.TCustom;
 import cn.com.sinosoft.common.model.TJob;
 import cn.com.sinosoft.common.model.TJobCommunication;
 import cn.com.sinosoft.common.model.TJobTeam;
-import cn.com.sinosoft.common.model.TResumeCommunication;
 import cn.com.sinosoft.common.util.StrUtils;
 import cn.com.sinosoft.core.service.SimpleServiceImpl;
 import cn.com.sinosoft.core.service.model.FormResult;
@@ -66,6 +65,41 @@ public class JobService extends SimpleServiceImpl {
 		srcSql.setValues(values.toArray());
 		
 		return pagingSearch(params, pageParams, srcSql);
+	}
+	
+	/**
+	 * 删除职位
+	 * @param id
+	 * @return
+	 */
+	@Transactional
+	public FormResult del(String id){
+		FormResult ret = new FormResult();
+		
+		//删除职位表
+		dao.executeDelOrUpdateSql(
+				"delete from t_job where id = ? ",
+				new Object[]{id},
+				new Type[]{StringType.INSTANCE});
+		//删除职位沟通记录
+		dao.executeDelOrUpdateSql(
+				"delete from t_job_communication where job_id = ? ",
+				new Object[]{id},
+				new Type[]{StringType.INSTANCE});
+		//删除职位团队关联表
+		dao.executeDelOrUpdateSql(
+				"delete from t_job_team where job_id = ? ",
+				new Object[]{id},
+				new Type[]{StringType.INSTANCE});
+		//删除职位-简历关联表
+		dao.executeDelOrUpdateSql(
+				"delete from t_resume_job where job_id = ? ",
+				new Object[]{id},
+				new Type[]{StringType.INSTANCE});
+		
+		ret.setSuccess(FormResult.SUCCESS);
+		ret.setMessage("删除职位成功");
+		return ret;
 	}
 
 	/**
@@ -127,26 +161,6 @@ public class JobService extends SimpleServiceImpl {
 	public FormResult edit(TJob job) {
 		FormResult ret = new FormResult();
 		
-		//保存执行团队信息
-		dao.executeDelOrUpdateSql("delete from t_job_team where job_id = ? ",
-				new Object[]{job.getId()},
-				new Type[]{StringType.INSTANCE});
-		if(!StrUtils.isNull(job.getTeam())){
-			List<TJobTeam> ts = new ArrayList<TJobTeam>();
-			String teams = job.getTeam();
-			String[] tIds = teams.split(",");
-			for(String tId : tIds){
-				ts.add(
-						new TJobTeam(
-								UUID.randomUUID().toString(),
-								tId,
-								job.getId()));
-			}
-			if(ts.size() > 0){
-				dao.batchSave(ts);
-			}
-		}
-		
 		if(StrUtils.isNull(job.getId())){//新增
 			job.setId(UUID.randomUUID().toString());
 			job.setCreateUser(userUtil.getLoginUser().getId());
@@ -167,6 +181,26 @@ public class JobService extends SimpleServiceImpl {
 			job.setLastUpdateTime(new Date());
 			job.setLastUpdateUser(userUtil.getLoginUser().getId());
 			dao.update(job);
+		}
+		
+		//保存执行团队信息
+		dao.executeDelOrUpdateSql("delete from t_job_team where job_id = ? ",
+				new Object[]{job.getId()},
+				new Type[]{StringType.INSTANCE});
+		if(!StrUtils.isNull(job.getTeam())){
+			List<TJobTeam> ts = new ArrayList<TJobTeam>();
+			String teams = job.getTeam();
+			String[] tIds = teams.split(",");
+			for(String tId : tIds){
+				ts.add(
+						new TJobTeam(
+								UUID.randomUUID().toString(),
+								tId,
+								job.getId()));
+			}
+			if(ts.size() > 0){
+				dao.batchSave(ts);
+			}
 		}
 		
 		ret.setSuccess(FormResult.SUCCESS);

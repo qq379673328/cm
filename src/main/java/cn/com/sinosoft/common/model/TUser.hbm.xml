@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated 2015-7-11 12:12:27 by Hibernate Tools 3.2.2.GA -->
+<!-- Generated 2015-7-12 11:28:58 by Hibernate Tools 3.2.2.GA -->
 <hibernate-mapping>
     <class name="cn.com.sinosoft.common.model.TUser" table="t_user" catalog="cm">
         <id name="id" type="string">
@@ -9,7 +9,7 @@
             <generator class="assigned" />
         </id>
         <property name="username" type="string">
-            <column name="username" length="100" not-null="true">
+            <column name="username" length="100" not-null="true" unique="true">
                 <comment>&#231;&#148;&#168;&#230;&#136;&#183;&#229;&#144;&#141;</comment>
             </column>
         </property>

@@ -92,7 +92,7 @@
 									ng-model="custom.contactLandline"
 									class="form-input" />
 					</td>
-					<td class="td-odd">手机号码：</td>
+					<td class="td-odd"><span class="warn">*</span>手机号码：</td>
 					<td class="td-even">
 						<input 
 									name="contactCellphone"
@@ -108,7 +108,7 @@
 									ng-model="custom.contactFax"
 									class="form-input" />
 					</td>
-					<td class="td-odd">电子邮件：</td>
+					<td class="td-odd"><span class="warn">*</span>电子邮件：</td>
 					<td class="td-even">
 						<input 
 									name="contactEmail"
@@ -177,9 +177,9 @@
 		<table class="my-table">
 			<thead>
 				<tr>
-					<th>内容</th>
-					<th>创建时间</th>
-					<th></th>
+					<th style="width: auto;">内容</th>
+					<th style="width: 200px;">创建时间</th>
+					<th style="width: 200px;"></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -226,7 +226,7 @@
 				</tr>
 				<tr>
 					<td>
-						<div class="btn btn-lblue" ng-show="!isrequest" ng-click="saveAndAddContract();">保存客户信息并添加新合同</div>
+						<div class="btn btn-lblue" ng-show="!isrequest && custom.state=='签约运作'" ng-click="saveAndAddContract();">保存客户信息并添加新合同</div>
 						<div class="btn btn-blank" ng-show="isrequest">操作中...</div>
 					</td>
 					<td>
