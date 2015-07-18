@@ -38,7 +38,7 @@ app.controller('JobMgrInJobCtrl',
 				if(customId){
 					$location.path("custommgr/viewcustom/" + customId);
 				}else{
-					$location.path("jobmgr/list");
+					$location.path("jobmgr/viewjob/" + jobId);
 				}
 			}
 		});

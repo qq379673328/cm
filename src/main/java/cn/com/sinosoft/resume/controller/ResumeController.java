@@ -104,6 +104,8 @@ public class ResumeController extends BaseController {
 	public FormResult saveTarget(TResumeTarget target){
 		if(StrUtils.isNull(target.getId())){//新增
 			target.setId(UUID.randomUUID().toString());
+			target.setCreateTime(new Date());
+			target.setCreateUser(resumeService.getLoginUserId());
 			return resumeService.saveBean(target);
 		}else{//更新
 			return resumeService.updateBean(target);
@@ -119,6 +121,8 @@ public class ResumeController extends BaseController {
 	public FormResult saveWorkHistory(TResumeWorkhistory item){
 		if(StrUtils.isNull(item.getId())){//新增
 			item.setId(UUID.randomUUID().toString());
+			item.setCreateTime(new Date());
+			item.setCreateUser(resumeService.getLoginUserId());
 			return resumeService.saveBean(item);
 		}else{//更新
 			return resumeService.updateBean(item);
@@ -143,6 +147,8 @@ public class ResumeController extends BaseController {
 	public FormResult saveEduHistory(TResumeEdu item){
 		if(StrUtils.isNull(item.getId())){//新增
 			item.setId(UUID.randomUUID().toString());
+			item.setCreateTime(new Date());
+			item.setCreateUser(resumeService.getLoginUserId());
 			return resumeService.saveBean(item);
 		}else{//更新
 			return resumeService.updateBean(item);
@@ -167,6 +173,8 @@ public class ResumeController extends BaseController {
 	public FormResult saveLanguage(TResumeLanguage item){
 		if(StrUtils.isNull(item.getId())){//新增
 			item.setId(UUID.randomUUID().toString());
+			item.setCreateTime(new Date());
+			item.setCreateUser(resumeService.getLoginUserId());
 			return resumeService.saveBean(item);
 		}else{//更新
 			return resumeService.updateBean(item);

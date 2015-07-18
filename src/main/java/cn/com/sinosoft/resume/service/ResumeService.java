@@ -18,6 +18,7 @@ import cn.com.sinosoft.common.model.TResume;
 import cn.com.sinosoft.common.model.TResumeDate;
 import cn.com.sinosoft.common.model.TResumeJob;
 import cn.com.sinosoft.common.model.TUser;
+import cn.com.sinosoft.common.util.SqlUtil;
 import cn.com.sinosoft.common.util.StrUtils;
 import cn.com.sinosoft.core.service.SimpleServiceImpl;
 import cn.com.sinosoft.core.service.model.FormResult;
@@ -43,14 +44,110 @@ public class ResumeService extends SimpleServiceImpl {
 		PagingSrcSql srcSql = new PagingSrcSql();
 		List<Object> values = new ArrayList<Object>();
 		List<Type> types = new ArrayList<Type>();
-		StringBuffer sb = new StringBuffer(" SELECT * from t_Resume t where 1=1 ");
+		TUser user = userUtil.getLoginUser();
+		String userId = user.getId();
+		StringBuffer sb = new StringBuffer(
+				" SELECT t.*,ifnull(j.recou, 0) recou, "
+				
+				+ " CASE "
+				+ "     WHEN t.create_user = ?  "
+				+ "     THEN 'my' "
+				+ "     ELSE 'other'  "
+				+ "   END AS beyond "
+				
+				+ "  from t_Resume t  left join ( select r.resume_id, count(1) recou "
+					+ "	from t_resume_job r where r.recom_state = '已推荐'"
+					+ " group by r.resume_id ) j"
+				+ " on t.id = j.resume_id "
+				+ " where 1=1 "
+				);
+		values.add(userId);
+		types.add(StringType.INSTANCE);
 		
+		if(!StrUtils.isNull(params.get("zone"))){//所在城市
+			sb.append(" AND t.city = ? ");
+			values.add(params.get("zone"));
+			types.add(StringType.INSTANCE);
+		}
+		if(!StrUtils.isNull(params.get("industry"))){//行业
+			sb.append(" AND t.industry = ? ");
+			values.add(params.get("industry"));
+			types.add(StringType.INSTANCE);
+		}
+		if(!StrUtils.isNull(params.get("edu"))){//学历
+			sb.append(" AND t.education = ? ");
+			values.add(params.get("edu"));
+			types.add(StringType.INSTANCE);
+		}
+		if(!StrUtils.isNull(params.get("duty"))){//职业
+			sb.append(" AND t.duty = ? ");
+			values.add(params.get("duty"));
+			types.add(StringType.INSTANCE);
+		}
+		if(!StrUtils.isNull(params.get("sex"))){//性别
+			sb.append(" AND t.sex = ? ");
+			values.add(params.get("sex"));
+			types.add(StringType.INSTANCE);
+		}
+		if(!StrUtils.isNull(params.get("agemin"))){//年龄-最小
+			sb.append(" AND t.sex = ? ");
+			values.add(params.get("agemin"));
+			types.add(StringType.INSTANCE);
+		}
+		if(!StrUtils.isNull(params.get("agemax"))){//年龄-最大
+			sb.append(" AND t.sex = ? ");
+			values.add(params.get("agemax"));
+			types.add(StringType.INSTANCE);
+		}
+		//目前年薪
+		String[] yp = handleYearPay(params.get("yearpay"));
+		if(yp != null){
+			if(yp.length == 1){
+				sb.append(" AND t.year_pay > ? ");//最小
+				values.add(yp[0]);
+				types.add(StringType.INSTANCE);
+			}else{
+				sb.append(" AND t.year_pay >= ? ");//最小
+				values.add(yp[0]);
+				types.add(StringType.INSTANCE);
+				
+				sb.append(" AND t.year_pay <= ? ");//最大
+				values.add(yp[1]);
+				types.add(StringType.INSTANCE);
+			}
+		}
+		if(!StrUtils.isNull(params.get("createTimeStart"))){//更新日期-开始
+			sb.append(" AND " + SqlUtil.toDate(params.get("createTimeStart"), 1, 0) + " <= t.last_update_time ");
+		}
+		if(!StrUtils.isNull(params.get("createTimeEnd"))){//更新日期-结束
+			sb.append(" AND " + SqlUtil.toDate(params.get("createTimeEnd"), 1, 0) + " >= t.last_update_time ");
+		}
+		//简历类型-我的、其他
+		if(!StrUtils.isNull(params.get("beyond"))){
+			sb.append(" AND tt.beyond = ? ");
+			values.add(params.get("beyond"));
+			types.add(StringType.INSTANCE);
+		}
 		
 		srcSql.setSrcSql(sb.toString());
 		srcSql.setTypes(types.toArray(new Type[0]));
 		srcSql.setValues(values.toArray());
 		
 		return pagingSearch(params, pageParams, srcSql);
+	}
+	
+	//处理年薪查询条件
+	private String[] handleYearPay(String yearPay){
+		if(StrUtils.isNull(yearPay)){
+			return null;
+		}else if(yearPay.endsWith("以下")){
+			return new String[]{"0", yearPay.replaceFirst("万以下", "")};
+		}else if(yearPay.endsWith("以上")){
+			return new String[]{yearPay.replaceFirst("万以上", "")};
+		}else{
+			String[] sp = yearPay.replace("万", "").split("-");
+			return new String[]{sp[0], sp[1]};
+		}
 	}
 
 	/**
@@ -142,45 +239,75 @@ public class ResumeService extends SimpleServiceImpl {
 		ret.put("resume", resume);
 		if(resume != null){
 			//期望
-			ret.put("target", dao.queryListBySql(" select * from t_resume_target t where t.resume_id = ? ",
+			ret.put("target", dao.queryListBySql(" select * from t_resume_target t where t.resume_id = ? order by t.create_time desc ",
 					new Object[]{id},
 					new Type[]{StringType.INSTANCE}));
 			//简历附件
 			ret.put("resumeDatas", dao.queryListBySql(
 					" select att.* from t_resume_date t "
-					+ "left join t_attachment att on t.attachment_id = att.id where t.resume_id = ? ",
-					new Object[]{id},
-					new Type[]{StringType.INSTANCE}));
-			//期望
-			ret.put("target", dao.queryListBySql(" select * from t_resume_target t where t.resume_id = ? ",
+					+ "left join t_attachment att on t.attachment_id = att.id where t.resume_id = ? order by att.upload_time desc ",
 					new Object[]{id},
 					new Type[]{StringType.INSTANCE}));
 			//教育
-			ret.put("resumeEdus", dao.queryListBySql(" select * from t_resume_edu t where t.resume_id = ? ",
+			ret.put("resumeEdus", dao.queryListBySql(" select * from t_resume_edu t where t.resume_id = ?  order by t.create_time desc ",
 					new Object[]{id},
 					new Type[]{StringType.INSTANCE}));
 			//推荐职位
-			ret.put("resumeJobs", dao.queryListBySql(" select * from t_resume_job t where t.resume_id = ? ",
+			ret.put("resumeJobs", dao.queryListBySql(" select * from t_resume_job t where t.resume_id = ? order by t.create_time desc ",
 					new Object[]{id},
 					new Type[]{StringType.INSTANCE}));
 			//语言
-			ret.put("resumeLanguages", dao.queryListBySql(" select * from t_resume_language t where t.resume_id = ? ",
+			ret.put("resumeLanguages", dao.queryListBySql(" select * from t_resume_language t where t.resume_id = ?  order by t.create_time desc",
 					new Object[]{id},
 					new Type[]{StringType.INSTANCE}));
 			//工作经历
-			ret.put("resumeWorkhistorys", dao.queryListBySql(" select * from t_resume_workhistory t where t.resume_id = ? ",
+			ret.put("resumeWorkhistorys", dao.queryListBySql(" select * from t_resume_workhistory t where t.resume_id = ? order by t.create_time desc ",
 					new Object[]{id},
 					new Type[]{StringType.INSTANCE}));
 			//沟通记录
-			ret.put("resumeComms", dao.queryListBySql(" select * from t_resume_communication t where t.resume_id = ? ",
+			ret.put("resumeComms", dao.queryListBySql(" select * from t_resume_communication t where t.resume_id = ? order by t.create_time desc ",
 					new Object[]{id},
 					new Type[]{StringType.INSTANCE}));
-			
+			//职位归属-本人？团队？
+			ret.put("beyond", getResumeType(id));
 		}
 		
 		return ret;
 	}
 	
+	/**
+	 * 简历类型-自己
+	 */
+	public static final String RESUMETYPE_MY = "my";
+	/**
+	 * 简历类型-其他
+	 */
+	public static final String RESUMETYPE_OTHER = "other";
+	/**
+	 * 获取职位类型-用于决定是否具有权限
+	 * @param customId
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	private String getResumeType(String resumeId){
+		String userId = getLoginUserId();
+		List<Map<String, String>> items = dao.queryListBySql(
+				" select "
+				+ " CASE "
+				+ "     WHEN t.create_user = ?  "
+				+ "     THEN 'my'  "
+				+ "     ELSE 'other'  "
+				+ "   END AS beyond"
+				+ " from t_resume t where id = ? ",
+				new Object[]{userId, resumeId},
+				new Type[]{StringType.INSTANCE, StringType.INSTANCE});
+		if(items.size() > 0){
+			return items.get(0).get("beyond");
+		}else{
+			return RESUMETYPE_OTHER;
+		}
+		
+	}
 	
 	/**
 	 * 获取某份简历的客户-分页
@@ -201,23 +328,26 @@ public class ResumeService extends SimpleServiceImpl {
 				+ " CASE "
 				+ "     WHEN j.create_user = ?  "
 				+ "     THEN 'my'  "
-				+ "      WHEN ? IN ( "
-				+ " 	     SELECT u.id FROM  t_user u WHERE  "
-				+ " 	     (u.team IN ( SELECT m.user_id FROM t_job_team m WHERE m.job_id = j.id)) "
-				+ " 	     OR "
-				+ " 	     (u.id IN ( SELECT m.user_id FROM t_job_team m WHERE m.job_id = j.id)) "
-				+ "      ) "
-				+ "     THEN 'team'  "
 				+ "     ELSE 'other'  "
 				+ "   END AS beyond , "
 				+ " CASE WHEN r.id IS NULL THEN '0' ELSE '1' END AS ispub  "
 
 				+ " FROM t_job j LEFT JOIN t_resume_job r ON j.id = r.job_id ) tt "
-				+ " WHERE 1=1 and (tt.beyond = 'team' or tt.beyond = 'my') ");
+				+ " WHERE 1=1 and ( tt.beyond = 'my') ");
 		values.add(userId);
 		types.add(StringType.INSTANCE);
-		values.add(userId);
-		types.add(StringType.INSTANCE);
+		
+		if(!StrUtils.isNull(params.get("companyName"))){//客户名
+			sb.append(" AND tt.custom_name like ? ");
+			values.add("%" + params.get("companyName") + "%");
+			types.add(StringType.INSTANCE);
+		}
+		if(!StrUtils.isNull(params.get("pubstate"))){//推荐状态
+			sb.append(" AND tt.ispub = ? ");
+			values.add(params.get("pubstate"));
+			types.add(StringType.INSTANCE);
+		}
+		
 		
 		sb.append(" ORDER BY tt.ispub desc,tt.create_time DESC ");
 		

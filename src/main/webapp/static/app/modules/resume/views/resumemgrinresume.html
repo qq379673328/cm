@@ -57,6 +57,15 @@
 					</td>
 				</tr>
 				<tr>
+					<td class="td-odd">所在城市：</td>
+					<td class="td-even" colspan="3">
+						<input 
+								name="city" 
+								ng-model="resume.city"
+								class="form-input" />
+					</td>
+				</tr>
+				<tr>
 					<td class="td-odd"><span class="warn">*</span>性别：</td>
 					<td class="td-even">
 						<select class="form-select" name="sex" ng-model="resume.sex">
@@ -73,6 +82,26 @@
 							type="select"
 							bind-model="resume.education"
 							key="edu"></div>
+					</td>
+				</tr>
+				<tr>
+					<td class="td-odd">行业：</td>
+					<td class="td-even">
+						<div
+							dataname="industry"
+							core-basedata
+							type="select"
+							bind-model="resume.industry"
+							key="customIndustry"></div>
+					</td>
+					<td class="td-odd">职位：</td>
+					<td class="td-even">
+						<div
+							dataname="duty"
+							core-basedata
+							type="select"
+							bind-model="resume.duty"
+							key="duty"></div>
 					</td>
 				</tr>
 				<tr>

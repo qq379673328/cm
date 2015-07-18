@@ -93,6 +93,10 @@ app.controller('ResumeMgrInResumeCtrl',
 				yearPay: {required: true, number: true},
 				//工作状态
 				workState: {required: true, maxlength: 50},
+				//行业
+				industry: {maxlength: 100},
+				//职位
+				duty: {maxlength: 50},
 				//个人简介
 				desc: {required: true, maxlength: 500}
 			}

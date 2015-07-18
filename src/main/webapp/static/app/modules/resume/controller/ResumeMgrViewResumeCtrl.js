@@ -7,32 +7,37 @@ app.controller('ResumeMgrViewResumeCtrl',
 	var resumeId = $routeParams.id;
 	$scope.isReady = false;
 	
-	//请求客户信息
-	$http.post("resume/getResumeViewById", {id: resumeId}).success(function(data){
-		$scope.resume = data.resume;
-		var targets = data.target;
-		if(targets && targets.length >0){
-			var tar = targets[0];
-			$scope.target = {
-				id: tar.id,
-				resumeId: tar.resume_id,
-				targetType: tar.target_type,
-				targetPlace: tar.target_place,
-				targetJob: tar.target_job,
-				targetIndustry: tar.target_industry,
-				targetPay: tar.target_pay,
-				workState: tar.work_state
-			};
-		}
-		$scope.resumeDatas = data.resumeDatas;
-		$scope.resumeEdus = data.resumeEdus;
-		$scope.resumeJobs = data.resumeJobs;
-		$scope.resumeLanguages = data.resumeLanguages;
-		$scope.resumeWorkhistorys = data.resumeWorkhistorys;
-		$scope.resumeComms = data.resumeComms;
-		
-		$scope.isReady = true;
-	});
+	function reload(){
+		//请求客户信息
+		$http.post("resume/getResumeViewById", {id: resumeId}).success(function(data){
+			$scope.resume = data.resume;
+			var targets = data.target;
+			if(targets && targets.length >0){
+				var tar = targets[0];
+				$scope.target = {
+					id: tar.id,
+					resumeId: tar.resume_id,
+					targetType: tar.target_type,
+					targetPlace: tar.target_place,
+					targetJob: tar.target_job,
+					targetIndustry: tar.target_industry,
+					targetPay: tar.target_pay,
+					workState: tar.work_state
+				};
+			}
+			$scope.resumeDatas = data.resumeDatas;
+			$scope.resumeEdus = data.resumeEdus;
+			$scope.resumeJobs = data.resumeJobs;
+			$scope.resumeLanguages = data.resumeLanguages;
+			$scope.resumeWorkhistorys = data.resumeWorkhistorys;
+			$scope.resumeComms = data.resumeComms;
+			$scope.beyond = data.beyond;
+			
+			$scope.isReady = true;
+		});
+	}
+	
+	reload();
 	
 	//添加沟通记录
 	$scope.addComm = function(){
@@ -42,7 +47,8 @@ app.controller('ResumeMgrViewResumeCtrl',
 		}).success(function(data){
 			$scope.formresult = data;
 			$scope.isrequest = false;
-			if(data.success == "1"){//成功
+			reload();
+			/*if(data.success == "1"){//成功
 				var item = data.data;
 				$scope.resumeComms.push({
 					id: item.id,
@@ -50,7 +56,7 @@ app.controller('ResumeMgrViewResumeCtrl',
 					content: item.content,
 					create_time: item.createTime
 				});
-			}
+			}*/
 		});
 	};
 	
@@ -62,7 +68,8 @@ app.controller('ResumeMgrViewResumeCtrl',
 			$scope.formresult = data;
 			$scope.isrequest = false;
 			if(data.success == "1"){//成功
-				delItemFormArray("resumeComms", id);
+				//delItemFormArray("resumeComms", id);
+				reload();
 			}
 		});
 	};

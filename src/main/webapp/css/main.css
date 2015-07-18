@@ -200,14 +200,13 @@ textarea{
 }
 
 .searchzone{
-	border: 1px solid #B7B7B7;
 	padding-bottom: 10px;
 }
 .searchzone .title{
 	height: 40px;
 	line-height: 40px;
 	padding-left: 10px;
-	background-color: #4396DB;
+	background-color: #77B9F0;
 	font-weight: bold;
 	color: #fff;
 }
@@ -268,7 +267,7 @@ textarea{
 	margin: 5px 3px;
 }
 .mytable .title{
-	background-color: #608BCA;
+	background-color: #64A3FF;
 	height: 35px;
 	line-height: 35px;
 	padding: 3px 20px;
@@ -319,7 +318,7 @@ textarea{
 }
 .mytable table thead{}
 .mytable table thead tr{
-	background-color: #4396DB;
+	background-color: #77B9F0;
 	height: 40px;
 	line-height: 40px;
 	text-align: center;
@@ -335,13 +334,19 @@ textarea{
 	text-align: center;
 }
 .mytable table tbody .line{
-	border-bottom: 2px solid #608BCA;
+	border-bottom: 2px solid #64A3FF;
+}
+.my-card .card-line{
+	border: none;
+	text-align: left;
+	height: 30px;
+	line-height: 30px;
 }
 .mytable table tbody .tr-odd{
-	background-color: #eee;
+	background-color: #E6F4F7;
 }
 .mytable table tbody .tr-even{
-	background-color: #E2E2E2;
+	background-color: #FAFAFA;
 }
 .mytable table tbody .td-odd{
 	width: 15%;
@@ -356,6 +361,7 @@ textarea{
 	padding-left: 5px;
 }
 .mytable table tbody tr td{
+	border-right: 1px solid #fff;
 }
 .card{
 	display: inline-block;
@@ -579,7 +585,6 @@ hr {
 	font-size: 14px;
 	text-align: center;
 	padding-right: 35px;
-	margin-bottom: 20px;
 	margin-right: 20px;
 	border: 1px solid transparent;
 	padding : 5px;
@@ -587,6 +592,8 @@ hr {
 	width: 100%;
 	position: fixed;
 	bottom: 0px;
+	left: 0px;
+	z-index: 9999;
 }
 .not-fix{
 	position: relative;
@@ -726,7 +733,7 @@ hr {
 .pagination .disabled a{
 	color: #fff;
 	cursor: not-allowed;
-	background-color: #608BCA;
+	background-color: #64A3FF;
 	border-color: #ddd;
 }
 .pagination>.active>a, .pagination>.active>span, .pagination>.active>a:hover, .pagination>.active>span:hover, .pagination>.active>a:focus, .pagination>.active>span:focus {
@@ -765,7 +772,8 @@ hr {
 	width: 300px;
 	float: left;
 	margin: 10px;
-	border: 1px solid #608BCA;	
+	padding: 10px;
+	border: 1px solid #64A3FF;	
 	color: #464549;
 	-webkit-box-shadow:0 0 10px rgba(96, 139, 202, 1);  
 	-moz-box-shadow:0 0 10px rgba(96, 139, 202, 1);  

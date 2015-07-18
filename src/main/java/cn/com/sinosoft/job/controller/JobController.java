@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.com.sinosoft.common.model.TJob;
+import cn.com.sinosoft.common.model.TResumeJobComm;
 import cn.com.sinosoft.core.action.BaseController;
 import cn.com.sinosoft.core.service.model.FormResult;
 import cn.com.sinosoft.core.service.model.PageParam;
@@ -119,6 +120,34 @@ public class JobController extends BaseController {
 	@ResponseBody
 	public FormResult delJobComm(String id){
 		return jobService.delJobComm(id);
+	}
+	
+	/**
+	 * 加载推荐简历的沟通记录
+	 * @return
+	 */
+	@RequestMapping("loadRJComm")
+	@ResponseBody
+	public Object loadRJComm(String id){
+		return jobService.loadRJComm(id);
+	}
+	/**
+	 * 编辑推荐简历的沟通记录
+	 * @return
+	 */
+	@RequestMapping("editRJComm")
+	@ResponseBody
+	public Object editRJComm(TResumeJobComm comm){
+		return jobService.editRJComm(comm);
+	}
+	/**
+	 * 删除推荐简历的沟通记录
+	 * @return
+	 */
+	@RequestMapping("delRJComm")
+	@ResponseBody
+	public Object delRJComm(String id){
+		return jobService.delRJComm(id);
 	}
 	
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated 2015-7-12 11:28:58 by Hibernate Tools 3.2.2.GA -->
+<!-- Generated 2015-7-18 17:13:23 by Hibernate Tools 3.2.2.GA -->
 <hibernate-mapping>
     <class name="cn.com.sinosoft.common.model.TResume" table="t_resume" catalog="cm">
         <id name="id" type="string">
@@ -48,11 +48,6 @@
                 <comment>&#231;&#148;&#181;&#229;&#173;&#144;&#233;&#130;&#174;&#231;&#174;&#177;</comment>
             </column>
         </property>
-        <property name="currentWage" type="string">
-            <column name="current_wage" length="50">
-                <comment>&#231;&#155;&#174;&#229;&#137;&#141;&#229;&#185;&#180;&#232;&#150;&#170;</comment>
-            </column>
-        </property>
         <property name="workState" type="string">
             <column name="work_state" length="50">
                 <comment>&#229;&#183;&#165;&#228;&#189;&#156;&#231;&#138;&#182;&#230;&#128;&#129;</comment>
@@ -91,6 +86,21 @@
         <property name="yearPay" type="string">
             <column name="year_pay" length="40">
                 <comment>&#231;&#155;&#174;&#229;&#137;&#141;&#229;&#185;&#180;&#232;&#150;&#170;</comment>
+            </column>
+        </property>
+        <property name="city" type="string">
+            <column name="city" length="100">
+                <comment>&#230;&#137;&#128;&#229;&#156;&#168;&#229;&#159;&#142;&#229;&#184;&#130;</comment>
+            </column>
+        </property>
+        <property name="industry" type="string">
+            <column name="industry" length="200">
+                <comment>&#232;&#161;&#140;&#228;&#184;&#154;</comment>
+            </column>
+        </property>
+        <property name="duty" type="string">
+            <column name="duty" length="100">
+                <comment>&#232;&#129;&#140;&#228;&#189;&#141;</comment>
             </column>
         </property>
     </class>

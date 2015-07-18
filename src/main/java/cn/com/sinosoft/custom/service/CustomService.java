@@ -50,11 +50,12 @@ public class CustomService extends SimpleServiceImpl {
 		List<Type> types = new ArrayList<Type>();
 		TUser user = userUtil.getLoginUser();
 		String userId = user.getId();
-		StringBuffer sb = new StringBuffer(" select tt.* from ( SELECT "
+		StringBuffer sb = new StringBuffer(
+				" select tt.*,ifnull(jj.jobcou, 0) jobcou from ( SELECT "
 				+ " t.*, getDictName(t.team) teams_desc,  "
 				+ " CASE "
 				+ "     WHEN t.create_user = ?  "
-				+ "     THEN 'my'  "
+				+ "     THEN 'my' "
 				+ "      WHEN ? IN ( "
 				+ " 	     SELECT u.id FROM  t_user u WHERE  "
 				+ " 	     (u.team IN ( SELECT m.user_id FROM t_custom_team m WHERE m.custom_id = t.id)) "
@@ -65,7 +66,10 @@ public class CustomService extends SimpleServiceImpl {
 				+ "     ELSE 'other'  "
 				+ "   END AS beyond "
 
-				+ " FROM t_custom t ) tt WHERE 1=1 ");
+				+ " FROM t_custom t ) tt left join"
+				+ " (SELECT j.custom_id,COUNT(1) jobcou FROM t_job j GROUP BY j.custom_id) jj"
+				+ " on tt.id = jj.custom_id "
+				+ " WHERE 1=1 ");
 		values.add(userId);
 		types.add(StringType.INSTANCE);
 		values.add(userId);
@@ -73,7 +77,7 @@ public class CustomService extends SimpleServiceImpl {
 		
 		if(!StrUtils.isNull(params.get("customIndustry"))){//客户行业
 			sb.append(" AND tt.industry like ? ");
-			values.add("%" + params.get("customIndustry") + "%");
+			values.add(params.get("customIndustry"));
 			types.add(StringType.INSTANCE);
 		}
 		if(!StrUtils.isNull(params.get("customSource"))){//客户来源

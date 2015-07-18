@@ -31,6 +31,12 @@
 						<span>{{custom.industry}}</span>
 					</td>
 				</tr>
+				<tr>
+					<td class="td-odd">客户状态：</td>
+					<td class="td-even" colspan="3">
+						<span>{{custom.state}}</span>
+					</td>
+				</tr>
 			</tbody>
 		</table>
 	</div>
@@ -53,7 +59,9 @@
 					</td>
 					<td class="td-odd"><span class="warn">*</span>合同状态：</td>
 					<td class="td-even">
+						<span ng-if="!contract.id">运作</span>
 						<div
+							ng-if="contract.id"
 							dataname="state"
 							core-basedata 
 							type="select"
@@ -121,6 +129,7 @@
 				<tr>
 					<td colspan="4">
 						<div class="btn btn-lblue" ng-show="!isrequest" ng-click="save();">保存</div>
+						<div class="btn btn-lblue" ng-show="!isrequest" ng-click="save(true);">保存并同步更新状态</div>
 					</td>
 				</tr>
 				<tr>

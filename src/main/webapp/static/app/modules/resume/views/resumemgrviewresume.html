@@ -13,7 +13,7 @@
 				简历详情
 			</span>
 			
-			<a class="spe" href="#resumemgr/editresume/{{resume.id}}">编辑简历信息</a>
+			<a ng-show="beyond=='my'" class="spe" href="#resumemgr/editresume/{{resume.id}}">编辑简历信息</a>
 			<a class="spe" href="#resumemgr/pub/{{resume.id}}">为简历推荐职位</a>
 		</div>
 		<table>
@@ -24,7 +24,7 @@
 				</tr>
 				<tr>
 					<td class="td-odd">更新时间：</td>
-					<td class="td-even">{{resume.last_update_time | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+					<td class="td-even">{{resume.lastUpdateTime | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
 					<td class="td-odd">基本概况：</td>
 					<td class="td-even">
 						{{resume.education}} |
@@ -57,7 +57,7 @@
 				</tr>
 				<tr>
 					<td class="td-odd">工作状态：</td>
-					<td class="td-even">{{resume.work_state}}</td>
+					<td class="td-even">{{resume.workState}}</td>
 					<td class="td-odd">现居住地：</td>
 					<td class="td-even">{{resume.address}}</td>
 				</tr>
@@ -65,19 +65,35 @@
 					<td class="td-odd">最近公司：</td>
 					<td class="td-even">{{resumeWorkhistorys[0].company}}</td>
 					<td class="td-odd">手机号码：</td>
-					<td class="td-even">{{resume.phone}}</td>
+					<td class="td-even">
+						<span ng-show="beyond=='my'">{{resume.phone}}</span>
+						<span ng-show="beyond!='my'">******</span>
+					</td>
 				</tr>
 				<tr>
 					<td class="td-odd">当前行业：</td>
 					<td class="td-even">{{target.targetIndustry}}</td>
 					<td class="td-odd">电子邮件：</td>
-					<td class="td-even">{{resume.email}}</td>
+					<td class="td-even">
+						<span ng-show="beyond=='my'">{{resume.email}}</span>
+						<span ng-show="beyond!='my'">******</span>
+					</td>
 				</tr>
 				<tr>
 					<td class="td-odd">目前年薪：</td>
-					<td class="td-even">未实现</td>
+					<td class="td-even">{{resume.yearPay}}</td>
 					<td class="td-odd">最高学历：</td>
 					<td class="td-even">{{resume.education}}</td>
+				</tr>
+				<tr>
+					<td class="td-odd">行业：</td>
+					<td class="td-even">{{resume.industry}}</td>
+					<td class="td-odd">职业：</td>
+					<td class="td-even">{{resume.duty}}</td>
+				</tr>
+				<tr>
+					<td class="td-odd">所在城市：</td>
+					<td class="td-even" colspan="3">{{resume.city}}</td>
 				</tr>
 				
 			</tbody>
@@ -128,13 +144,15 @@
 			</thead>
 			<tbody>
 				<tr ng-repeat="work in resumeWorkhistorys" ng-class="{true:'tr-odd' , false: 'tr-even'}[$index%2 == 0]">
-					<td style="width: 200px;">{{work.time_begin}} - {{work.time_end}}</td>
+					<td style="width: 200px;">{{work.time_begin}} 至 {{work.time_end}}</td>
 					<td style="width: 300px;">{{work.company}}</td>
 					<td style="width: auto;">{{work.content}}</td>
 				</tr>
 			</tbody>
 		</table>
 	</div>
+	
+	<hr/>
 	
 	<div class="mytable">
 		<div class="title">
@@ -153,15 +171,15 @@
 			</thead>
 			<tbody>
 				<tr ng-repeat="edu in resumeEdus" ng-class="{true:'tr-odd' , false: 'tr-even'}[$index%2 == 0]">
-					<td>{{edu.time_begin}} - {{edu.time_end}}</td>
-					<td>{{edu.org}}</td>
-					<td>{{edu.course}}</td>
-					<td>{{edu.content}}</td>
+					<td style="width: 200px;">{{edu.time_begin}} - {{edu.time_end}}</td>
+					<td style="width: 200px;">{{edu.org}}</td>
+					<td style="width: 200px;">{{edu.course}}</td>
+					<td style="width: auto;">{{edu.content}}</td>
 				</tr>
 			</tbody>
 		</table>
 	</div>
-	
+	<hr/>
 	<div class="mytable">
 		<div class="title">
 			<span>
@@ -185,7 +203,7 @@
 			</tbody>
 		</table>
 	</div>
-	
+	<hr/>
 	<div class="mytable">
 		<div class="title">
 			<span>
@@ -202,7 +220,7 @@
 			</tbody>
 		</table>
 	</div>
-	
+	<hr/>
 	<div class="mytable">
 		<div class="title">
 			<span>
@@ -214,14 +232,14 @@
 				<tr>
 					<th>时间</th>
 					<th>内容</th>
-					<th></th>
+					<th ng-show="beyond=='my'"></th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr ng-repeat="comm in resumeComms" ng-class="{true:'tr-odd' , false: 'tr-even'}[$index%2 == 0]">
 					<td style="width: 200px;">{{comm.create_time | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
 					<td style="width: auto;">{{comm.content}}</td>
-					<td style="width: 200px;">
+					<td style="width: 200px;" ng-show="beyond=='my'">
 						<a class="btn btn-small btn-success"
 							ng-click="comm.prepareDel = !comm.prepareDel"
 							>删除</a>
@@ -240,8 +258,8 @@
 			</tbody>
 		</table>
 	</div>
-	
-	<div class="mytable">
+	<hr/>
+	<div class="mytable" ng-show="beyond=='my'">
 		<div class="title">
 			<span>
 				添加沟通记录

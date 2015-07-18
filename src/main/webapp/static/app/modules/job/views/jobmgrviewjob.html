@@ -6,17 +6,20 @@
 	&gt;
 	[{{job.name}}]招聘概况
 </div>
-<div class="content">
+<div class="content" ng-show="!isReady">
+	加载中...
+</div>
+<div class="content" ng-show="isReady">
 	<div class="mytable">
 		<div class="title">
 			<span>
 				{{job.name}}&nbsp;&nbsp;&nbsp;&nbsp;招聘概述 
 				&nbsp;&nbsp;&nbsp;&nbsp;
-				{{job.create_time | date : 'yyyy-MM-dd HH:mm'}} 发布
+				{{job.createTime | date : 'yyyy-MM-dd HH:mm'}} 发布
 				
 			</span>
 			
-			<a class="spe" href="#jobmgr/editjob/{{job.id}}">编辑职位</a>
+			<a ng-show="beyond=='my'" class="spe" href="#jobmgr/editjob/{{job.id}}">编辑职位</a>
 		</div>
 		<table>
 			<tbody>
@@ -25,11 +28,12 @@
 					<td class="td-even">{{job.state}}</td>
 					<td class="td-odd">推荐概要：</td>
 					<td class="td-even">
-						向企业推荐{{job.pubcustom}}人 |
-						企业面试{{job.customverify}}人 |
-						企业否决{{job.customno}}人 |
-						确定录用{{job.customok}}人 |
-						未处理{{job.customnot}}人 |
+						向企业推荐{{jobrecstate.all}}人 |
+						未处理{{jobrecstate.notHandle}}人|
+						<br/> 
+						企业面试人{{jobrecstate.mianshi}}|
+						企业否决{{jobrecstate.pass}}人 |
+						确定录用{{jobrecstate.ok}}人 |
 					</td>
 				</tr>
 			</tbody>
@@ -88,7 +92,7 @@
 				<tr>
 					<td class="td-odd">执行团队：</td>
 					<td class="td-even">
-						{{job.team}}
+						{{jobTeamDesc}}
 					</td>
 					<td class="td-odd">咨询电话：</td>
 					<td class="td-even">谁的电话？</td>
@@ -104,6 +108,8 @@
 		</table>
 	</div>
 	
+	<hr/>
+	
 	<div class="mytable">
 		<div class="title">
 			<span>
@@ -117,11 +123,11 @@
 					<th>最近所在公司</th>
 					<th>当前职务</th>
 					<th>联系电话</th>
-					<th>推荐状态</th>
 					<th>推荐时间</th>
 					<th>评语或沟通记录</th>
 					<th>推荐人</th>
-					<th>&nbsp;</th>
+					<th>推荐状态</th>
+					<th ng-show="beyond=='my'">&nbsp;</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -133,11 +139,11 @@
 					<td>未实现</td>
 					<td>未实现</td>
 					<td>{{item.phone}}</td>
-					<td>{{item.recom_state}}</td>
 					<td>{{item.recom_time | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
 					<td>{{item.comm}}</td>
-					<td>{{item.recom_user}}</td>
-					<td>
+					<td>{{item.recom_user_desc}}</td>
+					<td>{{item.recom_state}}</td>
+					<td ng-show="beyond=='my'">
 						<a
 							ng-show="item.recom_state == '待处理' || !item.recom_state "
 							class="btn btn-small btn-success btn-w4"
@@ -148,11 +154,41 @@
 							class="btn btn-small btn-success btn-w4"
 							ng-click="cancleResume(item.jid)"
 							>取消投递</a>
+							
+						<a 
+							class="btn btn-small btn-success btn-w4"
+							ng-click="showcommdialog=true;loadComm(item.jid);"
+							>沟通记录</a>
 					</td>
 				</tr>
 			</tbody>
 		</table>
 	</div>
+	
+	<!-- 沟通记录 -->
+	<div class="widget-team" ng-show="showcommdialog == true">
+		<div class="dialog-wrap">
+			<div class="dialog">
+				<div ng-click="showcommdialog=false;" 
+					class="fa fa-2x fa-times close"></div>
+					
+				<div ng-click="showRJadd = !showRJadd;"
+					class="btn btn-error"
+					>添加沟通记录</div>
+				<textarea ng-show="showRJadd"
+					ng-model="addRJComm" class="textarea"></textarea>
+				
+				<div ng-show="!comms || comms.length == 0">无记录</div>
+				<div ng-repeat="item in comms">
+					<span>{{item.content}}</span>
+					<div ng-click="delComm(item.id);" 
+						class="fa fa-2x fa-times close"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<hr/>
 	
 	<div class="mytable">
 		<div class="title">
@@ -172,8 +208,7 @@
 					<th>评语或沟通记录</th>
 					<th>投递时间</th>
 					<th>推荐人</th>
-					<th>当前状态</th>
-					<th></th>
+					<th ng-show="beyond=='my'"></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -185,16 +220,12 @@
 					<td>未实现</td>
 					<td>未实现</td>
 					<td>{{item.phone}}</td>
-					<td>未实现</td>
-					<td>未实现</td>
+					<td>{{item.verify_state}}</td>
+					<td>{{item.verify_time | date : 'yyyy-MM-dd'}}</td>
 					<td>未实现</td>
 					<td>{{item.verify_time | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
-					<td>{{item.recom_user}}</td>
-					<td>
-						<span>{{item.verify_state}}</span>
-						<span>{{item.verify_time | date : 'yyyy-MM-dd'}}</span>
-					</td>
-					<td>
+					<td>{{item.recom_user_desc}}</td>
+					<td ng-show="beyond=='my'">
 						<a class="btn btn-small btn-success"
 							ng-click="item.prepareHandle = !item.prepareHandle"
 							>操作</a>
@@ -241,6 +272,8 @@
 		</table>
 	</div>
 	
+	<hr/>
+	
 	<div class="mytable">
 		<div class="title">
 			<span>
@@ -281,7 +314,9 @@
 		</table>
 	</div>
 	
-	<div class="mytable">
+	<hr/>
+	
+	<div class="mytable" ng-show="beyond=='my'">
 		<div class="title">
 			<span>
 				团队职位运作交流信息

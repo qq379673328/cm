@@ -1,7 +1,7 @@
 //合同管理-录入合同
 app.controller('ContractMgrInContractCtrl',
 		function($scope, $http, $routeParams, ngTableParams, 
-				$rootScope) {
+				$rootScope, $location) {
 	$rootScope.menu = "contract";
 	
 	var contractId = $routeParams.id;
@@ -28,19 +28,24 @@ app.controller('ContractMgrInContractCtrl',
 	}
 	
 	//保存合同信息
-	$scope.save = function(){
-		validFormAndSubmit(function(data){
+	$scope.save = function(isupdate){
+		validFormAndSubmit(isupdate, function(data){
 			if(data.success == "1"){//成功
-				$location.path("contractmgr/list");
+				if(contractId){
+					$location.path("contractmgr/viewcontract/" + contractId);
+				}else{
+					$location.path("contractmgr/list");
+				}
 			}
 		});
 	};
 	
 	//验证表单并提交
-	function validFormAndSubmit(cb){
+	function validFormAndSubmit(isUpdate, cb){
 		if(validForm()){
 			$scope.isrequest = true;
 			$scope.contract.customId = $scope.custom.id;
+			$scope.contract.isUpdate = isUpdate;
 			$http.post("contract/edit", $scope.contract).success(function(data){
 				$scope.formresult = data;
 				$scope.isrequest = false;

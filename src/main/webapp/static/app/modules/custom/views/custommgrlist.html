@@ -78,7 +78,6 @@
 					<th>职位数</th>
 					<th>执行团队</th>
 					<th>客户状态</th>
-					<th>附件</th>
 					<th>创建时间</th>
 					<th></th>
 					<th></th>
@@ -93,10 +92,9 @@
 						href="#custommgr/viewcustom/{{item.id}}">{{ item.custom_name }}</a></td>
 					<td>{{ item.contact_name }}</td>
 					<td>{{ item.contact_cellphone == null ? item.contact_landline : item.contact_cellphone}}</td>
-					<td>待实现</td>
+					<td>{{ item.jobcou }}</td>
 					<td>{{ item.teams_desc }}</td>
 					<td>{{ item.state }}</td>
-					<td></td>
 					<td>{{ item.create_time | date : 'yyyy-MM-dd HH:mm '}}</td>
 					<td>
 						<i ng-show="item.beyond=='my'" class="fa fa-user"></i>

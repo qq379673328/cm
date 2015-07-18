@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import cn.com.sinosoft.common.model.TContract;
 import cn.com.sinosoft.common.model.TContractData;
 import cn.com.sinosoft.common.model.TCustom;
+import cn.com.sinosoft.common.util.SqlUtil;
 import cn.com.sinosoft.common.util.StrUtils;
 import cn.com.sinosoft.core.service.SimpleServiceImpl;
 import cn.com.sinosoft.core.service.model.FormResult;
@@ -60,9 +61,26 @@ public class ContractService extends SimpleServiceImpl {
 		
 		//只能查询自己的合同
 		String userId = userUtil.getLoginUser().getId();
-		sb.append(" and cus.create_user = ? ");
+		sb.append(" and t.create_user = ? ");
 		values.add(userId);
 		types.add(StringType.INSTANCE);
+		
+		if(!StrUtils.isNull(params.get("companyName"))){//公司名称
+			sb.append(" AND cus.custom_name like ? ");
+			values.add("%" + params.get("companyName") + "%");
+			types.add(StringType.INSTANCE);
+		}
+		if(!StrUtils.isNull(params.get("no"))){//合同编号
+			sb.append(" AND t.no = ? ");
+			values.add(params.get("no"));
+			types.add(StringType.INSTANCE);
+		}
+		if(!StrUtils.isNull(params.get("createTimeStart"))){//创建日期-开始
+			sb.append(" AND " + SqlUtil.toDate(params.get("createTimeStart"), 1, 0) + " <= t.create_time ");
+		}
+		if(!StrUtils.isNull(params.get("createTimeEnd"))){//创建日期-结束
+			sb.append(" AND " + SqlUtil.toDate(params.get("createTimeEnd"), 1, 0) + " >= t.create_time ");
+		}
 		
 		sb.append(" order by t.in_date desc ");
 		srcSql.setSrcSql(sb.toString());
@@ -90,7 +108,7 @@ public class ContractService extends SimpleServiceImpl {
 			ret.put("custom", dao.queryById(contract.getCustomId(), TCustom.class));
 			//合作职位
 			ret.put("jobs", dao.queryListBySql(
-					"select * from t_job where contract_id = ? ",
+					"select t.*,getDictName(t.team) team_desc from t_job t where t.contract_id = ? ",
 					new Object[]{id},
 					new Type[]{StringType.INSTANCE}));
 			//附件信息
@@ -104,6 +122,16 @@ public class ContractService extends SimpleServiceImpl {
 		}
 		return ret;
 	}
+	
+	//验证客户是否有未结束的合同
+	public boolean hasContractNotEnd(String customId){
+		return dao.queryCountBySql(
+				"SELECT COUNT(1) FROM t_contract t "
+				+ "WHERE t.custom_id = ? "
+				+ "AND (t.state = '运作' OR t.state = '暂停')",
+				new Object[]{customId},
+				new Type[]{StringType.INSTANCE}) > 0 ? true : false;
+	}
 
 	/**
 	 * 编辑合同
@@ -111,26 +139,74 @@ public class ContractService extends SimpleServiceImpl {
 	 * @return
 	 */
 	@Transactional
-	public FormResult edit(TContract contract, String attas) {
+	public FormResult edit(TContract contract, String attas, boolean isUpdate) {
 		FormResult ret = new FormResult();
 		
-		if(isNoExist(contract.getNo())){//验证合同编号
-			ret.setSuccess(FormResult.ERROR);
-			ret.setMessage("合同编号已存在");
-			return ret;
-		}
+		boolean isNew = false;
 		
 		if(StrUtils.isNull(contract.getId())){//新增
+			isNew = true;
+			if(isNoExist(contract.getNo())){//验证合同编号
+				ret.setSuccess(FormResult.ERROR);
+				ret.setMessage("合同编号已存在");
+				return ret;
+			}
+			
+			//验证是否有未结束的合同-暂停或者运作
+			String customId = contract.getCustomId();
+			if(hasContractNotEnd(customId)){
+				ret.setSuccess(FormResult.ERROR);
+				ret.setMessage("客户存在未终止的合同,不能录入新合同");
+				return ret;
+			}
+			
 			contract.setId(UUID.randomUUID().toString());
 			contract.setInDate(new Date());
+			contract.setState("运作");//新增合同只能为运作状态
 			contract.setCreateTime(new Date());
 			contract.setCreateUser(getLoginUserId());
 			dao.save(contract);
 		}else{//更新
+			if(isNoExist(contract.getNo(), contract.getId())){//验证合同编号
+				ret.setSuccess(FormResult.ERROR);
+				ret.setMessage("合同编号已存在");
+				return ret;
+			}
+			
 			contract.setUpdateTime(new Date());
 			contract.setUpdateUser(getLoginUserId());
 			dao.update(contract);
 		}
+		//同步更新客户和职位状态
+		if(isUpdate){
+			String contractState = contract.getState();
+			String customState = null;
+			String jobState = null;
+			if("运作".equals(contractState)){//运作
+				customState = "签约运作";
+				jobState = "运作";
+			}else if("暂停".equals(contractState)){//暂停
+				customState = "签约暂停";
+				jobState = "暂停";
+			}else if("终止".equals(contractState)){//终止
+				customState = "签约终止";
+				jobState = "结束";
+			}
+			if(customState != null){
+				dao.executeDelOrUpdateSql("update t_custom set state = ? "
+						+ "where id = ? ",
+						new Object[]{customState, contract.getCustomId()},
+						new Type[]{StringType.INSTANCE, StringType.INSTANCE});
+			}
+			if(jobState != null && !isNew){
+				dao.executeDelOrUpdateSql("update t_job set state = ? "
+						+ "where custom_id = ? and contract_id = ? ",
+						new Object[]{jobState, contract.getCustomId(), contract.getId()},
+						new Type[]{StringType.INSTANCE, StringType.INSTANCE, StringType.INSTANCE});
+			}
+			
+		}
+		
 		
 		//更新附件信息
 		dao.executeDelOrUpdateSql("delete from t_contract_data where contract_id = ? ",
@@ -151,7 +227,7 @@ public class ContractService extends SimpleServiceImpl {
 	}
 	
 	/**
-	 * 验证合同编号是否存在
+	 * 验证合同编号是否存在-新增用
 	 *
 	 * 
 	 * @param no
@@ -162,6 +238,20 @@ public class ContractService extends SimpleServiceImpl {
 		return dao.queryCountBySql("select count(1) from t_contract where no = ? ",
 				new Object[]{no},
 				new Type[]{StringType.INSTANCE}) == 0 ? false : true;
+	}
+	
+	/**
+	 * 验证合同编号是否存在-编辑用
+	 *
+	 * 
+	 * @param no
+	 * @return
+	 * @author <a href="mailto:nytclizy@gmail.com">李志勇</a>
+	 */
+	private boolean isNoExist(String no, String contractId){
+		return dao.queryCountBySql("select count(1) from t_contract where no = ? and id <> ? ",
+				new Object[]{no, contractId},
+				new Type[]{StringType.INSTANCE, StringType.INSTANCE}) == 0 ? false : true;
 	}
 
 }

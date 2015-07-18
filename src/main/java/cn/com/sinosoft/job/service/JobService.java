@@ -19,6 +19,10 @@ import cn.com.sinosoft.common.model.TCustom;
 import cn.com.sinosoft.common.model.TJob;
 import cn.com.sinosoft.common.model.TJobCommunication;
 import cn.com.sinosoft.common.model.TJobTeam;
+import cn.com.sinosoft.common.model.TResumeJob;
+import cn.com.sinosoft.common.model.TResumeJobComm;
+import cn.com.sinosoft.common.model.TUser;
+import cn.com.sinosoft.common.util.SqlUtil;
 import cn.com.sinosoft.common.util.StrUtils;
 import cn.com.sinosoft.core.service.SimpleServiceImpl;
 import cn.com.sinosoft.core.service.model.FormResult;
@@ -50,14 +54,87 @@ public class JobService extends SimpleServiceImpl {
 		PagingSrcSql srcSql = new PagingSrcSql();
 		List<Object> values = new ArrayList<Object>();
 		List<Type> types = new ArrayList<Type>();
-		StringBuffer sb = new StringBuffer(" SELECT t.*, cus.custom_name, getDictName(t.team) teams_desc, "
-				+ " IFNULL(jobcou.jobcount, 0) jobcount "
+		TUser user = userUtil.getLoginUser();
+		String userId = user.getId();
+		StringBuffer sb = new StringBuffer(
+				" SELECT t.*, cus.custom_name, getDictName(t.team) teams_desc, "
+				+ " IFNULL(jobcou.jobcount, 0) jobcount, "
+				+ " IFNULL(jobcourec.jobcourec, 0) jobcourec, "
+				
+				+ " CASE "
+				+ "     WHEN t.create_user = ?  "
+				+ "     THEN 'my' "
+				+ "      WHEN ? IN ( "
+				+ " 	     SELECT u.id FROM  t_user u WHERE  "
+				+ " 	     (u.team IN ( SELECT m.user_id FROM t_job_team m WHERE m.job_id = t.id)) "
+				+ " 	     OR "
+				+ " 	     (u.id IN ( SELECT m.user_id FROM t_job_team m WHERE m.job_id = t.id)) "
+				+ "      ) "
+				+ "     THEN 'team'  "
+				+ "     ELSE 'other'  "
+				+ "   END AS beyond "
+				
 				+ " from "
 				+ " t_job t left join t_custom cus on t.custom_id = cus.id"
+				
 				+ " left join "
 				+ "(select job.job_id, count(1) jobcount from t_resume_job job group by job.job_id  ) jobcou "
 				+ " on t.id = jobcou.job_id "
+				
+				+ " left join "
+				+ "(select jobb.job_id, count(1) jobcourec "
+					+ "from t_resume_job jobb where jobb.recom_state = '已推荐' "
+					+ " group by jobb.job_id  ) jobcourec "
+				+ " on t.id = jobcourec.job_id "
+				
 				+ " where 1=1 ");
+		values.add(userId);
+		types.add(StringType.INSTANCE);
+		values.add(userId);
+		types.add(StringType.INSTANCE);
+		
+		if(!StrUtils.isNull(params.get("industry"))){//职位行业
+			sb.append(" AND t.industry like ? ");
+			values.add(params.get("industry"));
+			types.add(StringType.INSTANCE);
+		}
+		if(!StrUtils.isNull(params.get("workplace"))){//工作地点
+			sb.append(" AND t.workplace = ? ");
+			values.add(params.get("workplace"));
+			types.add(StringType.INSTANCE);
+		}
+		if(!StrUtils.isNull(params.get("payMin"))){//职位年薪-最小
+			sb.append(" AND t.pay_min > ? ");
+			values.add(params.get("payMin"));
+			types.add(StringType.INSTANCE);
+		}
+		if(!StrUtils.isNull(params.get("payMax"))){//职位年薪-最大
+			sb.append(" AND t.pay_max < ? ");
+			values.add(params.get("payMax"));
+			types.add(StringType.INSTANCE);
+		}
+		if(!StrUtils.isNull(params.get("state"))){//职位状态
+			sb.append(" AND t.state = ? ");
+			values.add(params.get("state"));
+			types.add(StringType.INSTANCE);
+		}
+		if(!StrUtils.isNull(params.get("name"))){//职位关键词
+			sb.append(" AND t.name like ? ");
+			values.add("%" + params.get("name") + "%");
+			types.add(StringType.INSTANCE);
+		}
+		if(!StrUtils.isNull(params.get("createTimeStart"))){//创建日期-开始
+			sb.append(" AND " + SqlUtil.toDate(params.get("createTimeStart"), 1, 0) + " <= t.create_time ");
+		}
+		if(!StrUtils.isNull(params.get("createTimeEnd"))){//创建日期-结束
+			sb.append(" AND " + SqlUtil.toDate(params.get("createTimeEnd"), 1, 0) + " >= t.create_time ");
+		}
+		//客户类型-我的、合作、其他
+		if(!StrUtils.isNull(params.get("beyond"))){
+			sb.append(" AND t.beyond = ? ");
+			values.add(params.get("beyond"));
+			types.add(StringType.INSTANCE);
+		}
 		
 		sb.append(" order by t.last_update_time desc ");
 		srcSql.setSrcSql(sb.toString());
@@ -107,6 +184,7 @@ public class JobService extends SimpleServiceImpl {
 	 * @param id
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public Object getJobViewById(String id) {
 		Map<String, Object> ret = new HashMap<String, Object>();
 		if(StrUtils.isNull(id)){
@@ -114,9 +192,28 @@ public class JobService extends SimpleServiceImpl {
 		}
 		TJob job = dao.queryById(id, TJob.class);
 		ret.put("job", job);
+		//执行团队
+		if(!StrUtils.isNull(job.getTeam())){
+			List<Map<String, String>> items = dao.queryListBySql(
+					"select getDictName(?) team_desc from dual",
+					new Object[]{job.getTeam()},
+					new Type[]{StringType.INSTANCE});
+			if(items != null && items.size() > 0){
+				ret.put("jobTeamDesc", items.get(0).get("team_desc"));
+			}
+		}
 		if(job != null){
 			//客户信息
 			ret.put("custom", dao.queryById(job.getCustomId(), TCustom.class));
+			//内部推荐
+			ret.put("inteamresumes", dao.queryListBySql(
+					"select t.*,j.recom_state,j.verify_state,"
+					+ "j.id as jid,j.recom_time, j.verify_time, "
+					+ " getDictName(j.recom_user) recom_user_desc "
+					+ " from t_resume t,t_resume_job j"
+					+ " where t.id = j.resume_id and j.job_id = ? ",
+					new Object[]{id},
+					new Type[]{StringType.INSTANCE}));
 			//向企业投递的简历
 			ret.put("pubresumes", dao.queryListBySql(
 					"select t.*,j.recom_state,j.verify_state,"
@@ -127,15 +224,6 @@ public class JobService extends SimpleServiceImpl {
 					+ " and j.recom_state = '已推荐' ",
 					new Object[]{id},
 					new Type[]{StringType.INSTANCE}));
-			//内部推荐
-			ret.put("inteamresumes", dao.queryListBySql(
-					"select t.*,j.recom_state,j.verify_state,"
-					+ "j.id as jid,j.recom_time, j.verify_time, "
-					+ " getDictName(j.recom_user) recom_user_desc "
-					+ " from t_resume t,t_resume_job j"
-					+ " where t.id = j.resume_id and j.job_id = ? ",
-					new Object[]{id},
-					new Type[]{StringType.INSTANCE}));
 			//职位交流信息
 			ret.put("jobcomms", dao.queryListBySql(
 					"select t.*,"
@@ -144,14 +232,63 @@ public class JobService extends SimpleServiceImpl {
 					+ " where t.job_id = ? ",
 					new Object[]{id},
 					new Type[]{StringType.INSTANCE}));
-			
+			//职位归属-本人？团队？
+			ret.put("beyond", getJobType(id));
+			//职位推荐的处理状态
+			ret.put("jobrecstate", dao.queryListBySql(
+					" select j.verify_state,count(1) cou from t_resume_job j where j.job_id = ?"
+					+ " and j.recom_state = '已推荐' group by j.verify_state ",
+					new Object[]{id},
+					new Type[]{StringType.INSTANCE}));
 		}
 		return ret;
 	}
 	
-	//更新职位简历的状态
+	/**
+	 * 职位类型-自己
+	 */
+	public static final String JOBTYPE_MY = "my";
+	/**
+	 * 职位类型-团队
+	 */
+	public static final String JOBTYPE_TEAM = "team";
+	/**
+	 * 职位类型-其他
+	 */
+	public static final String JOBTYPE_OTHER = "other";
+	/**
+	 * 获取职位类型-用于决定是否具有权限
+	 * @param customId
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	private String getJobType(String jobId){
+		String userId = getLoginUserId();
+		List<Map<String, String>> items = dao.queryListBySql(
+				" select "
+				+ " CASE "
+				+ "     WHEN t.create_user = ?  "
+				+ "     THEN 'my'  "
+				+ "      WHEN ? IN ( "
+				+ " 	     SELECT u.id FROM  t_user u WHERE  "
+				+ " 	     (u.team IN ( SELECT m.user_id FROM t_job_team m WHERE m.job_id = t.id)) "
+				+ " 	     OR "
+				+ " 	     (u.id IN ( SELECT m.user_id FROM t_job_team m WHERE m.job_id = t.id)) "
+				+ "      ) "
+				+ "     THEN 'team'  "
+				+ "     ELSE 'other'  "
+				+ "   END AS beyond"
+				+ " from t_job t where id = ? ",
+				new Object[]{userId, userId, jobId},
+				new Type[]{StringType.INSTANCE, StringType.INSTANCE, StringType.INSTANCE});
+		if(items.size() > 0){
+			return items.get(0).get("beyond");
+		}else{
+			return JOBTYPE_OTHER;
+		}
+		
+	}
 	
-
 	/**
 	 * 编辑职位
 	 * @param Job
@@ -310,6 +447,58 @@ public class JobService extends SimpleServiceImpl {
 				new Object[]{id},
 				new Type[]{StringType.INSTANCE});
 		ret.setSuccess(FormResult.SUCCESS);
+		return ret;
+	}
+
+	/**
+	 * 加载推荐简历的沟通记录
+	 * @param id
+	 * @return
+	 */
+	public Object loadRJComm(String id) {
+		return dao.queryListBySql(
+				"select * from t_resume_job_comm where resumejob_id = ? ",
+				new Object[]{id}, 
+				new Type[]{StringType.INSTANCE});
+	}
+	
+	/**
+	 * 编辑推荐简历的沟通记录
+	 * @param id
+	 * @return
+	 */
+	@Transactional
+	public FormResult editRJComm(TResumeJobComm comm) {
+		FormResult ret = new FormResult();
+		if(StrUtils.isNull(comm.getId())){//新增
+			comm.setId(UUID.randomUUID().toString());
+			comm.setCreateUser(getLoginUserId());
+			comm.setCreateDate(new Date());
+			dao.save(comm);
+		}else{//更新
+			comm.setCreateUser(getLoginUserId());
+			comm.setCreateDate(new Date());
+			dao.update(comm);
+		}
+		ret.setSuccess(FormResult.SUCCESS);
+		ret.setMessage("编辑沟通记录成功");
+		return ret;
+	}
+	
+	/**
+	 * 删除推荐简历的沟通记录
+	 * @param id
+	 * @return
+	 */
+	@Transactional
+	public FormResult delRJComm(String id) {
+		FormResult ret = new FormResult();
+		dao.executeDelOrUpdateSql(
+				"delete from t_resume_job_comm where id = ? ",
+				new Object[]{id},
+				new Type[]{StringType.INSTANCE});
+		ret.setSuccess(FormResult.SUCCESS);
+		ret.setMessage("删除沟通记录成功");
 		return ret;
 	}
 

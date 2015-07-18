@@ -12,13 +12,19 @@
 			<span>
 				基本信息
 			</span>
+			
+			<a
+			 ng-show="contract.state == '运作' || contract.state == '暂停'"
+			 class="spe" href="#contractmgr/editcontract/{{contract.id}}">编辑合同</a>
+			<span ng-show="contract.state == '终止'">-合同已终止、不可编辑</span>
+			 
 		</div>
 		<table>
 			<tbody>
 				<tr>
 					<td class="td-odd">客户名称：</td>
 					<td class="td-even">
-						<a href="#custommgr/viewcustom/{{custom.id}}">{{custom.customName}}</a>
+						<a class="link" href="#custommgr/viewcustom/{{custom.id}}">{{custom.customName}}</a>
 					</td>
 					<td class="td-odd">所属行业：</td>
 					<td class="td-even">{{custom.industry}}</td>
@@ -37,7 +43,7 @@
 			<tbody>
 				<tr>
 					<td class="td-odd">合同编号：</td>
-					<td class="td-even">{{contract.id}}</td>
+					<td class="td-even">{{contract.no}}</td>
 					<td class="td-odd">合同状态：</td>
 					<td class="td-even">{{contract.state}}</td>
 				</tr>
@@ -99,14 +105,14 @@
 			</thead>
 			<tbody>
 				<tr ng-repeat="job in jobs">
-					<td>{{job.name}}</td>
+					<td><a href="#jobmgr/viewjob/{{job.id}}" class="link">{{job.name}}</a></td>
 					<td>{{job.state}}</td>
-					<td>{{job.payMin}} - {{job.payMin}} 万</td>
+					<td>{{job.pay_min}} - {{job.pay_max}} 万</td>
 					<td>{{job.workplace}}</td>
-					<td>{{job.reportObj}}</td>
-					<td>{{job.team}}</td>
-					<td>{{job.requirePeople}}</td>
-					<td>{{job.createTime | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+					<td>{{job.report_obj}}</td>
+					<td>{{job.team_desc}}</td>
+					<td>{{job.require_people}}</td>
+					<td>{{job.create_time | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
 				</tr>
 			</tbody>
 		</table>

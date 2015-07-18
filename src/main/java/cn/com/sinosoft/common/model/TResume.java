@@ -1,5 +1,5 @@
 package cn.com.sinosoft.common.model;
-// Generated 2015-7-12 11:28:57 by Hibernate Tools 3.2.2.GA
+// Generated 2015-7-18 17:13:22 by Hibernate Tools 3.2.2.GA
 
 
 import java.util.Date;
@@ -19,7 +19,6 @@ public class TResume  implements java.io.Serializable {
      private String marrage;
      private String phone;
      private String email;
-     private String currentWage;
      private String workState;
      private String resumtDesc;
      private String headImage;
@@ -28,6 +27,9 @@ public class TResume  implements java.io.Serializable {
      private Date lastUpdateTime;
      private String lastUpdateUser;
      private String yearPay;
+     private String city;
+     private String industry;
+     private String duty;
 
     public TResume() {
     }
@@ -39,7 +41,7 @@ public class TResume  implements java.io.Serializable {
         this.sex = sex;
         this.createUser = createUser;
     }
-    public TResume(String id, String name, String address, String sex, String education, Date birthcay, String marrage, String phone, String email, String currentWage, String workState, String resumtDesc, String headImage, String createUser, Date createTime, Date lastUpdateTime, String lastUpdateUser, String yearPay) {
+    public TResume(String id, String name, String address, String sex, String education, Date birthcay, String marrage, String phone, String email, String workState, String resumtDesc, String headImage, String createUser, Date createTime, Date lastUpdateTime, String lastUpdateUser, String yearPay, String city, String industry, String duty) {
        this.id = id;
        this.name = name;
        this.address = address;
@@ -49,7 +51,6 @@ public class TResume  implements java.io.Serializable {
        this.marrage = marrage;
        this.phone = phone;
        this.email = email;
-       this.currentWage = currentWage;
        this.workState = workState;
        this.resumtDesc = resumtDesc;
        this.headImage = headImage;
@@ -58,6 +59,9 @@ public class TResume  implements java.io.Serializable {
        this.lastUpdateTime = lastUpdateTime;
        this.lastUpdateUser = lastUpdateUser;
        this.yearPay = yearPay;
+       this.city = city;
+       this.industry = industry;
+       this.duty = duty;
     }
    
     public String getId() {
@@ -123,13 +127,6 @@ public class TResume  implements java.io.Serializable {
     public void setEmail(String email) {
         this.email = email;
     }
-    public String getCurrentWage() {
-        return this.currentWage;
-    }
-    
-    public void setCurrentWage(String currentWage) {
-        this.currentWage = currentWage;
-    }
     public String getWorkState() {
         return this.workState;
     }
@@ -185,6 +182,27 @@ public class TResume  implements java.io.Serializable {
     
     public void setYearPay(String yearPay) {
         this.yearPay = yearPay;
+    }
+    public String getCity() {
+        return this.city;
+    }
+    
+    public void setCity(String city) {
+        this.city = city;
+    }
+    public String getIndustry() {
+        return this.industry;
+    }
+    
+    public void setIndustry(String industry) {
+        this.industry = industry;
+    }
+    public String getDuty() {
+        return this.duty;
+    }
+    
+    public void setDuty(String duty) {
+        this.duty = duty;
     }
 
 

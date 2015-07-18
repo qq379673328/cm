@@ -9,11 +9,13 @@ import java.util.UUID;
 
 import javax.annotation.Resource;
 
+import org.hibernate.type.StringType;
 import org.hibernate.type.Type;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import cn.com.sinosoft.common.model.TInvoice;
+import cn.com.sinosoft.common.util.SqlUtil;
 import cn.com.sinosoft.common.util.StrUtils;
 import cn.com.sinosoft.core.service.SimpleServiceImpl;
 import cn.com.sinosoft.core.service.model.FormResult;
@@ -47,8 +49,40 @@ public class InvoiceService extends SimpleServiceImpl {
 		List<Type> types = new ArrayList<Type>();
 		StringBuffer sb = new StringBuffer(
 				" SELECT t.*,getDictName(t.apply_user) apply_user_desc"
-				+ "  from t_invoice t where 1=1 ");
+				+ "  from t_invoice t left join t_user u on t.apply_user = u.id"
+				+ " where 1=1 ");
 		
+		if(!StrUtils.isNull(params.get("companyName"))){//客户名称
+			sb.append(" AND t.custom_name like ? ");
+			values.add("%" + params.get("companyName") + "%");
+			types.add(StringType.INSTANCE);
+		}
+		if(!StrUtils.isNull(params.get("incomestate"))){//回款状态
+			sb.append(" AND t.income_state = ? ");
+			values.add(params.get("incomestate"));
+			types.add(StringType.INSTANCE);
+		}
+		if(!StrUtils.isNull(params.get("type"))){//发票类型
+			sb.append(" AND t.type = ? ");
+			values.add(params.get("type"));
+			types.add(StringType.INSTANCE);
+		}
+		if(!StrUtils.isNull(params.get("invoicestate"))){//发票状态
+			sb.append(" AND t.state = ? ");
+			values.add(params.get("invoicestate"));
+			types.add(StringType.INSTANCE);
+		}
+		if(!StrUtils.isNull(params.get("name"))){//申请人
+			sb.append(" AND u.name like ? ");
+			values.add("%" + params.get("name") + "%");
+			types.add(StringType.INSTANCE);
+		}
+		if(!StrUtils.isNull(params.get("timeStart"))){//创建日期-开始
+			sb.append(" AND " + SqlUtil.toDate(params.get("timeStart"), 1, 0) + " <= t.create_time ");
+		}
+		if(!StrUtils.isNull(params.get("timeEnd"))){//创建日期-结束
+			sb.append(" AND " + SqlUtil.toDate(params.get("timeEnd"), 1, 0) + " >= t.create_time ");
+		}
 		
 		srcSql.setSrcSql(sb.toString());
 		srcSql.setTypes(types.toArray(new Type[0]));

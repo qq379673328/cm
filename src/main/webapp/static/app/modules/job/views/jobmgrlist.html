@@ -61,9 +61,9 @@
 	
 	<div class="mytable">
 		<div class="title">
-			<span>总数 ：
+			<span>搜索结果：共有
 				<span class="highlight">{{queryParams.total}}</span>
-			 	个
+			 	职位
 			 </span>
 			
 			<a class="spe" href="#jobmgr/injob">发布新职位</a>
@@ -109,7 +109,7 @@
 					<td>{{ item.workplace }}</td>
 					<td>{{ item.custom_name }}</td> 
 					<td>{{ item.teams_desc }}</td>
-					<td>{{ item.jobcount }}</td>
+					<td>{{ item.jobcourec }}人</td>
 					<td>未实现</td>
 					<td>{{ item.last_update_time | date : 'yyyy-MM-dd'}}</td>
 					<td ng-show="!item.ishandling">
