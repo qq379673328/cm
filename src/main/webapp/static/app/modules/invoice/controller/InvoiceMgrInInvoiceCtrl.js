@@ -1,7 +1,7 @@
 //发票管理-录入发票
 app.controller('InvoiceMgrInInvoiceCtrl',
 		function($scope, $http, $routeParams, ngTableParams,
-				$rootScope) {
+				$rootScope, $location) {
 	$rootScope.menu = "invoice";
 	
 	var invoiceId = $routeParams.id;
@@ -11,6 +11,12 @@ app.controller('InvoiceMgrInInvoiceCtrl',
 		//请求发票信息
 		$http.post("invoice/getInvoiceViewById", {id: invoiceId}).success(function(data){
 			$scope.invoice = data.invoice;
+			
+			$scope.invoice.cc = {
+				customId: data.invoice.customId,
+				contractNo: data.invoice.contractNo
+			};
+			
 			$scope.isReady = true;
 		});
 	}else{//新增
@@ -27,6 +33,9 @@ app.controller('InvoiceMgrInInvoiceCtrl',
 	$scope.save = function(){
 		validFormAndSubmit(function(data){
 			$scope.formresult = data;
+			if(data.success == "1"){//成功
+				$location.path("/invoicemgr/list");
+			}
 		});
 	};
 	
@@ -34,6 +43,13 @@ app.controller('InvoiceMgrInInvoiceCtrl',
 	function validFormAndSubmit(cb){
 		if(validForm()){
 			$scope.isrequest = true;
+			
+			$scope.invoice.customId = $scope.invoice.cc.customId;
+			$scope.invoice.contractNo = $scope.invoice.cc.contractNo;
+			
+			$scope.invoice.resumeId = $scope.invoice.rd.resumeId;
+			$scope.invoice.resumeDesc = $scope.invoice.rd.resumeDesc;
+			
 			$http.post("invoice/edit", $scope.invoice).success(function(data){
 				$scope.formresult = data;
 				$scope.isrequest = false;

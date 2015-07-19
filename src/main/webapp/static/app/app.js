@@ -117,5 +117,4 @@ app.controller('MainCtrl', function($scope, $location, $http) {
 		$scope.user = data;
 	});
 	
-	
 });

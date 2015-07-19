@@ -1,5 +1,5 @@
 package cn.com.sinosoft.common.model;
-// Generated 2015-7-18 17:13:22 by Hibernate Tools 3.2.2.GA
+// Generated 2015-7-19 16:35:59 by Hibernate Tools 3.2.2.GA
 
 
 import java.util.Date;
@@ -37,12 +37,13 @@ public class TUser  implements java.io.Serializable {
      private Date createTime;
      private String lastUpdateUser;
      private Date lastUpdateTime;
+     private String isDisabled;
 
     public TUser() {
     }
 
 	
-    public TUser(String id, String username, String password, String name, String sex, String duty, String userType, Date createTime, Date lastUpdateTime) {
+    public TUser(String id, String username, String password, String name, String sex, String duty, String userType, Date createTime, Date lastUpdateTime, String isDisabled) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -52,8 +53,9 @@ public class TUser  implements java.io.Serializable {
         this.userType = userType;
         this.createTime = createTime;
         this.lastUpdateTime = lastUpdateTime;
+        this.isDisabled = isDisabled;
     }
-    public TUser(String id, String username, String password, String name, String sex, String duty, Date entryDate, String state, String idCard, String npPlace, String phone, String eduSchool, Date eduDate, String department, String team, String userType, String email, String msn, String education, String professional, Date positiveDate, Date leaveDate, String skills, String userCreate, Date createTime, String lastUpdateUser, Date lastUpdateTime) {
+    public TUser(String id, String username, String password, String name, String sex, String duty, Date entryDate, String state, String idCard, String npPlace, String phone, String eduSchool, Date eduDate, String department, String team, String userType, String email, String msn, String education, String professional, Date positiveDate, Date leaveDate, String skills, String userCreate, Date createTime, String lastUpdateUser, Date lastUpdateTime, String isDisabled) {
        this.id = id;
        this.username = username;
        this.password = password;
@@ -81,6 +83,7 @@ public class TUser  implements java.io.Serializable {
        this.createTime = createTime;
        this.lastUpdateUser = lastUpdateUser;
        this.lastUpdateTime = lastUpdateTime;
+       this.isDisabled = isDisabled;
     }
    
     public String getId() {
@@ -271,6 +274,13 @@ public class TUser  implements java.io.Serializable {
     
     public void setLastUpdateTime(Date lastUpdateTime) {
         this.lastUpdateTime = lastUpdateTime;
+    }
+    public String getIsDisabled() {
+        return this.isDisabled;
+    }
+    
+    public void setIsDisabled(String isDisabled) {
+        this.isDisabled = isDisabled;
     }
 
 

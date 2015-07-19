@@ -17,9 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import cn.com.sinosoft.common.model.TCustom;
 import cn.com.sinosoft.common.model.TJob;
+import cn.com.sinosoft.common.model.TJobCommFile;
 import cn.com.sinosoft.common.model.TJobCommunication;
 import cn.com.sinosoft.common.model.TJobTeam;
-import cn.com.sinosoft.common.model.TResumeJob;
 import cn.com.sinosoft.common.model.TResumeJobComm;
 import cn.com.sinosoft.common.model.TUser;
 import cn.com.sinosoft.common.util.SqlUtil;
@@ -57,11 +57,12 @@ public class JobService extends SimpleServiceImpl {
 		TUser user = userUtil.getLoginUser();
 		String userId = user.getId();
 		StringBuffer sb = new StringBuffer(
-				" SELECT t.*, cus.custom_name, getDictName(t.team) teams_desc, "
-				+ " IFNULL(jobcou.jobcount, 0) jobcount, "
-				+ " IFNULL(jobcourec.jobcourec, 0) jobcourec, "
-				
-				+ " CASE "
+				" SELECT tt.*, "
+						+ " cus.custom_name, getDictName(tt.team) teams_desc, "
+						+ " IFNULL(jobcou.jobcount, 0) jobcount, "
+						+ " IFNULL(jobcourec.jobcourec, 0) jobcourec "
+				+ " from ( select t.*,"
+					+ " CASE "
 				+ "     WHEN t.create_user = ?  "
 				+ "     THEN 'my' "
 				+ "      WHEN ? IN ( "
@@ -75,17 +76,17 @@ public class JobService extends SimpleServiceImpl {
 				+ "   END AS beyond "
 				
 				+ " from "
-				+ " t_job t left join t_custom cus on t.custom_id = cus.id"
+				+ " t_job t ) tt left join t_custom cus on tt.custom_id = cus.id"
 				
 				+ " left join "
 				+ "(select job.job_id, count(1) jobcount from t_resume_job job group by job.job_id  ) jobcou "
-				+ " on t.id = jobcou.job_id "
+				+ " on tt.id = jobcou.job_id "
 				
 				+ " left join "
 				+ "(select jobb.job_id, count(1) jobcourec "
 					+ "from t_resume_job jobb where jobb.recom_state = '已推荐' "
 					+ " group by jobb.job_id  ) jobcourec "
-				+ " on t.id = jobcourec.job_id "
+				+ " on tt.id = jobcourec.job_id "
 				
 				+ " where 1=1 ");
 		values.add(userId);
@@ -94,49 +95,49 @@ public class JobService extends SimpleServiceImpl {
 		types.add(StringType.INSTANCE);
 		
 		if(!StrUtils.isNull(params.get("industry"))){//职位行业
-			sb.append(" AND t.industry like ? ");
+			sb.append(" AND tt.industry like ? ");
 			values.add(params.get("industry"));
 			types.add(StringType.INSTANCE);
 		}
 		if(!StrUtils.isNull(params.get("workplace"))){//工作地点
-			sb.append(" AND t.workplace = ? ");
+			sb.append(" AND tt.workplace = ? ");
 			values.add(params.get("workplace"));
 			types.add(StringType.INSTANCE);
 		}
 		if(!StrUtils.isNull(params.get("payMin"))){//职位年薪-最小
-			sb.append(" AND t.pay_min > ? ");
+			sb.append(" AND tt.pay_min > ? ");
 			values.add(params.get("payMin"));
 			types.add(StringType.INSTANCE);
 		}
 		if(!StrUtils.isNull(params.get("payMax"))){//职位年薪-最大
-			sb.append(" AND t.pay_max < ? ");
+			sb.append(" AND tt.pay_max < ? ");
 			values.add(params.get("payMax"));
 			types.add(StringType.INSTANCE);
 		}
 		if(!StrUtils.isNull(params.get("state"))){//职位状态
-			sb.append(" AND t.state = ? ");
+			sb.append(" AND tt.state = ? ");
 			values.add(params.get("state"));
 			types.add(StringType.INSTANCE);
 		}
 		if(!StrUtils.isNull(params.get("name"))){//职位关键词
-			sb.append(" AND t.name like ? ");
+			sb.append(" AND tt.name like ? ");
 			values.add("%" + params.get("name") + "%");
 			types.add(StringType.INSTANCE);
 		}
 		if(!StrUtils.isNull(params.get("createTimeStart"))){//创建日期-开始
-			sb.append(" AND " + SqlUtil.toDate(params.get("createTimeStart"), 1, 0) + " <= t.create_time ");
+			sb.append(" AND " + SqlUtil.toDate(params.get("createTimeStart"), 1, 0) + " <= tt.create_time ");
 		}
 		if(!StrUtils.isNull(params.get("createTimeEnd"))){//创建日期-结束
-			sb.append(" AND " + SqlUtil.toDate(params.get("createTimeEnd"), 1, 0) + " >= t.create_time ");
+			sb.append(" AND " + SqlUtil.toDate(params.get("createTimeEnd"), 1, 0) + " >= tt.create_time ");
 		}
 		//客户类型-我的、合作、其他
 		if(!StrUtils.isNull(params.get("beyond"))){
-			sb.append(" AND t.beyond = ? ");
+			sb.append(" AND tt.beyond = ? ");
 			values.add(params.get("beyond"));
 			types.add(StringType.INSTANCE);
 		}
 		
-		sb.append(" order by t.last_update_time desc ");
+		sb.append(" order by tt.last_update_time desc ");
 		srcSql.setSrcSql(sb.toString());
 		srcSql.setTypes(types.toArray(new Type[0]));
 		srcSql.setValues(values.toArray());
@@ -211,7 +212,8 @@ public class JobService extends SimpleServiceImpl {
 					+ "j.id as jid,j.recom_time, j.verify_time, "
 					+ " getDictName(j.recom_user) recom_user_desc "
 					+ " from t_resume t,t_resume_job j"
-					+ " where t.id = j.resume_id and j.job_id = ? ",
+					+ " where t.id = j.resume_id and j.job_id = ? "
+					+ " order by j.create_time desc ",
 					new Object[]{id},
 					new Type[]{StringType.INSTANCE}));
 			//向企业投递的简历
@@ -221,7 +223,7 @@ public class JobService extends SimpleServiceImpl {
 					+ " getDictName(j.recom_user) recom_user_desc"
 					+ " from t_resume t,t_resume_job j"
 					+ " where t.id = j.resume_id and j.job_id = ?"
-					+ " and j.recom_state = '已推荐' ",
+					+ " and j.recom_state = '已推荐' order by j.create_time desc ",
 					new Object[]{id},
 					new Type[]{StringType.INSTANCE}));
 			//职位交流信息
@@ -229,9 +231,17 @@ public class JobService extends SimpleServiceImpl {
 					"select t.*,"
 					+ " getDictName(t.create_user) create_user_desc "
 					+ " from t_job_communication t"
-					+ " where t.job_id = ? ",
+					+ " where t.job_id = ? order by t.create_time desc ",
 					new Object[]{id},
 					new Type[]{StringType.INSTANCE}));
+			//职位交流附件表
+			ret.put("jobcommsFile", dao.queryListBySql(
+					"select t.id, a.id as fid, a.path, a.name, a.upload_time, a.type from t_job_comm_file t "
+					+ "left join t_attachment a on t.attachment_id = a.id "
+					+ " where t.job_id = ? order by a.upload_time desc",
+					new Object[]{id},
+					new Type[]{StringType.INSTANCE}));
+			
 			//职位归属-本人？团队？
 			ret.put("beyond", getJobType(id));
 			//职位推荐的处理状态
@@ -240,6 +250,7 @@ public class JobService extends SimpleServiceImpl {
 					+ " and j.recom_state = '已推荐' group by j.verify_state ",
 					new Object[]{id},
 					new Type[]{StringType.INSTANCE}));
+			
 		}
 		return ret;
 	}
@@ -457,7 +468,8 @@ public class JobService extends SimpleServiceImpl {
 	 */
 	public Object loadRJComm(String id) {
 		return dao.queryListBySql(
-				"select * from t_resume_job_comm where resumejob_id = ? ",
+				"select * from t_resume_job_comm where resumejob_id = ?"
+				+ " order by create_date desc ",
 				new Object[]{id}, 
 				new Type[]{StringType.INSTANCE});
 	}
@@ -499,6 +511,43 @@ public class JobService extends SimpleServiceImpl {
 				new Type[]{StringType.INSTANCE});
 		ret.setSuccess(FormResult.SUCCESS);
 		ret.setMessage("删除沟通记录成功");
+		return ret;
+	}
+
+	/**
+	 * 添加沟通记录表-附件
+	 * @param ids
+	 * @return
+	 */
+	@Transactional
+	public Object addCommFile(String ids, String jobId) {
+		FormResult ret = new FormResult();
+		if(!StrUtils.isNull(ids)){
+			String[] idsp = ids.split(",");
+			List<TJobCommFile> tAttachments = new ArrayList<TJobCommFile>();
+			for(String id : idsp){
+				tAttachments.add(new TJobCommFile(UUID.randomUUID().toString(),id, jobId));
+			}
+			dao.getTemplate().saveOrUpdateAll(tAttachments);
+		}
+		ret.setSuccess(FormResult.SUCCESS);
+		ret.setMessage("沟通记录表附件保存成功");
+		return ret;
+	}
+
+	/**
+	 * 删除沟通记录表-附件
+	 * @param id
+	 * @return
+	 */
+	@Transactional
+	public FormResult delCommFile(String id) {
+		FormResult ret = new FormResult();
+		dao.executeDelOrUpdateSql("delete from t_job_comm_file where id = ? ",
+				new Object[]{id},
+				new Type[]{StringType.INSTANCE});
+		ret.setSuccess(FormResult.SUCCESS);
+		ret.setMessage("沟通记录表附件删除成功");
 		return ret;
 	}
 

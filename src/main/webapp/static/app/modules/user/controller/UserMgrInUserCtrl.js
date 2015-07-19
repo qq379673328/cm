@@ -1,6 +1,6 @@
 //用户管理-编辑用户
 app.controller('UserMgrInUserCtrl',function($scope, $routeParams, $http,
-		BaseInfoService, $rootScope) {
+		BaseInfoService, $rootScope, $location) {
 	
 	$rootScope.menu = "user";
 	
@@ -26,25 +26,35 @@ app.controller('UserMgrInUserCtrl',function($scope, $routeParams, $http,
 		$scope.formresult = null;
 		var valid = $("#usermgr-list-form").isHappy({//验证
 			fields: {
-				loginName: {required: true, 
-					maxlength: 20,
-					minlength: 6,
-					username: true},//登录名
-				userName: {required: true, maxlength: 20},//用户名
-				birthday: {dateISO: true},//出生日期
-				orgCode: {required: true, maxlength: 40},//所属机构
-				department: {required: true, maxlength: 100},//所属科室
-				comment: {maxlength: 100}//备注
+				username: {required: true, username: true},//登录名
+				userType: {required: true},//用户类型
+				name: {required: true, maxlength: 20},//姓名
+				sex: {required: true},//性别
+				duty: {required: true,  maxlength: 40},//职务
+				entryDate: {required: true, dateISO: true},//入职日期
+				state: {required: true},//状态
+				idCard: {idCard: true},//身份证号
+				npPlace: {maxlength: 200},//籍贯
+				phone: {required: true, maxlength: 100},//电话
+				eduSchool: {maxlength: 200},//毕业院校
+				eduDate: {dateISO: true},//毕业时间
+				department: {maxlength: 100},//所属部门
+				email: {email: true},//邮箱
+				msn: {maxlength: 100},//qq或者微信
+				education: {maxlength: 100},//学历
+				professional: {maxlength: 100},//专业
+				positiveDate: {dateISO: true},//转正日期
+				leaveDate: {dateISO: true},//离职日期
+				skills: {maxlength: 200}//擅长专业
 			}
 		});
 		if(valid){
 			$scope.isrequest = true;
 			$http.post("user/editUser", $scope.user).success(function(data){
 				$scope.formresult = data;
-				if(data.data){
-					$scope.user.id = data.data.id;
+				if(data.success == "1"){//成功
+					$location.path("usermgr/list/");
 				}
-				$scope.isrequest = false;
 			});
 		}
 	};

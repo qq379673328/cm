@@ -38,7 +38,7 @@ public class ContractController extends BaseController {
 	public PagingResult getcontractList(
 			@RequestParam Map<String ,String> params,
 			PageParam pageParams){
-		return contractService.getContractList(params, pageParams);
+		return contractService.getContractList(params, pageParams, true);
 	}
 	
 	/**

@@ -4,6 +4,11 @@ app.controller('InvoiceMgrListCtrl',
 				$rootScope) {
 	$rootScope.menu = "invoice";
 	
+	//用户是否能够开发票
+	$http.post("invoice/isCanInvoice", {}).success(function(data){
+		$scope.isCanInvoice = data.isCanInvoice;
+	});
+	
 	//分页查询
 	var initpage = 1,
 		initrows = 10;

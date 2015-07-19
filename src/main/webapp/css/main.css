@@ -261,6 +261,9 @@ textarea{
 	color: #6C2C2C;
 	font-weight: bold;
 }
+.hover{
+	cursor: pointer;	
+}
 .textarea{
 	width: 70%;
 	height: 150px;
@@ -382,6 +385,9 @@ textarea{
 	height: 80px;
 	border-bottom: 2px solid #eee;
 	margin-top: 5px;
+}
+.pubinfo p{
+	margin-bottom: 5px
 }
 
 /*btn*/
@@ -659,6 +665,18 @@ hr {
 .dialog{
 	margin: 0 auto;
 	color: #fff;
+	overflow-y: auto;
+	height: 90%;
+}
+.dialog .info span{
+	height: 20px;
+	line-height: 20px;
+	display: block;
+}
+.dialog .info input{
+	height: 20px;
+	line-height: 20px;
+	display: block;
 }
 .ok,.close{
 	cursor: pointer;

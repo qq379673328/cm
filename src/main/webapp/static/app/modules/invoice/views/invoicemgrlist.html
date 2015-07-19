@@ -59,18 +59,19 @@
 	
 	<div class="mytable">
 		<div class="title">
-			<span>总数 ：
+			<span>
+				搜索结果：共有
 				<span class="highlight">{{queryParams.total}}</span>
-			 	个
+			 	份发票
 			 </span>
 			
-			<a class="spe" href="#invoicemgr/ininvoice">申请发票</a>
+			<a ng-show="isCanInvoice==true" class="spe" href="#invoicemgr/ininvoice">申请发票</a>
 		</div>
 		<table class="my-table" ng-table="tableParams" template-pagination="custom/pager">
 			<thead>
 				<tr>
 					<th>申请人</th>
-					<th>客户名称</th>
+					<th>客户</th>
 					<th>发票类型</th>
 					<th>发票金额</th>
 					<th>发票状态</th>
@@ -85,11 +86,11 @@
 				<tr ng-show="!$data"><td colspan="4">加载中...</td></tr>
 				<tr ng-repeat="item in $data" ng-class="{true:'tr-odd' , false: 'tr-even'}[$index%2 == 0]">
 					<td>{{ item.apply_user_desc }}</td>
-					<td>{{ item.custom_name }}</td>
+					<td>{{ item.custom_name + item.no }}</td>
 					<td>{{ item.type }}</td>
 					<td>{{ item.total }}</td>
 					<td>{{ item.state }}</td>
-					<td>{{ item.check_user }}</td>
+					<td>{{ item.check_user_desc }}</td>
 					<td>{{ item.income_state }}</td>
 					<td>{{ item.apply_time }}</td>
 					<td>{{ item.comment }}</td>

@@ -37,6 +37,7 @@
 					<th>职位名</th>
 					<th>客户名</th>
 					<th>创建时间</th>
+					<th>推荐状态</th>
 					<th></th>
 				</tr>
 			</thead>
@@ -49,9 +50,13 @@
 						<i ng-show="item.beyond=='other'" class="fa fa-user-plus"></i>
 						
 						{{ item.state }}</td>
-					<td>{{ item.name }}</td>
+					<td><a class="link" href="#jobmgr/viewjob/{{item.id}}">{{ item.name }}</a></td>
 					<td>{{ item.custom_name }}</td>
 					<td>{{ item.create_time | date : 'yyyy-MM-dd HH:mm '}}</td>
+					<td>
+						<span ng-show="item.ispub=='1'" style="color: green;"><i class="fa fa-check"></i>已推荐</span>
+						<span ng-show="item.ispub=='0'">未推荐</span>
+					</td>
 					
 					<td ng-show="item.ishandling">操作中</td>
 					<td ng-show="!item.ishandling">

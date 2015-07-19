@@ -38,6 +38,7 @@
 					<th></th>
 					<th>登录名</th>
 					<th>用户名</th>
+					<th>用户类型</th>
 					<th>性别</th>
 					<th>状态</th>
 					<th></th>
@@ -49,6 +50,7 @@
 				
 				<td>{{ item.username }}</td>
 				<td>{{ item.NAME }}</td>
+				<td>{{ item.user_type }}</td>
 				<td>{{ item.sex == 1 ? "男" : ((item.sex == 2) ? "女" : "") }}</td>
 				<td>{{ item.state }}</td>
 				
@@ -58,16 +60,16 @@
 						ng-show="!item.ishanding"
 						>编辑</a>
 					
-					<a class="btn btn-small btn-danger"
+					<a  ng-show="item.user_type != '管理员'" class="btn btn-small btn-danger"
 						ng-click="item.ishanding==true;disabledUser(item);"
-						ng-show="item.is_disabled == 0 && !item.ishanding"
+						ng-show="item.is_disabled == 1 && !item.ishanding"
 						>锁定</a>
 					<a class="btn btn-small btn-success"
 						ng-click="item.ishanding==true;enableUser(item);"
-						ng-show="item.is_disabled == 1 && !item.ishanding"
+						ng-show="item.is_disabled == 0 && !item.ishanding"
 						>解锁</a>
 						
-					<a class="btn btn-small btn-success"
+					<a ng-show="item.user_type != '管理员'" class="btn btn-small btn-success"
 							ng-click="item.prepareDel = !item.prepareDel"
 							>删除</a>
 						

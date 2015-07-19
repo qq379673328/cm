@@ -10,6 +10,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -72,9 +73,9 @@ public class UserRealm extends AuthorizingRealm {
         if(user == null) {//用户名或者密码错误
             throw new AuthenticationException();
         }
-        /*if("1".equals(user.getIsDisabled())) {//用户已锁定
+        if("0".equals(user.getIsDisabled())) {//用户已锁定
             throw new LockedAccountException();
-        }*/
+        }
         
         //交给AuthenticatingRealm使用CredentialsMatcher进行密码匹配，如果觉得人家的不好可以自定义实现
         SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(

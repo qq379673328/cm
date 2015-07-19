@@ -8,6 +8,7 @@ package cn.com.sinosoft.core.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -142,9 +143,13 @@ public class CommonService extends SimpleServiceImpl {
 		String type = getFileTypeByName(fileName);
 		long size = muFile.getSize();
 		String id = UUID.randomUUID().toString();
-		String newName = id + "." + type;
+		String yMD = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+		String newName = yMD + File.separator + id + "." + type;
 		//保存附件到文件系统
-		File saveFile = new File(ATTAPATH + newName);
+		File saveFile = new File(ATTAPATH + File.separator + newName);
+		if(!saveFile.exists()){
+			saveFile.mkdirs();
+		}
 		saveFile.createNewFile();
 		muFile.transferTo(saveFile);
 		//保存附件信息到数据库
@@ -181,7 +186,6 @@ public class CommonService extends SimpleServiceImpl {
 	@Transactional
 	public FormResult fileDel(String id) {
 		FormResult ret = new FormResult();
-		TAttachment att = dao.queryById(id, TAttachment.class);
 		//附件表
 		dao.executeDelOrUpdateSql("delete from t_attachment where id = ? ",
 				new Object[]{id},
@@ -196,9 +200,15 @@ public class CommonService extends SimpleServiceImpl {
 		dao.executeDelOrUpdateSql("delete from t_resume_date where attachment_id = ? ",
 				new Object[]{id},
 				new Type[]{StringType.INSTANCE});
+		dao.executeDelOrUpdateSql("delete from t_job_comm_file where attachment_id = ? ",
+				new Object[]{id},
+				new Type[]{StringType.INSTANCE});
 		//删除附件文件
-		File saveFile = new File(ATTAPATH + att.getId());
-		saveFile.delete();
+		TAttachment att = dao.queryById(id, TAttachment.class);
+		if(att != null){
+			File saveFile = new File(ATTAPATH + File.separator + att.getPath());
+			saveFile.delete();
+		}
 		
 		ret.setSuccess(FormResult.SUCCESS);
 		ret.setMessage("附件删除成功");

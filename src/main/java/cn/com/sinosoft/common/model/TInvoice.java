@@ -1,5 +1,5 @@
 package cn.com.sinosoft.common.model;
-// Generated 2015-7-18 17:13:22 by Hibernate Tools 3.2.2.GA
+// Generated 2015-7-19 16:35:59 by Hibernate Tools 3.2.2.GA
 
 
 import java.util.Date;
@@ -24,6 +24,10 @@ public class TInvoice  implements java.io.Serializable {
      private String comment;
      private String createUser;
      private Date createTime;
+     private String customId;
+     private String contractNo;
+     private String resumeId;
+     private String resumeDesc;
 
     public TInvoice() {
     }
@@ -40,7 +44,7 @@ public class TInvoice  implements java.io.Serializable {
         this.checkUser = checkUser;
         this.createUser = createUser;
     }
-    public TInvoice(String id, String applyUser, Date applyTime, String customContract, String inUser, String type, String property, float total, String state, String checkUser, String incomeState, String comment, String createUser, Date createTime) {
+    public TInvoice(String id, String applyUser, Date applyTime, String customContract, String inUser, String type, String property, float total, String state, String checkUser, String incomeState, String comment, String createUser, Date createTime, String customId, String contractNo, String resumeId, String resumeDesc) {
        this.id = id;
        this.applyUser = applyUser;
        this.applyTime = applyTime;
@@ -55,6 +59,10 @@ public class TInvoice  implements java.io.Serializable {
        this.comment = comment;
        this.createUser = createUser;
        this.createTime = createTime;
+       this.customId = customId;
+       this.contractNo = contractNo;
+       this.resumeId = resumeId;
+       this.resumeDesc = resumeDesc;
     }
    
     public String getId() {
@@ -154,6 +162,34 @@ public class TInvoice  implements java.io.Serializable {
     
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+    public String getCustomId() {
+        return this.customId;
+    }
+    
+    public void setCustomId(String customId) {
+        this.customId = customId;
+    }
+    public String getContractNo() {
+        return this.contractNo;
+    }
+    
+    public void setContractNo(String contractNo) {
+        this.contractNo = contractNo;
+    }
+    public String getResumeId() {
+        return this.resumeId;
+    }
+    
+    public void setResumeId(String resumeId) {
+        this.resumeId = resumeId;
+    }
+    public String getResumeDesc() {
+        return this.resumeDesc;
+    }
+    
+    public void setResumeDesc(String resumeDesc) {
+        this.resumeDesc = resumeDesc;
     }
 
 

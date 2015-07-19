@@ -35,13 +35,18 @@ public class UserUtil {
 	/*session中用户*/
 	public static final String SESSION_NAME_USER = "loginuser";
 	/*用户类型*/
-	public static final String USERTYPE_SUPERADMIN = "1";//超级管理员
-	public static final String USERTYPE_FORMADMIN = "2";//表单管理员
-	public static final String USERTYPE_REPORTUSER = "3";//上报人员
-	
-	private TUser getTestUser(){
-		return new TUser("1", "admin", "测试用户", "1", "1", "1", "1", new Date(), new Date());
-	}
+	/**
+	 * 管理员
+	 */
+	public static final String USERTYPE_SUPERADMIN = "管理员";
+	/**
+	 * 顾问
+	 */
+	public static final String USERTYPE_GUWEN = "顾问";
+	/**
+	 * 助理
+	 */
+	public static final String USERTYPE_ZHULI = "助理";
 	
 	/**
 	 * 获取当前登陆的用户

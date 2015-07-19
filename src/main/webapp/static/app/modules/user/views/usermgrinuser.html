@@ -21,7 +21,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td class="td-r">登录名：</td>
+					<td class="td-r"><span class="warn">*</span>登录名：</td>
 					<td class="td-l">
 						<input class="form-input" name="username" 
 							ng-model="user.username"
@@ -30,14 +30,14 @@
 					</td>
 				</tr>
 				<tr>
-					<td class="td-r">用户类型：</td>
+					<td class="td-r"><span class="warn">*</span>用户类型：</td>
 					<td class="td-l">
-						<input type="radio" name="userType" ng-model="user.userType" value="2" />顾问
-						<input type="radio" name="userType" ng-model="user.userType" value="3" />助理
+						<input type="radio" name="userType" ng-model="user.userType" value="顾问" />顾问
+						<input type="radio" name="userType" ng-model="user.userType" value="助理" />助理
 					</td>
 				</tr>
 				<tr>
-					<td class="td-r">姓名：</td>
+					<td class="td-r"><span class="warn">*</span>姓名：</td>
 					<td class="td-l">
 						<input class="form-input" name="name" ng-model="user.name"
 							placeholder="请输入用户名"
@@ -45,7 +45,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td class="td-r">性别：</td>
+					<td class="td-r"><span class="warn">*</span>性别：</td>
 					<td class="td-l">
 						<input type="radio" ng-model="user.sex" name="sex" value="1" />
 						男
@@ -54,9 +54,9 @@
 					</td>
 				</tr>
 				<tr>
-					<td class="td-r">职务：</td>
+					<td class="td-r"><span class="warn">*</span>职务：</td>
 					<td class="td-l">
-						<input class="form-input" name="name" ng-model="user.duty" />
+						<input class="form-input" name="duty" ng-model="user.duty" />
 					</td>
 				</tr>
 				<tr>
@@ -66,7 +66,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td class="td-r">状态：</td>
+					<td class="td-r"><span class="warn">*</span>状态：</td>
 					<td class="td-l">
 						<input type="radio" ng-model="user.state" name="state" value="在职" />
 						在职
@@ -89,7 +89,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td class="td-r">电话：</td>
+					<td class="td-r"><span class="warn">*</span>电话：</td>
 					<td class="td-l">
 						<input class="form-input" name="phone" ng-model="user.phone" />
 					</td>

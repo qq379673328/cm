@@ -44,7 +44,9 @@ app.controller('ResumePubListCtrl',
 			}else{
 				$scope.queryParams.isreload = false;
 			}
-			$http.post("resume/getCustomList", $scope.queryParams).success(function(data){
+			$http.post("resume/getCustomList",
+					$.extend({}, $scope.queryParams, {resumeId: resumeId}))
+					.success(function(data){
 				var total = data.total;
 				$scope.queryParams.total = total;
 				params.total(total);

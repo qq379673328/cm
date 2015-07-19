@@ -47,55 +47,58 @@ public class ResumeService extends SimpleServiceImpl {
 		TUser user = userUtil.getLoginUser();
 		String userId = user.getId();
 		StringBuffer sb = new StringBuffer(
-				" SELECT t.*,ifnull(j.recou, 0) recou, "
+				" SELECT tt.*,ifnull(j.recou, 0) recou from ("
 				
+				+ " SELECT t.*, "
+				+ " (YEAR(CURDATE()) - YEAR(t.birthcay)) - (RIGHT(CURDATE(), 5) < RIGHT(t.birthcay, 5)) AS age , "
 				+ " CASE "
 				+ "     WHEN t.create_user = ?  "
 				+ "     THEN 'my' "
 				+ "     ELSE 'other'  "
 				+ "   END AS beyond "
 				
-				+ "  from t_Resume t  left join ( select r.resume_id, count(1) recou "
+				+ "  from t_Resume t ) tt"
+				+ "  left join ( select r.resume_id, count(1) recou "
 					+ "	from t_resume_job r where r.recom_state = '已推荐'"
 					+ " group by r.resume_id ) j"
-				+ " on t.id = j.resume_id "
+				+ " on tt.id = j.resume_id "
 				+ " where 1=1 "
 				);
 		values.add(userId);
 		types.add(StringType.INSTANCE);
 		
 		if(!StrUtils.isNull(params.get("zone"))){//所在城市
-			sb.append(" AND t.city = ? ");
+			sb.append(" AND tt.city = ? ");
 			values.add(params.get("zone"));
 			types.add(StringType.INSTANCE);
 		}
 		if(!StrUtils.isNull(params.get("industry"))){//行业
-			sb.append(" AND t.industry = ? ");
+			sb.append(" AND tt.industry = ? ");
 			values.add(params.get("industry"));
 			types.add(StringType.INSTANCE);
 		}
 		if(!StrUtils.isNull(params.get("edu"))){//学历
-			sb.append(" AND t.education = ? ");
+			sb.append(" AND tt.education = ? ");
 			values.add(params.get("edu"));
 			types.add(StringType.INSTANCE);
 		}
 		if(!StrUtils.isNull(params.get("duty"))){//职业
-			sb.append(" AND t.duty = ? ");
+			sb.append(" AND tt.duty = ? ");
 			values.add(params.get("duty"));
 			types.add(StringType.INSTANCE);
 		}
 		if(!StrUtils.isNull(params.get("sex"))){//性别
-			sb.append(" AND t.sex = ? ");
+			sb.append(" AND tt.sex = ? ");
 			values.add(params.get("sex"));
 			types.add(StringType.INSTANCE);
 		}
 		if(!StrUtils.isNull(params.get("agemin"))){//年龄-最小
-			sb.append(" AND t.sex = ? ");
+			sb.append(" AND tt.age > ? ");
 			values.add(params.get("agemin"));
 			types.add(StringType.INSTANCE);
 		}
 		if(!StrUtils.isNull(params.get("agemax"))){//年龄-最大
-			sb.append(" AND t.sex = ? ");
+			sb.append(" AND tt.age < ? ");
 			values.add(params.get("agemax"));
 			types.add(StringType.INSTANCE);
 		}
@@ -103,24 +106,24 @@ public class ResumeService extends SimpleServiceImpl {
 		String[] yp = handleYearPay(params.get("yearpay"));
 		if(yp != null){
 			if(yp.length == 1){
-				sb.append(" AND t.year_pay > ? ");//最小
+				sb.append(" AND tt.year_pay > ? ");//最小
 				values.add(yp[0]);
 				types.add(StringType.INSTANCE);
 			}else{
-				sb.append(" AND t.year_pay >= ? ");//最小
+				sb.append(" AND tt.year_pay >= ? ");//最小
 				values.add(yp[0]);
 				types.add(StringType.INSTANCE);
 				
-				sb.append(" AND t.year_pay <= ? ");//最大
+				sb.append(" AND tt.year_pay <= ? ");//最大
 				values.add(yp[1]);
 				types.add(StringType.INSTANCE);
 			}
 		}
 		if(!StrUtils.isNull(params.get("createTimeStart"))){//更新日期-开始
-			sb.append(" AND " + SqlUtil.toDate(params.get("createTimeStart"), 1, 0) + " <= t.last_update_time ");
+			sb.append(" AND " + SqlUtil.toDate(params.get("createTimeStart"), 1, 0) + " <= tt.last_update_time ");
 		}
 		if(!StrUtils.isNull(params.get("createTimeEnd"))){//更新日期-结束
-			sb.append(" AND " + SqlUtil.toDate(params.get("createTimeEnd"), 1, 0) + " >= t.last_update_time ");
+			sb.append(" AND " + SqlUtil.toDate(params.get("createTimeEnd"), 1, 0) + " >= tt.last_update_time ");
 		}
 		//简历类型-我的、其他
 		if(!StrUtils.isNull(params.get("beyond"))){
@@ -332,17 +335,23 @@ public class ResumeService extends SimpleServiceImpl {
 				+ "   END AS beyond , "
 				+ " CASE WHEN r.id IS NULL THEN '0' ELSE '1' END AS ispub  "
 
-				+ " FROM t_job j LEFT JOIN t_resume_job r ON j.id = r.job_id ) tt "
+				+ " FROM t_job j "
+					+ "	LEFT JOIN t_resume_job r "
+					+ " ON j.id = r.job_id and r.resume_id = ? ) tt "
 				+ " WHERE 1=1 and ( tt.beyond = 'my') ");
 		values.add(userId);
 		types.add(StringType.INSTANCE);
 		
-		if(!StrUtils.isNull(params.get("companyName"))){//客户名
+		//简历id
+		values.add(params.get("resumeId"));
+		types.add(StringType.INSTANCE);
+		
+		if(!StrUtils.isNull(params.get("companyName"))){//查询客户名
 			sb.append(" AND tt.custom_name like ? ");
 			values.add("%" + params.get("companyName") + "%");
 			types.add(StringType.INSTANCE);
 		}
-		if(!StrUtils.isNull(params.get("pubstate"))){//推荐状态
+		if(!StrUtils.isNull(params.get("pubstate"))){//查询-推荐状态
 			sb.append(" AND tt.ispub = ? ");
 			values.add(params.get("pubstate"));
 			types.add(StringType.INSTANCE);
@@ -372,11 +381,20 @@ public class ResumeService extends SimpleServiceImpl {
 				"delete from t_resume_job where job_id = ? and resume_id = ? ",
 				new Object[]{jobId, resumeId}, 
 				new Type[]{StringType.INSTANCE, StringType.INSTANCE});
+		
 		TResumeJob resumeJob = new TResumeJob();
+		//自己创建的简历跟团队简历推荐不一样
+		TResume resume = dao.queryById(resumeId, TResume.class);
+		//自己创建的直接推荐
+		if(resume != null && resume.getCreateUser().equals(getLoginUserId())){
+			resumeJob.setRecomState("已推荐");
+		}else{//团队推荐的
+			resumeJob.setRecomState("待处理");
+		}
+		
 		resumeJob.setId(UUID.randomUUID().toString());
 		resumeJob.setJobId(jobId);
 		resumeJob.setResumeId(resumeId);
-		resumeJob.setRecomState("待处理");
 		resumeJob.setRecomTime(new Date());
 		resumeJob.setRecomUser(getLoginUserId());
 		resumeJob.setCreateUser(getLoginUserId());

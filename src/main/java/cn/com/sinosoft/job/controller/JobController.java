@@ -150,4 +150,23 @@ public class JobController extends BaseController {
 		return jobService.delRJComm(id);
 	}
 	
+	/**
+	 * 添加沟通记录表-附件
+	 * @return
+	 */
+	@RequestMapping("addCommFile")
+	@ResponseBody
+	public Object addCommFile(String ids, String jobId){
+		return jobService.addCommFile(ids, jobId);
+	}
+	/**
+	 * 删除沟通记录表-附件
+	 * @return
+	 */
+	@RequestMapping("delCommFile")
+	@ResponseBody
+	public Object delCommFile(String id){
+		return jobService.delCommFile(id);
+	}
+	
 }

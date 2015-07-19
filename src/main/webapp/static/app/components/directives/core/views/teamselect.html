@@ -15,12 +15,13 @@
 	<input class="none" name="{{name ? name : 'team' }}" value="{{ selectteamsFlag }}" />
 	<div class="dialog-wrap" ng-show="showdialog">
 		<div class="dialog">
-			<span>请输入姓名进行查询</span>
-			<br/>
-			<span>至多显示100条记录</span>
-			<input class="form-input" ng-model="teamsearch" />
-			<div ng-click="showdialog=false;" 
-				class="fa fa-2x fa-times close"></div>
+			<div class="info">
+				<div ng-click="showdialog=false;" 
+					class="fa fa-2x fa-times close"></div>
+				<span>请输入姓名进行查询</span>
+				<span>至多显示100条记录</span>
+				<input class="form-input" ng-model="teamsearch" />
+			</div>
 			<div ng-repeat="team in teams">
 				<span
 					ng-click="addItem(team, $index);"

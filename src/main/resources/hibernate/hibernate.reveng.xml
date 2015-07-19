@@ -14,6 +14,7 @@
 	<table-filter match-name="t_job" match-catalog="cm"></table-filter>
 	<table-filter match-name="t_job_team" match-catalog="cm"></table-filter>
 	<table-filter match-name="t_job_communication" match-catalog="cm"></table-filter>
+	<table-filter match-name="t_job_comm_file" match-catalog="cm"></table-filter>
 	<table-filter match-name="t_pub" match-catalog="cm"></table-filter>
 	<table-filter match-name="t_resume" match-catalog="cm"></table-filter>
 	<table-filter match-name="t_resume_date" match-catalog="cm"></table-filter>

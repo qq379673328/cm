@@ -124,7 +124,6 @@
 					<th>当前职务</th>
 					<th>联系电话</th>
 					<th>推荐时间</th>
-					<th>评语或沟通记录</th>
 					<th>推荐人</th>
 					<th>推荐状态</th>
 					<th ng-show="beyond=='my'">&nbsp;</th>
@@ -140,7 +139,6 @@
 					<td>未实现</td>
 					<td>{{item.phone}}</td>
 					<td>{{item.recom_time | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
-					<td>{{item.comm}}</td>
 					<td>{{item.recom_user_desc}}</td>
 					<td>{{item.recom_state}}</td>
 					<td ng-show="beyond=='my'">
@@ -156,8 +154,8 @@
 							>取消投递</a>
 							
 						<a 
-							class="btn btn-small btn-success btn-w4"
-							ng-click="showcommdialog=true;loadComm(item.jid);"
+							class="btn btn-small btn-info btn-w4"
+							ng-click="loadRJComm(item.jid);"
 							>沟通记录</a>
 					</td>
 				</tr>
@@ -171,18 +169,24 @@
 			<div class="dialog">
 				<div ng-click="showcommdialog=false;" 
 					class="fa fa-2x fa-times close"></div>
-					
+				<hr/>
+				
 				<div ng-click="showRJadd = !showRJadd;"
 					class="btn btn-error"
 					>添加沟通记录</div>
-				<textarea ng-show="showRJadd"
-					ng-model="addRJComm" class="textarea"></textarea>
+				<div ng-show="showRJadd">
+					<textarea ng-model="addRJCommContent" class="textarea"></textarea>
+					<a class="btn btn-success" ng-click="addRJComm();">保存</a>
+				</div>
+				<hr/>
 				
 				<div ng-show="!comms || comms.length == 0">无记录</div>
 				<div ng-repeat="item in comms">
-					<span>{{item.content}}</span>
-					<div ng-click="delComm(item.id);" 
+					<span>{{item.create_date | date:'yyyy-MM-dd HH:mm:ss'}}</span>
+					<div style="width: 400px;word-wrap:break-word">{{item.content}}</div>
+					<div ng-click="delRJComm(item.id);" 
 						class="fa fa-2x fa-times close"></div>
+						<hr/>
 				</div>
 			</div>
 		</div>
@@ -205,7 +209,6 @@
 					<th>联系电话</th>
 					<th>企业反馈</th>
 					<th>反馈时间</th>
-					<th>评语或沟通记录</th>
 					<th>投递时间</th>
 					<th>推荐人</th>
 					<th ng-show="beyond=='my'"></th>
@@ -222,13 +225,16 @@
 					<td>{{item.phone}}</td>
 					<td>{{item.verify_state}}</td>
 					<td>{{item.verify_time | date : 'yyyy-MM-dd'}}</td>
-					<td>未实现</td>
 					<td>{{item.verify_time | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
 					<td>{{item.recom_user_desc}}</td>
 					<td ng-show="beyond=='my'">
 						<a class="btn btn-small btn-success"
 							ng-click="item.prepareHandle = !item.prepareHandle"
 							>操作</a>
+						<a 
+							class="btn btn-small btn-info btn-w4"
+							ng-click="loadRJComm(item.jid);"
+							>沟通记录</a>
 						<table ng-show="item.prepareHandle">
 							<tr>
 								<td colspan="5"></td>
@@ -337,5 +343,74 @@
 			</tbody>
 		</table>
 	</div>
+	
+	<hr/>
+	
+	<div class="mytable">
+		<div class="title">
+			<span>
+				职位沟通记录
+			</span>
+		</div>
+		<table>
+			<thead>
+				<tr>
+					<th>附件</th>
+					<th>上传时间</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="atta in jobcommsFile"  ng-class="{true:'tr-odd' , false: 'tr-even'}[$index%2 == 0]">
+					<td style="width:100px;">
+						<a class="link" href="download/{{atta.fid}}" target="_blank">{{atta.name}}</a>
+					</td>
+					<td style="width:100px;">
+						{{atta.upload_time | date:'yyyy-MM-dd HH:mm:ss'}}
+					</td>
+					<td style="width:100px;">
+						<a class="btn btn-small btn-success btn-w4"
+							ng-click="item.prepareDel = !item.prepareDel"
+							>删除</a>
+						<table ng-show="item.prepareDel">
+							<tr>
+								<td colspan="5"></td>
+								<td>
+									<a class="btn btn-small btn-danger btn-w4"
+										ng-click="delCommFile(atta.fid);"
+										>确认删除</a>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	<hr/>
+	
+	<div class="mytable" ng-show="beyond=='my' || beyond=='team'">
+		<div class="title">
+			<span>
+				职位沟通记录表
+			</span>
+		</div>
+		<table>
+			<tbody>
+				<tr>
+					<td>
+						<div core-fileupload ng-model="addcommFile" attas="attachs"></div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="btn btn-lblue" ng-click="addCommFile();">保存沟通记录表</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
 	<div core-formresult result="formresult"></div>
 </div>

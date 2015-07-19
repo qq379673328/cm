@@ -1,0 +1,38 @@
+<div class="widget-team">
+	<div class="teams">
+		<div class="team formresult-success">
+			<span class="fa fa-user">&nbsp;</span>
+		</div>
+		<div class="team formresult-success">
+			<span
+				ng-show="finalval!=null"
+				ng-click="finalval=null"
+				class="fa fa-times close">
+					{{finalval}}
+				</span>
+		</div>
+	</div>
+	<span class="btn btn-lblue teams-btn" ng-click="showdialog=true;">选择</span>
+	<input name="customContract" class="none" value="{{finalval}}" />
+	<div class="dialog-wrap" ng-show="showdialog">
+		<div class="dialog">
+			<div ng-click="showdialog=false;" 
+					class="fa fa-2x fa-times close"></div><br/>
+			<div class="info">
+				<span>请输入条件进行查询</span>
+				<span>至多显示100条记录</span>
+				合同编号：<input class="form-input" ng-model="customcontractsearch.no" />
+				职位名：<input class="form-input" ng-model="customcontractsearch.jobName" />
+				入职人名：<input class="form-input" ng-model="customcontractsearch.resumeName" />
+			</div>
+			<div ng-repeat="item in items">
+				<span
+					ng-click="ok(item);"
+					class="fa fa-2x fa-check-circle ok">
+						{{item.resume_name + "-" + item.job_name + "-" + item.no}}
+					</span>
+				<br/>
+			</div>
+		</div>
+	</div>
+</div>

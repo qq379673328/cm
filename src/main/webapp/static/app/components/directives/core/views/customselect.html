@@ -16,13 +16,14 @@
 	<input name="customName" class="none" value="{{customname}}" />
 	<div class="dialog-wrap" ng-show="showdialog">
 		<div class="dialog">
-			<span>请输入客户名进行查询</span>
-			<span>只能查询出签约运作的客户</span>
-			<br/>
-			<span>至多显示100条记录</span>
-			<input class="form-input" ng-model="customsearch" />
-			<div ng-click="showdialog=false;" 
-				class="fa fa-2x fa-times close"></div>
+			<div class="info">
+				<div ng-click="showdialog=false;" 
+					class="fa fa-2x fa-times close"></div>
+				<span>请输入客户名进行查询</span>
+				<span>只能查询出签约运作的客户</span>
+				<span>至多显示100条记录</span>
+				<input class="form-input" ng-model="customsearch" />
+			</div>
 			<div ng-repeat="item in customs">
 				<span
 					ng-click="ok(item);"

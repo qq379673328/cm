@@ -44,7 +44,7 @@ public class ContractService extends SimpleServiceImpl {
 	 * @param pageParams
 	 * @return
 	 */
-	public PagingResult getContractList(Map<String, String> params, PageParam pageParams) {
+	public PagingResult getContractList(Map<String, String> params, PageParam pageParams, boolean isMy) {
 		
 		PagingSrcSql srcSql = new PagingSrcSql();
 		List<Object> values = new ArrayList<Object>();
@@ -60,10 +60,12 @@ public class ContractService extends SimpleServiceImpl {
 				+ " where 1=1 ");
 		
 		//只能查询自己的合同
-		String userId = userUtil.getLoginUser().getId();
-		sb.append(" and t.create_user = ? ");
-		values.add(userId);
-		types.add(StringType.INSTANCE);
+		if(isMy){
+			String userId = userUtil.getLoginUser().getId();
+			sb.append(" and t.create_user = ? ");
+			values.add(userId);
+			types.add(StringType.INSTANCE);
+		}
 		
 		if(!StrUtils.isNull(params.get("companyName"))){//公司名称
 			sb.append(" AND cus.custom_name like ? ");
@@ -252,6 +254,54 @@ public class ContractService extends SimpleServiceImpl {
 		return dao.queryCountBySql("select count(1) from t_contract where no = ? and id <> ? ",
 				new Object[]{no, contractId},
 				new Type[]{StringType.INSTANCE, StringType.INSTANCE}) == 0 ? false : true;
+	}
+
+	/***
+	 * 查询入职人选
+	 * @param params
+	 * @param pageParams
+	 * @return
+	 */
+	public PagingResult getContractResume(Map<String, String> params,
+			PageParam pageParams) {
+		
+		PagingSrcSql srcSql = new PagingSrcSql();
+		List<Object> values = new ArrayList<Object>();
+		List<Type> types = new ArrayList<Type>();
+		StringBuffer sb = new StringBuffer(
+				" SELECT  "
+				+ " r.id rid, "
+				+ " r.name resume_name, "
+				+ " j.id jid, "
+				+ " j.name job_name, "
+				+ " c.no "
+				+ "  FROM t_resume_job rj  "
+				+ " LEFT JOIN t_resume r ON rj.resume_id = r.id "
+				+ " LEFT JOIN t_job j ON rj.job_id = j.id "
+				+ " LEFT JOIN t_contract c ON j.contract_id = c.id "
+				+ " where 1=1 ");
+		
+		if(!StrUtils.isNull(params.get("no"))){//合同编号
+			sb.append(" AND c.no = ? ");
+			values.add(params.get("no"));
+			types.add(StringType.INSTANCE);
+		}
+		if(!StrUtils.isNull(params.get("jobName"))){//职位名
+			sb.append(" AND j.name like ? ");
+			values.add("%" + params.get("jobName") + "%");
+			types.add(StringType.INSTANCE);
+		}
+		if(!StrUtils.isNull(params.get("resumeName"))){//人名
+			sb.append(" AND r.name like ? ");
+			values.add("%" + params.get("resumeName") + "%");
+			types.add(StringType.INSTANCE);
+		}
+		
+		srcSql.setSrcSql(sb.toString());
+		srcSql.setTypes(types.toArray(new Type[0]));
+		srcSql.setValues(values.toArray());
+		
+		return pagingSearch(params, pageParams, srcSql);
 	}
 
 }

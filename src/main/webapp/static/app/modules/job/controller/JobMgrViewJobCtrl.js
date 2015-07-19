@@ -16,6 +16,7 @@ app.controller('JobMgrViewJobCtrl',
 			$scope.inteams = data.inteamresumes;
 			$scope.pubresumes = data.pubresumes;
 			$scope.jobcomms = data.jobcomms;
+			$scope.jobcommsFile = data.jobcommsFile;
 			$scope.beyond = data.beyond;
 			$scope.jobTeamDesc = data.jobTeamDesc;
 			$scope.jobrecstate = handleJobrecstate(data.jobrecstate);//简历推荐状态
@@ -108,33 +109,56 @@ app.controller('JobMgrViewJobCtrl',
 	};
 	
 	//加载推荐简历的沟通记录
-	$scope.loadComm = function(id){
+	$scope.loadRJComm = function(id){
+		$scope.rjResumeId = id;
+		$scope.addRJCommContent = null;
+		$scope.comms = null;
 		$http.post("job/loadRJComm", {id: id})
 		.success(function(data){
 			$scope.comms = data;
-			
+			$scope.showcommdialog=true;
 			$scope.editRJCommID = id;
 		});
 	};
-	
-	//删除简历的沟通记录
-	$scope.delComm = function(id){
+	//新增推荐简历的沟通记录
+	$scope.addRJComm = function(){
+		$http.post("job/editRJComm", 
+				{resumejobId: $scope.rjResumeId, content: $scope.addRJCommContent}
+		)
+		.success(function(data){
+			$scope.loadRJComm($scope.rjResumeId);
+			$scope.formresult = data;
+		});
+	};
+	//删除推荐简历的沟通记录
+	$scope.delRJComm = function(id){
 		$http.post("job/delRJComm", {id: id})
 		.success(function(data){
 			$scope.formresult = data;
-			$scope.loadComm(id);
+			$scope.loadRJComm($scope.rjResumeId);
 		});
 	};
 	
-	//新增简历的沟通记录
-	$scope.addComm = function(){
-		$http.post("job/editRJComm", 
-				{
-			content: $scope.addRJComm,
-			resumejobId: $scope.editRJCommID})
+	//添加交流信息表-附件格式
+	$scope.addCommFile = function(){
+		$http.post("job/addCommFile", {ids: $scope.addcommFile, jobId: jobId})
+			.success(function(data){
+				$scope.formresult = data;
+				if(data.success == 1){
+					loadViewInfo();
+					$scope.addcommFile = null;
+					$scope.attachs = null;
+				}
+		});
+	};
+	//删除交流信息表-附件格式
+	$scope.delCommFile = function(id){
+		$http.post("fileDel", {id: id})
 		.success(function(data){
 			$scope.formresult = data;
-			$scope.loadComm(id);
+			if(data.success == 1){
+				loadViewInfo();
+			}
 		});
 	};
 	

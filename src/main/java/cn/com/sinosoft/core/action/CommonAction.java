@@ -161,6 +161,10 @@ public class CommonAction extends BaseController {
         //获取网站部署路径(通过ServletContext对象)，用于确定下载文件位置，从而实现下载  
         String path = servletContext.getRealPath("/");
         TAttachment atta = commonService.getFile(id);
+        if(atta == null){
+        	response.setStatus(404);
+        	return;
+        }
         String fileName = "unkonwn";
 		try {
 			fileName = new String(atta.getName().getBytes("UTF-8"),"iso-8859-1");

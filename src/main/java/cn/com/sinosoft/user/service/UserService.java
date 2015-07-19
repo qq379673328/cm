@@ -129,7 +129,7 @@ public class UserService extends SimpleServiceImpl {
 		PagingSrcSql srcSql = new PagingSrcSql();
 		List<Object> values = new ArrayList<Object>();
 		List<Type> types = new ArrayList<Type>();
-		StringBuffer sb = new StringBuffer(" select id, username," +
+		StringBuffer sb = new StringBuffer(" select id, username,is_disabled, " +
 				" NAME, sex, duty, entry_date, state, " +
 				"id_card, np_place, phone, edu_school, " +
 				"edu_date, department, team, user_type, email," +
@@ -184,23 +184,13 @@ public class UserService extends SimpleServiceImpl {
 			user.setCreateTime(new Date());
 			user.setUserCreate(loginUser.getId());
 			//用户类型
-			/*String loginUserType = loginUser.getUserType();
-			if(UserUtil.USERTYPE_SUPERADMIN.equals(loginUserType)){//超级管理员
-				userType = UserUtil.USERTYPE_FORMADMIN;//表单管理员
-			}else if(UserUtil.USERTYPE_FORMADMIN.equals(loginUserType)){//表单管理员
-				userType = UserUtil.USERTYPE_REPORTUSER;//上报人员
-			}else if(UserUtil.USERTYPE_REPORTUSER.equals(loginUserType)){//上报人员
-				userType = UserUtil.USERTYPE_REPORTUSER;
-			}else{
-				userType = UserUtil.USERTYPE_REPORTUSER;
-			}*/
 			if(!StrUtils.isNull("userType")){
-				//默认用户类型2
-				userType = ("2".equals(userType) || "3".equals(userType)) ? userType : "2";
+				//默认用户类型助理
+				userType = ("顾问".equals(userType) || "助理".equals(userType)) ? userType : "助理";
 			}
 			user.setUserType(userType);//用户类型
 			user.setPassword(UserUtil.DEFAULT_PWD);//默认密码
-			//user.setIsDisabled("0");//未锁定
+			user.setIsDisabled("1");//未锁定
 		}else{//更新
 			user.setLastUpdateTime(new Date());
 			user.setLastUpdateUser(loginUser.getId());
@@ -227,12 +217,11 @@ public class UserService extends SimpleServiceImpl {
 		
 		if(isUpdate){//更新用户时保留原始信息
 			TUser oldUser = dao.queryById(user.getId(), TUser.class);
-			user.setUserType(oldUser.getUserType());
 			user.setCreateTime(oldUser.getCreateTime());
 			user.setUserCreate(oldUser.getUserCreate());
 			user.setUsername(oldUser.getUsername());
 			user.setPassword(oldUser.getPassword());
-			//user.setIsDisabled(oldUser.getIsDisabled());
+			user.setIsDisabled(oldUser.getIsDisabled());
 			dao.getTemplate().merge(user);
 			ret.setMessage("用户编辑成功");
 		}else{//新增
@@ -325,7 +314,7 @@ public class UserService extends SimpleServiceImpl {
 	public FormResult disabledUser(String userId) {
 		FormResult ret = new FormResult();
 		if(!StrUtils.isNull(userId)){
-			dao.executeDelOrUpdateSql(" update t_user set is_disabled = '1' where id = ? ",
+			dao.executeDelOrUpdateSql(" update t_user set is_disabled = '0' where id = ? ",
 					new Object[]{userId},
 					new Type[]{StringType.INSTANCE});
 		}
@@ -344,7 +333,7 @@ public class UserService extends SimpleServiceImpl {
 	public FormResult enableUser(String userId) {
 		FormResult ret = new FormResult();
 		if(!StrUtils.isNull(userId)){
-			dao.executeDelOrUpdateSql(" update t_user set is_disabled = '0' where id = ? ",
+			dao.executeDelOrUpdateSql(" update t_user set is_disabled = '1' where id = ? ",
 					new Object[]{userId},
 					new Type[]{StringType.INSTANCE});
 		}

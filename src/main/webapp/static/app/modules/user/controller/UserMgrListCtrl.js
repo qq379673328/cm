@@ -60,14 +60,12 @@ app.controller('UserMgrListCtrl',function($scope, $routeParams,
 	
 	//删除用户
 	$scope.delUser = function(item){
-		if(confirm("确认删除?") === false) return;
 		$http.post("user/delUser", {id: item.id}).success(function(data){
 			$scope.reload();
 		});
 	};
 	//锁定用户
 	$scope.disabledUser = function(item){
-		if(confirm("确认锁定?") === false) return;
 		$http.post("user/disabledUser", {id: item.id}).success(function(data){
 			$scope.reload();
 		});

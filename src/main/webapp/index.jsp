@@ -58,11 +58,14 @@
 			
 			<div class="lv1"><i class="fa fa-edit"></i>&nbsp;系统管理</div>
 			
-			<div ng-class="{true: 'select'}[$root.menu=='user']" class="lv2" ng-click="to('usermgr/list');"><i class="fa fa-caret-right"></i>&nbsp;用户管理</div>
+			<div ng-if="user.userType == '管理员'"
+				 ng-class="{true: 'select'}[$root.menu=='user']"
+				  class="lv2" ng-click="to('usermgr/list');">
+				  <i class="fa fa-caret-right"></i>&nbsp;用户管理</div>
 			<div ng-class="{true: 'select'}[$root.menu=='resetpwd']" class="lv2" ng-click="to('usermgr/resetpwd');"><i class="fa fa-caret-right"></i>&nbsp;修改密码</div>
 			
-			<div class="lv1"><i class="fa fa-calendar"></i>&nbsp;公告管理</div>
-			<div ng-class="{true: 'select'}[$root.menu=='pub']" class="lv2" ng-click="to('pubmgr/list');"><i class="fa fa-caret-right"></i>&nbsp;公告管理</div>
+			<div ng-if="user.userType == '管理员'" class="lv1"><i class="fa fa-calendar"></i>&nbsp;公告管理</div>
+			<div ng-if="user.userType == '管理员'" ng-class="{true: 'select'}[$root.menu=='pub']" class="lv2" ng-click="to('pubmgr/list');"><i class="fa fa-caret-right"></i>&nbsp;公告管理</div>
 			
 		</div>
 		

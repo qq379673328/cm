@@ -23,13 +23,31 @@
 	</div>
 	
 	<div class="pubinfo">
-		<h1>公告</h1>
+		<h1>公告
+			<a class="hover" ng-click="showcommdialog=true;"><i class="fa fa-eye"></i></a>
+		</h1>
 		<marquee class="scroll" onmouseover=stop() onmouseout=start() scrollamount="2" direction="up" >
 			<p ng-repeat="pub in data.pubs">
 				{{ pub.content | trustHtml}}
-				<hr />
+				<br/>
+				{{ pub.pub_time | date : 'yyyy-MM-dd HH:mm' }}
 			</p>
 		</marquee>
+	</div>
+	<div class="widget-team ng-hide" ng-show="showcommdialog == true;">
+		<div class="dialog-wrap">
+			<div class="dialog">
+				<div ng-click="showcommdialog=false;" class="fa fa-2x fa-times close"></div>
+				<div>
+					<div ng-repeat="pub in data.pubs" style="width: 400px;">
+						{{ pub.content | trustHtml}}
+						<br/>
+						{{ pub.pub_time | date : 'yyyy-MM-dd HH:mm' }}
+						<hr />
+					</div>
+				</div>	
+			</div>
+		</div>
 	</div>
 	
 	<div class="mytable">
@@ -51,6 +69,9 @@
 				</tr>
 			</thead>
 			<tbody>
+				<tr ng-show="!data.myjobs || data.myjobs.length == 0">
+					<td colspan="8">无记录</td>
+				</tr>
 				<tr ng-repeat="item in data.myjobs" ng-class="{true:'tr-odd' , false: 'tr-even'}[$index%2 == 0]">
 					<td>
 						<a class="link" 
@@ -84,6 +105,9 @@
 				</tr>
 			</thead>
 			<tbody>
+				<tr ng-show="!data.mycustoms || data.mycustoms.length == 0">
+					<td colspan="6">无记录</td>
+				</tr>
 				<tr ng-repeat="item in data.mycustoms" ng-class="{true:'tr-odd' , false: 'tr-even'}[$index%2 == 0]">
 					<td>
 						<a class="link"

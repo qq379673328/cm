@@ -48,7 +48,9 @@ public class InvoiceService extends SimpleServiceImpl {
 		List<Object> values = new ArrayList<Object>();
 		List<Type> types = new ArrayList<Type>();
 		StringBuffer sb = new StringBuffer(
-				" SELECT t.*,getDictName(t.apply_user) apply_user_desc"
+				" SELECT t.*,getDictName(t.apply_user) apply_user_desc, "
+				+ " ( select c.custom_name from t_custom c where c.id = t.custom_id ) custom_name , "
+				+ " getDictName(t.check_user) check_user_desc "
 				+ "  from t_invoice t left join t_user u on t.apply_user = u.id"
 				+ " where 1=1 ");
 		
@@ -113,16 +115,50 @@ public class InvoiceService extends SimpleServiceImpl {
 	@Transactional
 	public FormResult edit(TInvoice invoice) {
 		FormResult ret = new FormResult();
+		if(!isCanInvoice()){
+			ret.setSuccess(FormResult.ERROR);
+			ret.setMessage("只有录入职位并有候选人上岗的顾问可以申请开具发票");
+			return ret;
+		}
+		
 		if(StrUtils.isNull(invoice.getId())){//新增
 			invoice.setId(UUID.randomUUID().toString());
 			invoice.setCreateTime(new Date());
 			invoice.setCreateUser(userUtil.getLoginUser().getId());
+			dao.save(invoice);
+		}else{
+			dao.update(invoice);
 		}
 		
-		dao.save(invoice);
 		ret.setSuccess(FormResult.SUCCESS);
 		ret.setData(invoice.getId());
 		return ret;
+	}
+	
+	/**
+	 * 用户是否能开发票
+	 * 	-只有录入职位并有候选人上岗的顾问可以申请开具发票
+	 *  -管理员可开发票
+	 * @return
+	 */
+	public boolean isCanInvoice(){
+		if(UserUtil.USERTYPE_SUPERADMIN.equals(userUtil.getLoginUser().getUserType())){
+			return true;
+		}
+		
+		if(!UserUtil.USERTYPE_GUWEN.equals(userUtil.getLoginUser().getUserType())){
+			return false;
+		}
+		int count = dao.queryCountBySql(
+				"select count(1) from t_resume_job t where t.create_user = ? and "
+				+ " ( t.verify_state = '入职' OR t.verify_state = '离职' ) ",
+				new Object[]{getLoginUserId()}, 
+				new Type[]{StringType.INSTANCE});
+		if(count == 0){
+			return false;
+		}
+		
+		return true;
 	}
 
 }

@@ -68,7 +68,7 @@
     			return optional(element)||isIdCard.test(value);
     		},
     		username: function(value, element) {//用户名验证
-    			var usernameRep = /^[\w\d_]*$/;
+    			var usernameRep = /^[\w\d_]{6,20}$/;
     			return optional(element) || usernameRep.test(value);         
     		}
         };
@@ -113,7 +113,7 @@
     		min: format("请输入一个最小为 {0} 的值"),
     		telephone: "请填写正确的电话号码",
     		idCard: "请填写正确的身份证号",
-    		username:  "用户名只能由字母、下划线、数字组成"
+    		username:  "用户名只能由6到20位字母、下划线、数字组成"
         };
         
         function getLength( value, element ) {

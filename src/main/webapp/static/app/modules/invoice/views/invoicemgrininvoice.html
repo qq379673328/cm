@@ -34,7 +34,17 @@
 				<tr>
 					<td class="td-odd"><span class="warn">*</span>客户+合同编号：</td>
 					<td class="td-even" colspan="3">
-						<input name="customContract" class="form-input" ng-model="invoice.customContract" />
+						<div core-customcontractselect
+							finalval = "invoice.customContract"
+							ng-model = "invoice.cc"></div>
+					</td>
+				</tr>
+				<tr>
+					<td class="td-odd"><span class="warn">*</span>入职人选：</td>
+					<td class="td-even" colspan="3">
+						<div core-contractresumeselect
+							finalval = "invoice.resumeDesc"
+							ng-model = "invoice.rd"></div>
 					</td>
 				</tr>
 				<tr>
