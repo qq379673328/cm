@@ -57,10 +57,10 @@ public class PubService extends SimpleServiceImpl {
 		}
 		
 		if(!StrUtils.isNull(params.get("createTimeStart"))){//创建日期-开始
-			sb.append(" AND " + SqlUtil.toDate(params.get("createTimeStart"), 1, 0) + " <= tt.create_time ");
+			sb.append(" AND " + SqlUtil.toDate(params.get("createTimeStart"), 1, 0) + " <= t.create_time ");
 		}
 		if(!StrUtils.isNull(params.get("createTimeEnd"))){//创建日期-结束
-			sb.append(" AND " + SqlUtil.toDate(params.get("createTimeEnd"), 1, 0) + " >= tt.create_time ");
+			sb.append(" AND " + SqlUtil.toDate(params.get("createTimeEnd"), 1, 0) + " >= t.create_time ");
 		}
 		
 		sb.append(" order by t.create_time desc ");

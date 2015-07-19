@@ -372,6 +372,9 @@ textarea{
 	text-align: center;
 	margin: 5px 10px;
 }
+.card i{
+	color: #77B9F0;
+}
 .commonfun{
 	width: 400px;
 }
@@ -383,7 +386,6 @@ textarea{
 .pubinfo .scroll{
 	width: 400px;
 	height: 80px;
-	border-bottom: 2px solid #eee;
 	margin-top: 5px;
 }
 .pubinfo p{
