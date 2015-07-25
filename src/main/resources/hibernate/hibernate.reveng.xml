@@ -26,4 +26,6 @@
 	<table-filter match-name="t_resume_job" match-catalog="cm"></table-filter>
 	<table-filter match-name="t_resume_job_comm" match-catalog="cm"></table-filter>
 	<table-filter match-name="t_user" match-catalog="cm"></table-filter>
+	<table-filter match-name="t_code" match-catalog="cm"></table-filter>
+	<table-filter match-name="t_codetype" match-catalog="cm"></table-filter>
 </hibernate-reverse-engineering>

@@ -154,6 +154,11 @@ app.config([ '$routeProvider', function($routeProvider) {
 		controller : 'PubMgrEditPubCtrl'
 	})
 	
+	.when('/codemgr', {//编码管理
+		templateUrl : fdRouterViewsBasepath + 'code/views/codemgr.html',
+		controller : 'CodeMgrCtrl'
+	})
+	
 	.otherwise({
 		redirectTo : '/'
 	});

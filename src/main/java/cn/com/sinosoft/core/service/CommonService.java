@@ -223,5 +223,15 @@ public class CommonService extends SimpleServiceImpl {
 	public TAttachment getFile(String id) {
 		return dao.queryById(id, TAttachment.class);
 	}
+
+	/**
+	 * 获取所有码表
+	 * @return
+	 */
+	public Object getAllCodes() {
+		return dao.queryListBySql(
+				"select c.* from t_code c order by c.rank "
+				,null, null);
+	}
 	
 }

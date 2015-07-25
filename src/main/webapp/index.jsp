@@ -23,6 +23,7 @@
 <body>
 	<div class="main" ng-controller="MainCtrl">
 		<div class="top">
+			<div class="word">客户管理系统</div>
 			<div>
 				<span>{{ user.name }}</span>
 				<br/>
@@ -38,6 +39,8 @@
 		<div class="right">
 			<div class="body">
 				<div ng-view></div>
+			</div>
+			<div class="footer">
 			</div>
 		</div>
 		<div class="menus">
@@ -63,6 +66,11 @@
 				  class="lv2" ng-click="to('usermgr/list');">
 				  <i class="fa fa-caret-right"></i>&nbsp;用户管理</div>
 			<div ng-class="{true: 'select'}[$root.menu=='resetpwd']" class="lv2" ng-click="to('usermgr/resetpwd');"><i class="fa fa-caret-right"></i>&nbsp;修改密码</div>
+			<div ng-if="user.userType == '管理员'"
+				 ng-class="{true: 'select'}[$root.menu=='codemgr']" 
+				 class="lv2" 
+				 ng-click="to('codemgr');">
+				 <i class="fa fa-caret-right"></i>&nbsp;编码管理</div>
 			
 			<div ng-if="user.userType == '管理员'" class="lv1"><i class="fa fa-calendar"></i>&nbsp;公告管理</div>
 			<div ng-if="user.userType == '管理员'" ng-class="{true: 'select'}[$root.menu=='pub']" class="lv2" ng-click="to('pubmgr/list');"><i class="fa fa-caret-right"></i>&nbsp;公告管理</div>

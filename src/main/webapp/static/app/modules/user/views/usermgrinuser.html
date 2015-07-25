@@ -32,8 +32,11 @@
 				<tr>
 					<td class="td-r"><span class="warn">*</span>用户类型：</td>
 					<td class="td-l">
-						<input type="radio" name="userType" ng-model="user.userType" value="顾问" />顾问
-						<input type="radio" name="userType" ng-model="user.userType" value="助理" />助理
+						<div ng-if="user.userType == '管理员'">管理员</div>
+						<div ng-if="user.userType != '管理员'">
+							<input type="radio" name="userType" ng-model="user.userType" value="顾问" />顾问
+							<input type="radio" name="userType" ng-model="user.userType" value="助理" />助理
+						</div>
 					</td>
 				</tr>
 				<tr>
@@ -56,7 +59,12 @@
 				<tr>
 					<td class="td-r"><span class="warn">*</span>职务：</td>
 					<td class="td-l">
-						<input class="form-input" name="duty" ng-model="user.duty" />
+						<div
+							core-basedata 
+							dataname="duty"
+							type="select"
+							bind-model="user.duty"
+							key="userduty"></div>
 					</td>
 				</tr>
 				<tr>

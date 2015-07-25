@@ -200,6 +200,16 @@ public class CommonAction extends BaseController {
         } catch (IOException e) {  
             e.printStackTrace();  
         }  
-    }  
+    }
+	
+	/**
+	 * 获取所有码表
+	 * @return
+	 */
+	@RequestMapping("getAllCodes")
+	@ResponseBody
+	public Object getAllCodes(){
+		return commonService.getAllCodes();
+	}
 	
 }

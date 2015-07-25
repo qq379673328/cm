@@ -124,6 +124,13 @@ textarea{
 	margin-right: 10px;
 	margin-top: 20px;
 }
+.main .top .word{
+	position: relative;
+	left: 50px;
+	top: 10px;
+	float: left;
+	font-size: 40px;
+}
 .main .top a{
 	color: #fff;
 }
@@ -182,6 +189,7 @@ textarea{
 }
 .main .right .body{
 	margin-left: 186px;
+	min-height: 550px;
 }
 .main .body .navigation{
 	height: 31px;
@@ -199,8 +207,20 @@ textarea{
 	margin-bottom: 50px;
 }
 
+.footer{
+	background-color: #68A4EA;
+	text-align: center;
+	bottom: 0px;
+	width: 100%;
+	float: left;
+	height: 30px;
+	line-height: 30px;
+	color: #fff;
+}
 .searchzone{
 	padding-bottom: 10px;
+	float: left;
+	width: 100%;
 }
 .searchzone .title{
 	height: 40px;
@@ -215,7 +235,7 @@ textarea{
 	margin: 0 auto;
 	border-bottom: 1px dotted #B7B7B7;
 	line-height: 31px;
-	height: 31px;
+	float: left;
 }
 .searchzone .border-none{
 	border: none;
@@ -245,6 +265,8 @@ textarea{
 
 .mytable{
 	background-color: #FBFBFB;
+ 	float: left;
+	width: 100%;
 }
 .mytable .attach{
 	width: 70%;

@@ -60,13 +60,13 @@
 						ng-show="!item.ishanding"
 						>编辑</a>
 					
-					<a  ng-show="item.user_type != '管理员'" class="btn btn-small btn-danger"
+					<a  class="btn btn-small btn-danger"
 						ng-click="item.ishanding==true;disabledUser(item);"
-						ng-show="item.is_disabled == 1 && !item.ishanding"
+						ng-show="item.user_type != '管理员' && item.is_disabled == 1"
 						>锁定</a>
 					<a class="btn btn-small btn-success"
 						ng-click="item.ishanding==true;enableUser(item);"
-						ng-show="item.is_disabled == 0 && !item.ishanding"
+						ng-show="item.is_disabled == 0"
 						>解锁</a>
 						
 					<a ng-show="item.user_type != '管理员'" class="btn btn-small btn-success"

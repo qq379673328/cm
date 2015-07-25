@@ -1,0 +1,70 @@
+<div class="navigation">
+	位置：
+	<a href="#">首页</a>
+	&gt;
+	编码管理
+</div>
+<div class="content">
+	<div class="formresult formresult-success not-fix">
+		<p>注意：请谨慎修改编码</p>
+	</div>
+	<div class="searchzone">
+		<div class="title"><i class="fa fa-users"></i>&nbsp;编码管理</div>
+		<div class="line">
+			编码类型：
+			<select
+				ng-model="search.queryParams.codetype"
+				ng-options="option.codetype as option.codetypedesc for option in items"
+				>
+			</select>
+		</div>
+	</div>
+	
+	<div class="btn btn-success" ng-click="add = true;">新增</div>
+	<div ng-show="add == true;">
+		编码值：<input ng-model="addCodeValue" />
+		顺序：<input ng-model="addCodeRank" />
+		<div class="btn btn-success" ng-click="addCode();" >保存</div>
+		<div class="btn btn-cancle" 
+			ng-click="add = false;addCodeValue = null;addCodeRank = null;" >取消</div>
+	</div>
+	<div class="mytable">
+		<div class="title">
+		</div>
+		<table class="my-table">
+			<thead>
+				<tr>
+					<th>编码值</th>
+					<th>顺序</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-show="!codes"><td colspan="4">加载中...</td></tr>
+				<tr ng-repeat="item in codes" ng-class="{true:'tr-odd' , false: 'tr-even'}[$index%2 == 0]">
+					<td>{{ item.codevalue }}</td>
+					<td>{{ item.rank }}</td>
+					
+					<td ng-show="item.ishandling">操作中</td>
+					<td ng-show="!item.ishandling">
+						<a  class="btn btn-small btn-success"
+							ng-click="item.prepareDel = !item.prepareDel"
+							>删除</a>
+						<table ng-show="item.prepareDel">
+							<tr>
+								<td colspan="5"></td>
+								<td>
+									<a class="btn btn-small btn-danger btn-w4"
+										ng-click="del(item);item.ishandling=true;"
+										>确认删除</a>
+								</td>
+							</tr>
+						</table>
+									
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<div core-formresult result="formresult"></div>
+	</div>
+</div>

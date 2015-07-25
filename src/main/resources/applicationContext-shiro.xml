@@ -58,6 +58,7 @@
 				/scripts/** = anon
 				/images/** = anon
 				/css/** = anon
+				/getAllCodes = authc
 				/** = ajaxuser,authc
         	</value>
 		</property>
