@@ -19,59 +19,74 @@
 				<tr>
 					<td class="td-odd"><span class="warn">*</span>申请人：</td>
 					<td class="td-even" colspan="3">
-						<div core-teamselect 
+						<div ng-if="USER.userType != '管理员'" core-teamselect 
 							ng-model="invoice.applyUser"
 							teamids="invoice.applyUser"
 							single="true"></div>
+						<span ng-if="USER.userType == '管理员'">{{applyUserDesc}}</span>
 					</td>
 				</tr>
 				<tr>
 					<td class="td-odd"><span class="warn">*</span>申请时间：</td>
 					<td class="td-even" colspan="3">
-						<input name="applyTime" class="form-input" datepicker ng-model="invoice.applyTime" />
+						<input ng-if="USER.userType != '管理员'" name="applyTime" class="form-input" datepicker ng-model="invoice.applyTime" />
+						<span ng-if="USER.userType == '管理员'">{{invoice.applyTime}}</span>
 					</td>
 				</tr>
 				<tr>
 					<td class="td-odd"><span class="warn">*</span>客户+合同编号：</td>
 					<td class="td-even" colspan="3">
-						<div core-customcontractselect
+						<div ng-if="USER.userType != '管理员'" core-customcontractselect
 							finalval = "invoice.customContract"
 							ng-model = "invoice.cc"></div>
+						<div ng-if="USER.userType == '管理员'">{{invoice.customContract}}</div>
 					</td>
 				</tr>
 				<tr>
 					<td class="td-odd"><span class="warn">*</span>入职人选：</td>
 					<td class="td-even" colspan="3">
-						<div core-contractresumeselect
+						<div ng-if="USER.userType != '管理员'" core-contractresumeselect
 							finalval = "invoice.resumeDesc"
 							ng-model = "invoice.rd"></div>
+						<div ng-if="USER.userType == '管理员'">{{invoice.resumeDesc}}</div>
 					</td>
 				</tr>
 				<tr>
 					<td class="td-odd"><span class="warn">*</span>发票类型：</td>
 					<td class="td-even" colspan="3">
-						<input name="type" type="radio" ng-model="invoice.type" value="普通发票" />
-						普通发票
-						<input name="type" type="radio" ng-model="invoice.type" value="专用发票" />
-						专用发票
+						<div ng-if="USER.userType != '管理员'" 
+							dataname="type"
+							core-basedata 
+							type="select"
+							bind-model="invoice.type"
+							key="invoicetype"></div>
+						<div ng-if="USER.userType == '管理员'" >{{invoice.type}}</div>
 					</td>
 				</tr>
 				<tr>
 					<td class="td-odd"><span class="warn">*</span>发票属性：</td>
 					<td class="td-even" colspan="3">
-						<select name="property" class="form-select" ng-model="invoice.property">
-							<option value="服务费">服务费</option>
-							<option value="其它">其它</option>
-						</select>
+						<div ng-if="USER.userType != '管理员'" 
+							dataname="property"
+							core-basedata 
+							type="select"
+							bind-model="invoice.property"
+							key="invoicepro"></div>
+						<div ng-if="USER.userType == '管理员'" >{{invoice.property}}</div>
 					</td>
 				</tr>
 				<tr>
 					<td class="td-odd"><span class="warn">*</span>发票金额：</td>
 					<td class="td-even" colspan="3">
-						<input name="total" class="form-input" ng-model="invoice.total"/>
+						<input name="total" ng-if="USER.userType != '管理员'" 
+						 class="form-input" ng-model="invoice.total"/>
+						<div  ng-if="USER.userType == '管理员'" >{{invoice.total}}</div>
 					</td>
 				</tr>
-				<tr>
+				
+				
+				
+				<tr ng-if="USER.userType == '管理员'">
 					<td class="td-odd"><span class="warn">*</span>发票状态：</td>
 					<td class="td-even" colspan="3">
 						<div
@@ -82,7 +97,7 @@
 							key="invoicestate"></div>
 					</td>
 				</tr>
-				<tr>
+				<tr ng-if="USER.userType == '管理员'">
 					<td class="td-odd"><span class="warn">*</span>开票人：</td>
 					<td class="td-even" colspan="3">
 						<div core-teamselect 
@@ -92,7 +107,7 @@
 							single="true"></div>
 					</td>
 				</tr>
-				<tr>
+				<tr ng-if="USER.userType == '管理员'">
 					<td class="td-odd"><span class="warn">*</span>回款状态：</td>
 					<td class="td-even" colspan="3">
 						<div
@@ -103,7 +118,7 @@
 							key="incomestate"></div>
 					</td>
 				</tr>
-				<tr>
+				<tr ng-if="USER.userType == '管理员'">
 					<td class="td-odd">备注：</td>
 					<td class="td-even" colspan="3">
 						<textarea class="textarea"
@@ -112,8 +127,7 @@
 									></textarea>
 					</td>
 				</tr>
-				
-				<tr>
+				<tr ng-if="USER.userType == '管理员' || (USER.userType != '管理员' && invoice.state == '申请中') || !invoice.id ">
 					<td colspan="2">
 						<div class="btn btn-blank" ng-show="isrequest">操作中...</div>
 						<div class="btn btn-lblue" ng-show="!isrequest" ng-click="save();">保存发票信息</div>

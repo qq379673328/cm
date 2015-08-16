@@ -52,10 +52,14 @@
 				<tr>
 					<td class="td-odd"><span class="warn">*</span>合同编号：</td>
 					<td class="td-even">
-						<input 
-							name="no"
-							ng-model="contract.no"
-							class="form-input" />
+						<!-- 编辑 -->
+						<div ng-if="contract.id">
+							<span>{{contract.no}}</span>
+						</div>
+						<!-- 新增 -->
+						<div ng-if="!contract.id">
+							<span>保存之后自动生成</span>
+						</div>
 					</td>
 					<td class="td-odd"><span class="warn">*</span>合同状态：</td>
 					<td class="td-even">

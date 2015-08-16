@@ -7,14 +7,22 @@ app.controller('InvoiceMgrInInvoiceCtrl',
 	var invoiceId = $routeParams.id;
 	$scope.isReady = false;
 	
+	$scope.USER = LOGINUSER;
+	
 	if(invoiceId){//编辑
 		//请求发票信息
 		$http.post("invoice/getInvoiceViewById", {id: invoiceId}).success(function(data){
 			$scope.invoice = data.invoice;
+			$scope.applyUserDesc = data.applyUserDesc;
 			
 			$scope.invoice.cc = {
 				customId: data.invoice.customId,
 				contractNo: data.invoice.contractNo
+			};
+			
+			$scope.invoice.rd = {
+				resumeId: data.invoice.resumeId,
+				resumeDesc: data.invoice.resumeDesc
 			};
 			
 			$scope.isReady = true;

@@ -36,12 +36,23 @@ app.directive('coreCustomselect', ["$http", function($http){
         	$scope.$watch('customsearch', function(newValue, oldValue){
         		if(newValue == oldValue) return;
         		$http.post("custom/list",
-        				{companyName: newValue, page: 1, rows: 100, customStatus: "签约运作"})
+        				{
+        				companyName: newValue,
+        				page: 1, rows: 100,
+        				beyond:"my",
+        				customStatus: "签约运作"})
         				.success(function(data){
 						$scope.customs = data.rows;
         		});
         	}, true);
-        	
+        	//默认查询一次
+        	$http.post("custom/list",
+    				{
+        			page: 1, rows: 100, beyond:"my",
+        			customStatus: "签约运作"})
+    				.success(function(data){
+					$scope.customs = data.rows;
+    		});
         }
     };
 }]);

@@ -20,11 +20,14 @@
 		<div class="line">
 			<div class="desc">入职时间：</div>
 			<div class="vals">
-				<div core-basedata
+				<!-- <div core-basedata
 					 type="span"
 					 ng-model="search.inyear"
 					 key="inyear"
-					 all-select-name="不限"></div>
+					 all-select-name="不限"></div> -->
+				<input datepicker ng-model="search.createTimeStart" />
+				至
+				<input datepicker ng-model="search.createTimeEnd"/>
 			</div>
 		</div>
 		<div class="line">

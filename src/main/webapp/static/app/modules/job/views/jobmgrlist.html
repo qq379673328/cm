@@ -72,14 +72,15 @@
 				<i class="fa fa-user-plus"></i>&nbsp;其他职位</a>
 			<a class="common" ng-click="search.beyond = 'team';changeSelect($event.target);">
 				<i class="fa fa-users"></i>&nbsp;合作职位</a>
-			<a class="common" ng-click="search.beyond = 'my';changeSelect($event.target);">
+			<a class="common" id="beyond-my" ng-click="search.beyond = 'my';changeSelect($event.target);">
 				<i class="fa fa-user"></i>&nbsp;我的职位</a>
-			<a class="common select" ng-click="search.beyond = '';">全部</a>
+			<a class="common select" ng-click="search.beyond = '';changeSelect($event.target);">全部</a>
 			
 		</div>
 		<table class="my-table" ng-table="tableParams" template-pagination="custom/pager">
 			<thead>
 				<tr>
+					<th></th>
 					<th>状态</th>
 					<th>职位名称</th>
 					<th>职位年薪</th>
@@ -87,7 +88,6 @@
 					<th>招聘企业</th>
 					<th>执行团队</th>
 					<th>推荐</th>
-					<th>应聘</th>
 					<th>更新时间</th>
 					<th></th>
 				</tr>
@@ -96,10 +96,15 @@
 				<tr ng-show="!$data"><td colspan="4">加载中...</td></tr>
 				<tr ng-repeat="item in $data" ng-class="{true:'tr-odd' , false: 'tr-even'}[$index%2 == 0]">
 					<td>
-						<i ng-show="item.state=='运作'" class="fa fa-user"></i>
-						<i ng-show="item.state=='结束'" class="fa fa-users"></i>
-						<i ng-show="item.state=='暂停'" class="fa fa-user-plus"></i>
-						<i ng-show="item.state=='关闭'" class="fa fa-user-plus"></i>
+						<i ng-show="item.beyond=='my'" class="fa fa-user"></i>
+						<i ng-show="item.beyond=='team'" class="fa fa-users"></i>
+						<i ng-show="item.beyond=='other'" class="fa fa-user-plus"></i>
+					</td>
+					<td>
+						<i ng-show="item.state=='运作'" class="fa fa-play"></i>
+						<i ng-show="item.state=='结束'" class="fa fa-stop"></i>
+						<i ng-show="item.state=='暂停'" class="fa fa-pause"></i>
+						<i ng-show="item.state=='关闭'" class="fa fa-ban"></i>
 						{{ item.state }}
 					</td>
 					<td>
@@ -110,11 +115,11 @@
 					<td>{{ item.custom_name }}</td> 
 					<td>{{ item.teams_desc }}</td>
 					<td>{{ item.jobcourec }}人</td>
-					<td>未实现</td>
 					<td>{{ item.last_update_time | date : 'yyyy-MM-dd'}}</td>
 					<td ng-show="!item.ishandling">
 						<a class="btn btn-small btn-success btn-w4"
 							ng-click="item.prepareDel = !item.prepareDel"
+							ng-if="item.beyond=='my'"
 							>删除</a>
 						<table ng-show="item.prepareDel">
 							<tr>

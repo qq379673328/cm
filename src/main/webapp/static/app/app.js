@@ -115,6 +115,7 @@ app.controller('MainCtrl', function($scope, $location, $http) {
 	//加载用户基本信息
 	$http.post("user/getLoginUserInfo", {}).success(function(data){
 		$scope.user = data;
+		window.LOGINUSER = data;
 	});
 	
 });

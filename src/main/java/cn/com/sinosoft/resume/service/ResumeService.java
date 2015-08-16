@@ -132,6 +132,8 @@ public class ResumeService extends SimpleServiceImpl {
 			types.add(StringType.INSTANCE);
 		}
 		
+		sb.append(" ORDER BY tt.last_update_time DESC ");
+		
 		srcSql.setSrcSql(sb.toString());
 		srcSql.setTypes(types.toArray(new Type[0]));
 		srcSql.setValues(values.toArray());
@@ -338,7 +340,9 @@ public class ResumeService extends SimpleServiceImpl {
 				+ " FROM t_job j "
 					+ "	LEFT JOIN t_resume_job r "
 					+ " ON j.id = r.job_id and r.resume_id = ? ) tt "
-				+ " WHERE 1=1 and ( tt.beyond = 'my') ");
+				+ " WHERE 1=1 "
+				//+ "and ( tt.beyond = 'my') "
+				);
 		values.add(userId);
 		types.add(StringType.INSTANCE);
 		

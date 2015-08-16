@@ -8,6 +8,7 @@ import org.hibernate.type.StringType;
 import org.hibernate.type.Type;
 import org.springframework.stereotype.Service;
 
+import cn.com.sinosoft.common.util.SqlUtil;
 import cn.com.sinosoft.common.util.StrUtils;
 import cn.com.sinosoft.core.service.SimpleServiceImpl;
 import cn.com.sinosoft.core.service.model.PageParam;
@@ -64,13 +65,44 @@ public class TeamService extends SimpleServiceImpl {
 				+ " t.positive_date,t.leave_date,t.skills "
 				+ " from t_user t where 1=1 ");
 		
+		if(!StrUtils.isNull(params.get("industry"))){//擅长行业
+			sb.append(" and t.skills like ? ");
+			values.add("%" + params.get("industry") + "%");
+			types.add(StringType.INSTANCE);
+		}
+		
+		if(!StrUtils.isNull(params.get("inyear"))){//入职时间
+			sb.append(" AND DATE_FORMAT(t.entry_date, '%Y')  = ? ");
+			values.add(params.get("inyear"));
+			types.add(StringType.INSTANCE);
+		}
+		
+		if(!StrUtils.isNull(params.get("createTimeStart"))){//入职时间-开始
+			sb.append(" AND " + SqlUtil.toDate(params.get("createTimeStart"), 1, 0) + " <= t.entry_date ");
+		}
+		if(!StrUtils.isNull(params.get("createTimeEnd"))){//入职时间-结束
+			sb.append(" AND " + SqlUtil.toDate(params.get("createTimeEnd"), 1, 0) + " >= t.entry_date ");
+		}
+		
+		if(!StrUtils.isNull(params.get("department"))){//所属部门
+			sb.append(" AND t.department  = ? ");
+			values.add(params.get("department"));
+			types.add(StringType.INSTANCE);
+		}
+		
+		if(!StrUtils.isNull(params.get("userduty"))){//担任职务
+			sb.append(" AND t.duty  = ? ");
+			values.add(params.get("userduty"));
+			types.add(StringType.INSTANCE);
+		}
+		
 		if(!StrUtils.isNull(params.get("name"))){//姓名
 			sb.append(" and t.name like ? ");
 			values.add("%" + params.get("name") + "%");
 			types.add(StringType.INSTANCE);
 		}
 		
-		sb.append(" order by t.last_update_time desc ");
+		sb.append(" order by t.create_time desc ");
 		
 		srcSql.setSrcSql(sb.toString());
 		srcSql.setTypes(types.toArray(new Type[0]));

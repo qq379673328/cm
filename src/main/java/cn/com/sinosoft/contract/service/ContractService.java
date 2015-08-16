@@ -1,6 +1,7 @@
 package cn.com.sinosoft.contract.service;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -148,12 +149,11 @@ public class ContractService extends SimpleServiceImpl {
 		
 		if(StrUtils.isNull(contract.getId())){//新增
 			isNew = true;
-			if(isNoExist(contract.getNo())){//验证合同编号
+			/*if(isNoExist(contract.getNo())){//验证合同编号
 				ret.setSuccess(FormResult.ERROR);
 				ret.setMessage("合同编号已存在");
 				return ret;
-			}
-			
+			}*/
 			//验证是否有未结束的合同-暂停或者运作
 			String customId = contract.getCustomId();
 			if(hasContractNotEnd(customId)){
@@ -167,14 +167,23 @@ public class ContractService extends SimpleServiceImpl {
 			contract.setState("运作");//新增合同只能为运作状态
 			contract.setCreateTime(new Date());
 			contract.setCreateUser(getLoginUserId());
+			
+			//获取合同编号
+			contract.setNo(getContractNo());
+			
 			dao.save(contract);
 		}else{//更新
-			if(isNoExist(contract.getNo(), contract.getId())){//验证合同编号
+			/*if(isNoExist(contract.getNo(), contract.getId())){//验证合同编号
 				ret.setSuccess(FormResult.ERROR);
 				ret.setMessage("合同编号已存在");
 				return ret;
+			}*/
+			//合同只有在运行和暂停状态下才能编辑。
+			if(!isCanEdit(contract.getId())){
+				ret.setSuccess(FormResult.ERROR);
+				ret.setMessage("合同只有在运行和暂停状态下才能编辑");
+				return ret;
 			}
-			
 			contract.setUpdateTime(new Date());
 			contract.setUpdateUser(getLoginUserId());
 			dao.update(contract);
@@ -209,7 +218,6 @@ public class ContractService extends SimpleServiceImpl {
 			
 		}
 		
-		
 		//更新附件信息
 		dao.executeDelOrUpdateSql("delete from t_contract_data where contract_id = ? ",
 				new Object[]{contract.getId()},
@@ -229,6 +237,45 @@ public class ContractService extends SimpleServiceImpl {
 	}
 	
 	/**
+	 * 生成合同编号，编号从数据库中获取，自动+1
+	 * 长度为8位，四位年份+四位顺序数:20150021
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public String getContractNo(){
+		Calendar a = Calendar.getInstance();
+		String currentYear = "" + a.get(Calendar.YEAR);
+		List<Map<String, String>> items = dao.queryListBySql(
+				"SELECT MAX(t.no) maxno FROM t_contract t", null, null);
+		String no = "";
+		if(items.size() == 0 || items.get(0).get("maxno") == null){//无合同号
+			no += currentYear + "0001";
+		}else{
+			String lastNo = items.get(0).get("maxno");
+			if(lastNo.substring(0, 4).equals(currentYear)){//同一年合同
+				String num = lastNo.substring(4);
+				//去除前面的0
+				int numNo = Integer.valueOf(num);
+				String newNo = "" + (numNo + 1);
+				//补0
+				int len = newNo.length();
+				if(len == 1){
+					newNo = "000" + newNo;
+				}else if(len == 2){
+					newNo = "00" + newNo;
+				}else if(len == 3){
+					newNo = "0" + newNo;
+				}
+				//加年份
+				no = currentYear + newNo;
+			}else{//不同年合同，重新编号
+				no += currentYear + "0001";
+			}
+		}
+		return no;
+	}
+	
+	/**
 	 * 验证合同编号是否存在-新增用
 	 *
 	 * 
@@ -240,6 +287,17 @@ public class ContractService extends SimpleServiceImpl {
 		return dao.queryCountBySql("select count(1) from t_contract where no = ? ",
 				new Object[]{no},
 				new Type[]{StringType.INSTANCE}) == 0 ? false : true;
+	}
+	
+	/**
+	 * 合同是否能够编辑-合同只有在运行和暂停状态下才能编辑。
+	 * @param id
+	 * @return
+	 */
+	private boolean isCanEdit(String id){
+		return dao.queryCountBySql("select count(1) from t_contract where id = ? and ( state = '运行' or state = '暂停' ) ",
+				new Object[]{id},
+				new Type[]{StringType.INSTANCE}) == 0 ? true : false;
 	}
 	
 	/**
@@ -303,5 +361,7 @@ public class ContractService extends SimpleServiceImpl {
 		
 		return pagingSearch(params, pageParams, srcSql);
 	}
-
+	
+	
+	
 }

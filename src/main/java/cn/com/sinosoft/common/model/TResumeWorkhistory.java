@@ -1,5 +1,5 @@
 package cn.com.sinosoft.common.model;
-// Generated 2015-7-25 14:48:24 by Hibernate Tools 3.2.2.GA
+// Generated 2015-8-15 12:20:10 by Hibernate Tools 3.2.2.GA
 
 
 import java.util.Date;
@@ -18,6 +18,8 @@ public class TResumeWorkhistory  implements java.io.Serializable {
      private String company;
      private Date createTime;
      private String createUser;
+     private String zhiwei;
+     private String hangye;
 
     public TResumeWorkhistory() {
     }
@@ -28,7 +30,7 @@ public class TResumeWorkhistory  implements java.io.Serializable {
         this.resumeId = resumeId;
         this.content = content;
     }
-    public TResumeWorkhistory(String id, String resumeId, String content, String timeBegin, String timeEnd, String company, Date createTime, String createUser) {
+    public TResumeWorkhistory(String id, String resumeId, String content, String timeBegin, String timeEnd, String company, Date createTime, String createUser, String zhiwei, String hangye) {
        this.id = id;
        this.resumeId = resumeId;
        this.content = content;
@@ -37,6 +39,8 @@ public class TResumeWorkhistory  implements java.io.Serializable {
        this.company = company;
        this.createTime = createTime;
        this.createUser = createUser;
+       this.zhiwei = zhiwei;
+       this.hangye = hangye;
     }
    
     public String getId() {
@@ -94,6 +98,20 @@ public class TResumeWorkhistory  implements java.io.Serializable {
     
     public void setCreateUser(String createUser) {
         this.createUser = createUser;
+    }
+    public String getZhiwei() {
+        return this.zhiwei;
+    }
+    
+    public void setZhiwei(String zhiwei) {
+        this.zhiwei = zhiwei;
+    }
+    public String getHangye() {
+        return this.hangye;
+    }
+    
+    public void setHangye(String hangye) {
+        this.hangye = hangye;
     }
 
 

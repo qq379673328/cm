@@ -15,21 +15,21 @@
 		<div class="title" ng-init="show='baseinfo'">
 			<a class="item" ng-click="show='baseinfo'"
 				ng-class="{true: 'select', false: 'unselect'}[show=='baseinfo']" >基本信息</a>
+			<a class="item" ng-show="resume.id" ng-click="show='eduhistory'"
+				ng-class="{true: 'select', false: 'unselect'}[show=='eduhistory']" >教育经历</a>
+			<a ng-show="!resume.id" class="disabled">教育经历</a>
 			<a class="item" ng-show="resume.id" ng-click="show='target'" 
 				ng-class="{true: 'select', false: 'unselect'}[show=='target']">求职意向</a>
 			<a ng-show="!resume.id" class="disabled">求职意向</a>
 			<a class="item" ng-show="resume.id" ng-click="show='workhistory'"
 				ng-class="{true: 'select', false: 'unselect'}[show=='workhistory']" >工作经历</a>
 			<a ng-show="!resume.id" class="disabled">工作经历</a>
-			<a class="item" ng-show="resume.id" ng-click="show='eduhistory'"
-				ng-class="{true: 'select', false: 'unselect'}[show=='eduhistory']" >教育培训经历</a>
-			<a ng-show="!resume.id" class="disabled">教育培训经历</a>
-			<a class="item" ng-show="resume.id" ng-click="show='language'"
+			<!-- <a class="item" ng-show="resume.id" ng-click="show='language'"
 				ng-class="{true: 'select', false: 'unselect'}[show=='language']" >语言能力</a>
-			<a ng-show="!resume.id" class="disabled">语言能力</a>
-			<!-- <a class="item" ng-show="resume.id" ng-click="show='icon'"
+			<a ng-show="!resume.id" class="disabled">语言能力</a> -->
+			<a class="item" ng-show="resume.id" ng-click="show='icon'"
 				ng-class="{true: 'select', false: 'unselect'}[show=='icon']" >个人头像</a>
-			<a ng-show="!resume.id" class="disabled">个人头像</a> -->
+			<a ng-show="!resume.id" class="disabled">个人头像</a>
 			<a class="item" ng-show="resume.id" ng-click="show='atta'"
 				ng-class="{true: 'select', false: 'unselect'}[show=='atta']" >简历附件</a>
 			<a ng-show="!resume.id" class="disabled">简历附件</a>
@@ -131,7 +131,7 @@
 				<tr>
 					<td class="td-odd"><span class="warn">*</span>目前年薪：</td>
 					<td class="td-even">
-						<input class="form-input" name="yearPay" ng-model="resume.yearPay" />
+						<input class="form-input" name="yearPay" ng-model="resume.yearPay" />万
 					</td>
 					<td class="td-odd"><span class="warn">*</span>工作状态：</td>
 					<td class="td-even">
@@ -159,7 +159,7 @@
 						<div class="btn btn-lblue" 
 							ng-show="!isrequest"
 							ng-click="saveBaseInfo(true);">
-							保存基本信息并编辑求职意向
+							保存基本信息并编辑教育经历
 						</div>
 					</td>
 				</tr>
@@ -251,17 +251,23 @@
 	
 	<div class="mytable" ng-show="show=='workhistory'">
 		<form id="resumeeditform-workhistory" name="form">
-		<table>
-			<tbody>
+		<table class="my-table">
+			<thead>
 				<tr>
-					<td>工作时间</td>
-					<td>公司名</td>
-					<td>内容</td>
-					<td></td>
+					<th style="width:80px;">工作时间</th>
+					<th style="width:200px;">公司名</th>
+					<th style="width:200px;">职位</th>
+					<th style="width:200px;">行业</th>
+					<th style="width:auto">业绩</th>
+					<th></th>
 				</tr>
-				<tr ng-repeat="work in resumeWorkhistorys">
-					<td>{{work.time_begin}} - {{work.time_end}}</td>
+			</thead>
+			<tbody>
+				<tr ng-repeat="work in resumeWorkhistorys" ng-class="{true:'tr-odd' , false: 'tr-even'}[$index%2 == 0]">
+					<td>{{work.time_begin}} 至 {{work.time_end}}</td>
 					<td>{{work.company}}</td>
+					<td>{{work.zhiwei}}</td>
+					<td>{{work.hangye}}</td>
 					<td>{{work.content}}</td>
 					<td>
 						<div class="btn btn-small btn-danger" 
@@ -273,40 +279,66 @@
 				</tr>
 				<tr class="line"><td colspan="4"></td></tr>
 				<tr>
-					<td>工作时间：</td>
-					<td colspan="3">
+					<td >工作时间：</td>
+					<td colspan="5">
 						从
-						<input class="form-input" style="width: 30%;" name="timeBegin" datepicker ng-model="workhistory.timeBegin" />
+						<input class="form-input" style="width: 30%;" 
+						name="timeBegin" 
+						datepicker
+						format="yy-mm"
+						ng-model="workhistory.timeBegin" />
 						至
-						<input class="form-input" style="width: 30%;" name="timeEnd" datepicker ng-model="workhistory.timeEnd"/>
+						<input class="form-input" style="width: 30%;"
+						name="timeEnd"
+						datepicker
+						format="yy-mm"
+						ng-model="workhistory.timeEnd"/>
 					</td>
 				</tr>
 				<tr>
 					<td>公司名：</td>
-					<td colspan="3">
+					<td colspan="5">
 						<input name="company" class="form-input" ng-model="workhistory.company" />
 					</td>
 				</tr>
 				<tr>
-					<td>内容：</td>
-					<td colspan="3">
+					<td>职位：</td>
+					<td colspan="5">
+						<input name="zhiwei" class="form-input" ng-model="workhistory.zhiwei" />
+					</td>
+				</tr>
+				<tr>
+					<td>行业：</td>
+					<td colspan="5">
+						<div
+							id="hangye-tag"
+							dataname="hangye"
+							core-basedata 
+							type="select"
+							bind-model="workhistory.hangye"
+							key="customIndustry"></div>
+					</td>
+				</tr>
+				<tr>
+					<td>业绩：</td>
+					<td colspan="5">
 						<textarea name="content" class="textarea" ng-model="workhistory.content"></textarea>
 					</td>
 				</tr>
 				
 				<tr>
-					<td colspan="2">
+					<td colspan="3">
 						<div class="btn btn-lblue" 
 							ng-show="!isrequest"
 							ng-click="saveWorkHistory();">
 							保存工作经历
 						</div>
 					</td>
-					<td colspan="2">
+					<td colspan="3">
 						<div class="btn btn-lblue" 
 							ng-show="!isrequest"
 							ng-click="saveWorkHistory(true);">
-							保存工作经历并编辑教育培训经历
+							保存工作经历并编辑个人头像
 						</div>
 					</td>
 				</tr>
@@ -317,17 +349,19 @@
 	
 	<div class="mytable" ng-show="show=='eduhistory'">
 		<form id="resumeeditform-eduhistory" name="form">
-		<table>
-			<tbody>
+		<table class="my-table">
+			<thead>
 				<tr>
-					<td>日期</td>
-					<td>培训机构</td>
-					<td>培训课程</td>
-					<td>培训内容</td>
-					<td></td>
+					<th>时间</th>
+					<th>学校</th>
+					<th>专业</th>
+					<th>学历</th>
+					<th></th>
 				</tr>
-				<tr ng-repeat="edu in resumeEdus">
-					<td>{{edu.time_begin}} - {{edu.time_end}}</td>
+			</thead>
+			<tbody>
+				<tr ng-repeat="edu in resumeEdus" ng-class="{true:'tr-odd' , false: 'tr-even'}[$index%2 == 0]">
+					<td>{{edu.time_begin}} 至  {{edu.time_end}}</td>
 					<td>{{edu.org}}</td>
 					<td>{{edu.course}}</td>
 					<td>{{edu.content}}</td>
@@ -341,30 +375,38 @@
 				</tr>
 				<tr class="line"><td colspan="4"></td></tr>
 				<tr>
-					<td>培训时间：</td>
+					<td>时间：</td>
 					<td colspan="3">
 						从
-						<input class="form-input" style="width: 30%;" name="timeBegin" datepicker ng-model="eduhistory.timeBegin" />
+						<input class="form-input" style="width: 30%;" 
+						name="timeBegin" 
+						datepicker 
+						format="yy-mm"
+						ng-model="eduhistory.timeBegin" />
 						至
-						<input class="form-input" style="width: 30%;" name="timeEnd" datepicker ng-model="eduhistory.timeEnd"/>
+						<input class="form-input" style="width: 30%;"
+						 name="timeEnd"
+						 datepicker
+						 format="yy-mm"
+						 ng-model="eduhistory.timeEnd"/>
 					</td>
 				</tr>
 				<tr>
-					<td>培训机构：</td>
+					<td>学校：</td>
 					<td colspan="3">
 						<input name="org" class="form-input" ng-model="eduhistory.org" />
 					</td>
 				</tr>
 				<tr>
-					<td>培训课程：</td>
+					<td>专业：</td>
 					<td colspan="3">
-						<input name="course" class="form-input" ng-model="eduhistory.course"></textarea>
+						<input name="course" class="form-input" ng-model="eduhistory.course" />
 					</td>
 				</tr>
 				<tr>
-					<td>培训内容：</td>
+					<td>学历：</td>
 					<td colspan="3">
-						<textarea name="content" class="textarea" ng-model="eduhistory.content"></textarea>
+						<input name="content" class="form-input" ng-model="eduhistory.content" />
 					</td>
 				</tr>
 				
@@ -373,14 +415,14 @@
 						<div class="btn btn-lblue" 
 							ng-show="!isrequest"
 							ng-click="saveEduHistory();">
-							保存 教育培训经历
+							保存 教育经历
 						</div>
 					</td>
 					<td colspan="2">
 						<div class="btn btn-lblue" 
 							ng-show="!isrequest"
 							ng-click="saveEduHistory(true);">
-							保存 教育培训经历 并编辑 语言能力
+							保存 教育经历 并编辑 求职意向
 						</div>
 					</td>
 				</tr>

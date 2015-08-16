@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import cn.com.sinosoft.common.model.TUser;
+import cn.com.sinosoft.common.util.SqlUtil;
 import cn.com.sinosoft.common.util.StrUtils;
 import cn.com.sinosoft.common.util.security.Md5PwdEncoder;
 import cn.com.sinosoft.core.service.SimpleServiceImpl;
@@ -152,11 +153,29 @@ public class UserService extends SimpleServiceImpl {
 			values.add(params.get("usertype"));
 			types.add(StringType.INSTANCE);
 		}
-		if(!StrUtils.isNull(params.get("isDisabled"))){//用户状态
+		if(!StrUtils.isNull(params.get("duty"))){//职务
+			sb.append(" AND duty = ? ");
+			values.add(params.get("duty"));
+			types.add(StringType.INSTANCE);
+		}
+		if(!StrUtils.isNull(params.get("state"))){//状态
+			sb.append(" AND state = ? ");
+			values.add(params.get("state"));
+			types.add(StringType.INSTANCE);
+		}
+		if(!StrUtils.isNull(params.get("isDisabled"))){//禁用状态
 			sb.append(" AND is_disabled = ? ");
 			values.add(params.get("isDisabled"));
 			types.add(StringType.INSTANCE);
 		}
+		if(!StrUtils.isNull(params.get("createTimeStart"))){//创建日期-开始
+			sb.append(" AND " + SqlUtil.toDate(params.get("createTimeStart"), 1, 0) + " <= entry_date ");
+		}
+		if(!StrUtils.isNull(params.get("createTimeEnd"))){//创建日期-结束
+			sb.append(" AND " + SqlUtil.toDate(params.get("createTimeEnd"), 1, 0) + " >= entry_date ");
+		}
+		
+		sb.append(" order by FIELD(state, '在职', '试用期', '离职') ");
 		
 		srcSql.setSrcSql(sb.toString());
 		srcSql.setTypes(types.toArray(new Type[0]));

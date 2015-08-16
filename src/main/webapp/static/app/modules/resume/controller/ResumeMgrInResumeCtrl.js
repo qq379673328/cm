@@ -86,9 +86,9 @@ app.controller('ResumeMgrInResumeCtrl',
 				//婚姻状况
 				marrage: {required: true, maxlength: 20},
 				//手机号码
-				phone: {required: true, maxlength: 100},
+				phone: {required: true, telephone:true, maxlength: 100},
 				//电子邮箱
-				email: {required: true, maxlength: 100},
+				email: {required: true, email:true, maxlength: 100},
 				//目前年薪
 				yearPay: {required: true, number: true},
 				//工作状态
@@ -108,7 +108,7 @@ app.controller('ResumeMgrInResumeCtrl',
 				if(data.success == "1"){//成功
 					$scope.resume.id = data.data.id;
 					if(next){
-						$scope.show = "target";
+						$scope.show = "language";
 					}
 				}
 			});
@@ -178,13 +178,17 @@ app.controller('ResumeMgrInResumeCtrl',
 		if($("#resumeeditform-workhistory").isHappy({
 			fields: {
 				//工作时间-从
-				timeBegin: {required: true},
+				timeBegin: {required: true, date: true},
 				//工作时间-到
-				timeEnd: {required: true},
+				timeEnd: {date: true},
 				//公司名
 				company: {required: true, maxlength: 100},
 				//内容
-				content: {required: true, maxlength: 500}
+				content: {required: true, maxlength: 500},
+				//职位
+				zhiwei: {required: true, maxlength: 100},
+				//行业
+				hangye: {required: true, maxlength: 500}
 			}
 		})){
 			$scope.isrequest = true;
@@ -200,11 +204,14 @@ app.controller('ResumeMgrInResumeCtrl',
 						time_begin: item.timeBegin,
 						time_end: item.timeEnd,
 						content: item.content,
-						company: item.company
+						company: item.company,
+						zhiwei: item.zhiwei,
+						hangye: item.hangye
 					});
+					$("#hangye-tag").find("[name=hangye]").val("");
 					$scope.workhistory = {};
 					if(next){
-						$scope.show = "eduhistory";
+						$scope.show = "icon";
 					}
 				}
 			});
@@ -226,9 +233,9 @@ app.controller('ResumeMgrInResumeCtrl',
 		if($("#resumeeditform-eduhistory").isHappy({
 			fields: {
 				//培训时间-从
-				timeBegin: {required: true},
+				timeBegin: {required: true, date: true},
 				//培训时间-到
-				timeEnd: {required: true},
+				timeEnd: {date: true},
 				//培训机构
 				org: {required: true, maxlength: 100},
 				//课程
@@ -253,7 +260,7 @@ app.controller('ResumeMgrInResumeCtrl',
 					});
 					$scope.eduhistory = {};
 					if(next){
-						$scope.show = "language";
+						$scope.show = "target";
 					}
 					
 				}
@@ -303,7 +310,7 @@ app.controller('ResumeMgrInResumeCtrl',
 					});
 					$scope.language = {};
 					if(next){
-						$scope.show = "atta";
+						$scope.show = "target";
 					}
 				}
 			});
@@ -334,8 +341,11 @@ app.controller('ResumeMgrInResumeCtrl',
 				}).success(function(data){
 					$scope.formresult = data;
 					$scope.isrequest = false;
-					if(data.success == "1" && next){//成功
-						$scope.show = "atta";
+					if(data.success == "1"){//成功
+						var item = data.data;
+						if(next){
+							$scope.show = "atta";
+						}
 					}
 				});
 		}

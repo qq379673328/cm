@@ -21,6 +21,13 @@
 
 </head>
 <body>
+<!-- oncontextmenu="return false" 
+ondragstart="return false" 
+onselectstart ="return false" 
+onselect="document.selection.empty()" 
+oncopy="document.selection.empty()" 
+onbeforecopy="return false" 
+onmouseup="document.selection.empty()" -->
 	<div class="main" ng-controller="MainCtrl">
 		<div class="top">
 			<div class="word">客户管理系统</div>

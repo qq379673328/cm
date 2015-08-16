@@ -12,6 +12,10 @@ app.config([ '$routeProvider', function($routeProvider) {
 		templateUrl : fdRouterViewsBasepath + 'custom/views/custommgrlist.html',
 		controller : 'CustomMgrListCtrl'
 	})
+	.when('/custommgr/list/:who', {//客户管理-我的
+		templateUrl : fdRouterViewsBasepath + 'custom/views/custommgrlist.html',
+		controller : 'CustomMgrListCtrl'
+	})
 	.when('/custommgr/incustom', {//客户管理-录入客户
 		templateUrl : fdRouterViewsBasepath + 'custom/views/custommgrincustom.html',
 		controller : 'CustomMgrInCustomCtrl'
@@ -26,6 +30,10 @@ app.config([ '$routeProvider', function($routeProvider) {
 	})
 	
 	.when('/jobmgr/list', {//职位管理-列表页
+		templateUrl : fdRouterViewsBasepath + 'job/views/jobmgrlist.html',
+		controller : 'JobMgrListCtrl'
+	})
+	.when('/jobmgr/list/:who', {//职位管理-列表页-我的
 		templateUrl : fdRouterViewsBasepath + 'job/views/jobmgrlist.html',
 		controller : 'JobMgrListCtrl'
 	})

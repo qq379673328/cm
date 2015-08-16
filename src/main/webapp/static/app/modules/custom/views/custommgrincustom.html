@@ -33,7 +33,7 @@
 				</tr>
 				<tr>
 					<td class="td-odd"><span class="warn">*</span>所属行业：</td>
-					<td class="td-even" colspan="3">
+					<td class="td-even">
 						<div
 							dataname="industry"
 							core-basedata 
@@ -41,6 +41,8 @@
 							bind-model="custom.industry"
 							key="customIndustry"></div>
 					</td>
+					<td class="td-odd"></td>
+					<td class="td-even"></td>
 				</tr>
 				<tr>
 					<td class="td-odd">客户来源：</td>
@@ -85,14 +87,14 @@
 					</td>
 				</tr>
 				<tr>
-					<td class="td-odd">座机号码：</td>
+					<td class="td-odd"><span class="warn">*</span>座机号码：</td>
 					<td class="td-even">
 						<input 
 									name="contactLandline"
 									ng-model="custom.contactLandline"
 									class="form-input" />
 					</td>
-					<td class="td-odd"><span class="warn">*</span>手机号码：</td>
+					<td class="td-odd">手机号码：</td>
 					<td class="td-even">
 						<input 
 									name="contactCellphone"
@@ -140,7 +142,7 @@
 									ng-model="custom.contactAddress"
 									class="form-input" />
 					</td>
-					<td class="td-odd">网址：</td>
+					<td class="td-odd"><span class="warn">*</span>网址：</td>
 					<td class="td-even">
 						<input 
 									name="contactWebsite"

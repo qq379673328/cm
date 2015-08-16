@@ -68,6 +68,11 @@ app.directive('coreTeamselect', ["$http", function($http){
         		});
         	}, true);
         	
+        	//默认查询一次
+        	$http.post("team/list",{page: 1, rows: 100}).success(function(data){
+    			$scope.teams = data.rows;
+    		});
+        	
         }
     };
 }]);

@@ -75,7 +75,7 @@ hr {
 }
 
 /* 让非ie浏览器默认也显示垂直滚动条，防止因滚动条引起的闪烁 */
-html {overflow-y: scroll;}
+html {overflow-y: scroll; overflow-x: hidden;}
 /****************/
 .hide{display: none;}
 a{
@@ -204,7 +204,9 @@ textarea{
 }
 .main .body .content{
 	padding: 5px 10px;
-	margin-bottom: 50px;
+	margin-bottom: 70px;
+	float: left;
+	width: 100%;
 }
 
 .footer{
@@ -216,6 +218,7 @@ textarea{
 	height: 30px;
 	line-height: 30px;
 	color: #fff;
+	position: fixed;
 }
 .searchzone{
 	padding-bottom: 10px;
@@ -392,7 +395,7 @@ textarea{
 	display: inline-block;
 	width: 50px;
 	text-align: center;
-	margin: 5px 10px;
+	margin: 5px 20px;
 }
 .card i{
 	color: #77B9F0;
@@ -589,6 +592,7 @@ textarea{
 	margin: 3px;
 	transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
 	float: left;
+	width: 80%;
 }
 .form-table td{
 	border: none;
@@ -609,7 +613,7 @@ hr {
 	margin: 18px 0;
 	border: 0;
 	border-top: 1px solid #eee;
-	border-bottom: 1px solid #fff;
+	width: 100%;
 }
 .formresult{
 	font-size: 14px;
@@ -676,6 +680,7 @@ hr {
 }
 /*dialog*/
 .dialog-wrap{
+	width: 60%;
 	position: fixed;
 	top: 0px;
 	right: 0px;
@@ -692,20 +697,31 @@ hr {
 	overflow-y: auto;
 	height: 90%;
 }
+.dialog .field-line{
+	margin-bottom: 5px;	
+}
+.dialog .info{
+	margin-bottom: 10px;
+}
 .dialog .info span{
 	height: 20px;
 	line-height: 20px;
-	display: block;
 }
 .dialog .info input{
-	height: 20px;
-	line-height: 20px;
+	height: 30px;
+	line-height: 30px;
 	display: block;
+}
+.dialog .field-desc{
+	float: left;
+	font-size: 18px;
+	font-weight: bold;
 }
 .ok,.close{
 	cursor: pointer;
 	height: 30px;
 	line-height: 30px;
+	margin-right: 30px;
 }
 .ok:hover,.close:hover{
 	color: #D3BDBD;
@@ -840,4 +856,8 @@ hr {
 	width: 0px;
 	height: 0px;
 	border: none;
+}
+
+.ui-datepicker-calendar { 
+    display: none; 
 }

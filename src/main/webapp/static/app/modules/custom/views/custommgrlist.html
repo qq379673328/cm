@@ -63,7 +63,7 @@
 				<i class="fa fa-user-plus"></i>&nbsp;其他客户</a>
 			<a class="common" ng-click="search.beyond = 'team';changeSelect($event.target);">
 				<i class="fa fa-users"></i>&nbsp;合作客户</a>
-			<a class="common" ng-click="search.beyond = 'my';changeSelect($event.target);">
+			<a class="common" id="beyond-my" ng-click="search.beyond = 'my';changeSelect($event.target);">
 				<i class="fa fa-user"></i>&nbsp;我的客户</a>
 			<a class="common select" ng-click="search.beyond = '';changeSelect($event.target);">全部</a>
 			
@@ -71,40 +71,41 @@
 		<table class="my-table" ng-table="tableParams" template-pagination="custom/pager">
 			<thead>
 				<tr>
-					<th>客户来源</th>
+					<th></th>
 					<th>公司名称</th>
+					<th>客户来源</th>
 					<th>联系人</th>
 					<th>联系电话</th>
 					<th>职位数</th>
 					<th>执行团队</th>
 					<th>客户状态</th>
 					<th>创建时间</th>
-					<th></th>
-					<th></th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr ng-show="!$data"><td colspan="4">加载中...</td></tr>
 				<tr ng-repeat="item in $data" ng-class="{true:'tr-odd' , false: 'tr-even'}[$index%2 == 0]">
-					<td>{{ item.source }}</td>
+					<td>
+						<i ng-show="item.beyond=='my'" class="fa fa-user"></i>
+						<i ng-show="item.beyond=='team'" class="fa fa-users"></i>
+						<i ng-show="item.beyond=='other'" class="fa fa-user-plus"></i>
+					</td>
 					<td>
 						<a class="link" 
 						href="#custommgr/viewcustom/{{item.id}}">{{ item.custom_name }}</a></td>
+					<td>
+						{{ item.source }}
+					</td>
 					<td>{{ item.contact_name }}</td>
 					<td>{{ item.contact_cellphone == null ? item.contact_landline : item.contact_cellphone}}</td>
 					<td>{{ item.jobcou }}</td>
 					<td>{{ item.teams_desc }}</td>
 					<td>{{ item.state }}</td>
 					<td>{{ item.create_time | date : 'yyyy-MM-dd HH:mm '}}</td>
-					<td>
-						<i ng-show="item.beyond=='my'" class="fa fa-user"></i>
-						<i ng-show="item.beyond=='team'" class="fa fa-users"></i>
-						<i ng-show="item.beyond=='other'" class="fa fa-user-plus"></i>
-					</td>
 					
-					<td ng-show="item.ishandling">操作中</td>
+					<!-- <td ng-show="item.ishandling">操作中</td>
 					<td ng-show="!item.ishandling">
-						<!-- <a ng-show="item.beyond=='my'" class="btn btn-small btn-lblue" href="#custommgr/editcustom/{{item.id}}">编辑</a> -->
+						<a ng-show="item.beyond=='my'" class="btn btn-small btn-lblue" href="#custommgr/editcustom/{{item.id}}">编辑</a>
 						<a ng-show="item.beyond=='my'" class="btn btn-small btn-success"
 							ng-click="item.prepareDel = !item.prepareDel"
 							>删除</a>
@@ -119,7 +120,7 @@
 							</tr>
 						</table>
 									
-					</td>
+					</td> -->
 				</tr>
 			</tbody>
 		</table>

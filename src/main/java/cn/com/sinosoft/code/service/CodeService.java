@@ -21,7 +21,9 @@ public class CodeService extends SimpleServiceImpl {
 	 */
 	public Object getCodeTypes() {
 		return dao.queryListBySql(
-				"select * from t_codetype ", null, null);
+				"select * from t_codetype where codetypedesc "
+				+ "not in ('客户状态', '合同状态', '职位状态') "
+				, null, null);
 	}
 
 	/**

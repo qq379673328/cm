@@ -6,8 +6,6 @@
  */
 package cn.com.sinosoft.core.util;
 
-import java.util.Date;
-
 import javax.annotation.Resource;
 
 import org.apache.shiro.SecurityUtils;
@@ -73,6 +71,24 @@ public class UserUtil {
 		}else{
 			return null;
 		}
+	}
+	
+	/**
+	 * 是否为管理员
+	 * @return
+	 */
+	public boolean isAdmin(){
+		TUser user = getLoginUser();
+		return "管理员".equals(user.getUserType()) ? true : false;
+	}
+	
+	/**
+	 * 是否为顾问
+	 * @return
+	 */
+	public boolean isGuWen(){
+		TUser user = getLoginUser();
+		return "顾问".equals(user.getUserType()) ? true : false;
 	}
 
 }

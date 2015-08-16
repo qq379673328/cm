@@ -19,10 +19,13 @@
 			<div class="info">
 				<div ng-click="showdialog=false;" 
 					class="fa fa-2x fa-times close"></div>
-				<span>请输入客户名进行查询</span>
-				<span>只能查询出签约运作的客户</span>
+				<i class="fa fa-info"></i>&nbsp;&nbsp;
+				<span>请输入客户名进行查询，</span>
+				<span>只能查询出自己创建的签约运作的客户，</span>
 				<span>至多显示100条记录</span>
-				<input class="form-input" ng-model="customsearch" />
+				<div>
+					<div class="field-desc">客户名：</div><input class="form-input" ng-model="customsearch" />
+				</div>
 			</div>
 			<div ng-repeat="item in customs">
 				<span

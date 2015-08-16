@@ -18,12 +18,21 @@
 		<div class="dialog">
 			<div ng-click="showdialog=false;" 
 					class="fa fa-2x fa-times close"></div><br/>
+			<span>请输入条件进行查询</span>
+			<span>至多显示100条记录</span>
 			<div class="info">
-				<span>请输入条件进行查询</span>
-				<span>至多显示100条记录</span>
-				合同编号：<input class="form-input" ng-model="customcontractsearch.no" />
-				职位名：<input class="form-input" ng-model="customcontractsearch.jobName" />
-				入职人名：<input class="form-input" ng-model="customcontractsearch.resumeName" />
+				<div class="field-line">
+					<div class="field-desc">入职人名：</div>
+					<input class="form-input" ng-model="customcontractsearch.resumeName" />
+				</div>
+				<div class="field-line">
+					<div class="field-desc">职位名：</div>
+					<input class="form-input" ng-model="customcontractsearch.jobName" />
+				</div>
+				<div class="field-line">
+					<div class="field-desc">合同编号：</div>
+					<input class="form-input" ng-model="customcontractsearch.no" />
+				</div>
 			</div>
 			<div ng-repeat="item in items">
 				<span

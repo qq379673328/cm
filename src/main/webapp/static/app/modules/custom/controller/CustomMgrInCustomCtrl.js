@@ -82,13 +82,13 @@ app.controller('CustomMgrInCustomCtrl',
 				//担任职务
 				contactDuty: {required: true,maxlength: 100},
 				//座机号码
-				contactLandline: {maxlength: 100},
+				contactLandline: {required: true,maxlength: 100},
 				//手机号码
-				contactCellphone: {required: true,maxlength: 100},
+				contactCellphone: {maxlength: 100},
 				//fax传真
 				contactFax: {maxlength: 100},
 				//电子邮件
-				contactEmail: {required: true,maxlength: 100},
+				contactEmail: {required: true,email: true, maxlength: 100},
 				//qq
 				contactQq: {maxlength: 100},
 				//微信
@@ -96,7 +96,7 @@ app.controller('CustomMgrInCustomCtrl',
 				//公司地址
 				contactAddress: {maxlength: 200},
 				//网址
-				contactWebsite: {maxlength: 100},
+				contactWebsite: {required: true,maxlength: 100},
 				//公司介绍
 				companyProfile: {maxlength: 100},
 				//沟通记录

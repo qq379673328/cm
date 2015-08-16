@@ -4,6 +4,11 @@ app.controller('ResumeMgrListCtrl',
 				$rootScope) {
 	$rootScope.menu = "resume";
 	
+	$scope.changeSelect = function(target){
+		$(target).siblings().removeClass("select");
+		$(target).addClass("select");
+	}
+	
 	//分页查询
 	var initpage = 1,
 		initrows = 10;

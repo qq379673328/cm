@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated 2015-7-25 14:48:25 by Hibernate Tools 3.2.2.GA -->
+<!-- Generated 2015-8-15 12:20:11 by Hibernate Tools 3.2.2.GA -->
 <hibernate-mapping>
     <class name="cn.com.sinosoft.common.model.TResumeWorkhistory" table="t_resume_workhistory" catalog="cm">
         <id name="id" type="string">
@@ -38,6 +38,16 @@
         </property>
         <property name="createUser" type="string">
             <column name="create_user" length="40" />
+        </property>
+        <property name="zhiwei" type="string">
+            <column name="zhiwei" length="100">
+                <comment>&#232;&#129;&#140;&#228;&#189;&#141;</comment>
+            </column>
+        </property>
+        <property name="hangye" type="string">
+            <column name="hangye" length="500">
+                <comment>&#232;&#161;&#140;&#228;&#184;&#154;</comment>
+            </column>
         </property>
     </class>
 </hibernate-mapping>

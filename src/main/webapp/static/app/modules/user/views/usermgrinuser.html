@@ -117,7 +117,12 @@
 				<tr>
 					<td class="td-r">所属部门：</td>
 					<td class="td-l">
-						<input class="form-input" name="department" ng-model="user.department" />
+						<div
+							core-basedata 
+							dataname="department"
+							type="select"
+							bind-model="user.department"
+							key="department"></div>
 					</td>
 				</tr>
 				<tr>
@@ -163,9 +168,14 @@
 					</td>
 				</tr>
 				<tr>
-					<td class="td-r">擅长专业：</td>
+					<td class="td-r">擅长行业：</td>
 					<td class="td-l">
-						<input class="form-input" name="skills" ng-model="user.skills" />
+						<div
+							core-basedata 
+							dataname="skills"
+							type="select"
+							bind-model="user.skills"
+							key="customIndustry"></div>
 					</td>
 				</tr>
 				

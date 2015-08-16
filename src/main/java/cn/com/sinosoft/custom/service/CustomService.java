@@ -51,7 +51,10 @@ public class CustomService extends SimpleServiceImpl {
 		TUser user = userUtil.getLoginUser();
 		String userId = user.getId();
 		StringBuffer sb = new StringBuffer(
-				" select tt.*,ifnull(jj.jobcou, 0) jobcou from ( SELECT "
+				" select tt.*,"
+				+ " custom_contract.cou, "//最新合同职位数
+				+ " ifnull(jj.jobcou, 0) jobcou "
+				+ " from ( SELECT "
 				+ " t.*, getDictName(t.team) teams_desc,  "
 				+ " CASE "
 				+ "     WHEN t.create_user = ?  "
@@ -69,6 +72,22 @@ public class CustomService extends SimpleServiceImpl {
 				+ " FROM t_custom t ) tt left join"
 				+ " (SELECT j.custom_id,COUNT(1) jobcou FROM t_job j GROUP BY j.custom_id) jj"
 				+ " on tt.id = jj.custom_id "
+				
+				//职位数-最新合同的职位数
+				+ " left join ( "
+				+ " SELECT cnew.custom_id, jobc.cou FROM "
+				+ " ( "
+				+ " SELECT * "
+				+ " FROM (SELECT * FROM t_contract ORDER BY create_time DESC) t "
+				+ " GROUP BY custom_id "
+				+ " ) cnew "
+				+ " LEFT JOIN  "
+				+ " ( "
+				+ " SELECT job.contract_id,COUNT(1) cou FROM t_job job GROUP BY job.contract_id "
+				+ " ) jobc ON cnew.id = jobc.contract_id "
+				+ " ) custom_contract "
+				+ " on tt.id = custom_contract.custom_id "
+				
 				+ " WHERE 1=1 ");
 		values.add(userId);
 		types.add(StringType.INSTANCE);

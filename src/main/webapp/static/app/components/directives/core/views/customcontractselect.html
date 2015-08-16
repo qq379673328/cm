@@ -17,18 +17,24 @@
 	<div class="dialog-wrap" ng-show="showdialog">
 		<div class="dialog">
 			<div ng-click="showdialog=false;" 
-				class="fa fa-2x fa-times close"></div><br/>
+				class="fa fa-2x fa-times close"></div>
+			<i class="fa fa-info"></i>&nbsp;&nbsp;
+			<span>请输入条件进行查询，</span>
+			<span>至多显示100条记录</span>
 			<div class="info">
-				<span>请输入条件进行查询</span>
-				<span>至多显示100条记录</span>
-				客户名：<input class="form-input" ng-model="customcontractsearch.companyName" />
-				合同编号：<input class="form-input" ng-model="customcontractsearch.no" />
+				<div class="field-line">
+					<div class="field-desc">客&nbsp;户&nbsp;名：</div>
+					<input class="form-input" ng-model="customcontractsearch.companyName" /></div>
+				<div class="field-line">
+					<div class="field-desc">合同编号：</div>
+					<input class="form-input" ng-model="customcontractsearch.no" />
+				</div>
 			</div>
 			<div ng-repeat="item in items">
 				<span
 					ng-click="ok(item);"
 					class="fa fa-2x fa-check-circle ok">
-						{{item.custom_name + "-" + item.no}}
+						{{item.custom_name + "(合同编号：" + item.no + ")"}}
 					</span>
 				<br/>
 			</div>

@@ -8,13 +8,36 @@
 	<div class="searchzone">
 		<div class="title"><i class="fa fa-users"></i>&nbsp;用户管理</div>
 		<div class="line border-none">
-			<div class="desc">登录名：</div>
+			<div class="desc">姓名：</div>
 			<div class="vals">
 				<input ng-model="search.username" />
 			</div>
-			<div class="desc">用户名：</div>
+			<div class="desc">职务：</div>
 			<div class="vals">
-				<input ng-model="search.name" />
+				<div core-basedata
+					 type="span"
+					 ng-model="search.duty"
+					 key="userduty"
+					 all-select-name="不限"></div>
+			</div>
+		</div>
+		<div class="line border-none">
+			<div class="desc">入职时间：</div>
+			<div class="vals">
+				<input datepicker ng-model="search.createTimeStart" />
+				至
+				<input datepicker ng-model="search.createTimeEnd"/>
+			</div>
+			<div class="desc">状态：</div>
+			<div class="vals">
+				<input type="radio" ng-model="search.state" name="state" value="" />
+				全部 &nbsp;&nbsp;&nbsp;&nbsp;
+				<input type="radio" ng-model="search.state" name="state" value="在职" />
+				在职
+				<input type="radio" ng-model="search.state" name="state" value="离职" />
+				离职
+				<input type="radio" ng-model="search.state" name="state" value="试用期" />
+				试用期
 			</div>
 		</div>
 	</div>
@@ -40,6 +63,8 @@
 					<th>用户名</th>
 					<th>用户类型</th>
 					<th>性别</th>
+					<th>职务</th>
+					<th>入职日期</th>
 					<th>状态</th>
 					<th></th>
 				</tr>
@@ -52,6 +77,8 @@
 				<td>{{ item.NAME }}</td>
 				<td>{{ item.user_type }}</td>
 				<td>{{ item.sex == 1 ? "男" : ((item.sex == 2) ? "女" : "") }}</td>
+				<td>{{ item.duty }}</td>
+				<td>{{ item.entry_date }}</td>
 				<td>{{ item.state }}</td>
 				
 				<td class="handle">
@@ -69,9 +96,9 @@
 						ng-show="item.is_disabled == 0"
 						>解锁</a>
 						
-					<a ng-show="item.user_type != '管理员'" class="btn btn-small btn-success"
+					<!-- <a ng-show="item.user_type != '管理员'" class="btn btn-small btn-success"
 							ng-click="item.prepareDel = !item.prepareDel"
-							>删除</a>
+							>删除</a> -->
 						
 					<a class="btn btn-small btn-danger btn-4x"
 						ng-click="item.ishanding==true;resetPwd(item);"
@@ -81,7 +108,7 @@
 						ng-show="item.ishanding"
 						>操作中...</a>
 					
-					<table ng-show="item.prepareDel">
+					<!-- <table ng-show="item.prepareDel">
 							<tr>
 								<td colspan="5"></td>
 								<td>
@@ -90,7 +117,7 @@
 										>确认删除</a>
 								</td>
 							</tr>
-						</table>
+						</table> -->
 					
 				</td>
 			</tr>

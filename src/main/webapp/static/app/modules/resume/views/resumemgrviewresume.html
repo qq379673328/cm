@@ -64,19 +64,17 @@
 				<tr>
 					<td class="td-odd">最近公司：</td>
 					<td class="td-even">{{resumeWorkhistorys[0].company}}</td>
-					<td class="td-odd">手机号码：</td>
+					<td class="td-odd"><span ng-if="beyond=='my'">手机号码：</span></td>
 					<td class="td-even">
-						<span ng-show="beyond=='my'">{{resume.phone}}</span>
-						<span ng-show="beyond!='my'">******</span>
+						<span ng-if="beyond=='my'">{{resume.phone}}</span>
 					</td>
 				</tr>
 				<tr>
 					<td class="td-odd">当前行业：</td>
 					<td class="td-even">{{target.targetIndustry}}</td>
-					<td class="td-odd">电子邮件：</td>
+					<td class="td-odd"><span ng-if="beyond=='my'">电子邮件：</span></td>
 					<td class="td-even">
-						<span ng-show="beyond=='my'">{{resume.email}}</span>
-						<span ng-show="beyond!='my'">******</span>
+						<span ng-if="beyond=='my'">{{resume.email}}</span>
 					</td>
 				</tr>
 				<tr>
@@ -134,12 +132,12 @@
 				工作经验
 			</span>
 		</div>
-		<table>
+		<table class="my-table">
 			<thead>
 				<tr>
 					<th>工作时间</th>
 					<th>公司</th>
-					<th>内容</th>
+					<th>业绩</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -160,18 +158,18 @@
 				教育背景
 			</span>
 		</div>
-		<table>
+		<table class="my-table">
 			<thead>
 				<tr>
-					<th>日期</th>
-					<th>培训机构</th>
-					<th>培训课程</th>
-					<th>培训内容</th>
+					<th>时间</th>
+					<th>学校</th>
+					<th>专业</th>
+					<th>学历</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr ng-repeat="edu in resumeEdus" ng-class="{true:'tr-odd' , false: 'tr-even'}[$index%2 == 0]">
-					<td style="width: 200px;">{{edu.time_begin}} - {{edu.time_end}}</td>
+					<td style="width: 200px;">{{edu.time_begin}} 至 {{edu.time_end}}</td>
 					<td style="width: 200px;">{{edu.org}}</td>
 					<td style="width: 200px;">{{edu.course}}</td>
 					<td style="width: auto;">{{edu.content}}</td>
@@ -180,7 +178,7 @@
 		</table>
 	</div>
 	<hr/>
-	<div class="mytable">
+	<!-- <div class="mytable">
 		<div class="title">
 			<span>
 				语言能力
@@ -202,7 +200,7 @@
 				</tr>
 			</tbody>
 		</table>
-	</div>
+	</div> -->
 	<hr/>
 	<div class="mytable">
 		<div class="title">
@@ -259,7 +257,7 @@
 		</table>
 	</div>
 	<hr/>
-	<div class="mytable" ng-show="beyond=='my'">
+	<div class="mytable">
 		<div class="title">
 			<span>
 				添加沟通记录

@@ -48,6 +48,15 @@ app.directive('coreContractresumeselect', ["$http", function($http){
         		});
         	}, true);
         	
+        	//默认查询一次
+        	$http.post("invoice/getContractResume",
+    				{
+    			page: 1,
+    			rows: 100})
+    				.success(function(data){
+					$scope.items = data.rows;
+    		});
+        	
         }
     };
 }]);

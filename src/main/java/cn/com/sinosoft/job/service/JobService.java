@@ -84,7 +84,8 @@ public class JobService extends SimpleServiceImpl {
 				
 				+ " left join "
 				+ "(select jobb.job_id, count(1) jobcourec "
-					+ "from t_resume_job jobb where jobb.recom_state = '已推荐' "
+					+ "from t_resume_job jobb "
+					+ "where jobb.recom_state = '已推荐' or jobb.recom_state = '待处理' "
 					+ " group by jobb.job_id  ) jobcourec "
 				+ " on tt.id = jobcourec.job_id "
 				
@@ -205,25 +206,44 @@ public class JobService extends SimpleServiceImpl {
 		}
 		if(job != null){
 			//客户信息
-			ret.put("custom", dao.queryById(job.getCustomId(), TCustom.class));
+			TCustom custom = dao.queryById(job.getCustomId(), TCustom.class);
+			//处理隐私信息
+			if(custom != null && !getLoginUserId().equals(custom.getCreateUser())){
+				//手机号
+				custom.setContactCellphone(null);
+			}
+			
+			ret.put("custom", custom);
 			//内部推荐
 			ret.put("inteamresumes", dao.queryListBySql(
-					"select t.*,j.recom_state,j.verify_state,"
+					" select * from ( select t.*,j.recom_state,j.verify_state,"
 					+ "j.id as jid,j.recom_time, j.verify_time, "
 					+ " getDictName(j.recom_user) recom_user_desc "
 					+ " from t_resume t,t_resume_job j"
 					+ " where t.id = j.resume_id and j.job_id = ? "
-					+ " order by j.create_time desc ",
+					+ " order by j.create_time desc ) resume left join  "
+					
+					+ " ( SELECT ttt.resume_id,ttt.zhiwei,ttt.company "
+					+ " FROM (SELECT * FROM t_resume_workhistory ORDER BY STR_TO_DATE(time_begin, '%Y-%m') DESC) ttt "
+					+ "  GROUP BY  ttt.resume_id ) work on resume.id = work.resume_id "
+					,
+					
 					new Object[]{id},
 					new Type[]{StringType.INSTANCE}));
 			//向企业投递的简历
 			ret.put("pubresumes", dao.queryListBySql(
-					"select t.*,j.recom_state,j.verify_state,"
+					"select * from ( select t.*,j.recom_state,j.verify_state,"
 					+ "j.id as jid,j.recom_time, j.verify_time, "
 					+ " getDictName(j.recom_user) recom_user_desc"
 					+ " from t_resume t,t_resume_job j"
 					+ " where t.id = j.resume_id and j.job_id = ?"
-					+ " and j.recom_state = '已推荐' order by j.create_time desc ",
+					+ " and j.recom_state = '已推荐' "
+					+ "order by j.create_time desc) resume left join "
+					
+					+ " ( SELECT ttt.resume_id,ttt.zhiwei,ttt.company "
+					+ " FROM (SELECT * FROM t_resume_workhistory ORDER BY STR_TO_DATE(time_begin, '%Y-%m') DESC) ttt "
+					+ "  GROUP BY  ttt.resume_id ) work on resume.id = work.resume_id "
+					,
 					new Object[]{id},
 					new Type[]{StringType.INSTANCE}));
 			//职位交流信息
@@ -414,6 +434,10 @@ public class JobService extends SimpleServiceImpl {
 	@Transactional
 	public FormResult verifyResume(String rjId, String status) {
 		FormResult ret = new FormResult();
+		ret.setSuccess(FormResult.SUCCESS);
+		if(StrUtils.isNull(rjId)){
+			return ret;
+		}
 		dao.executeDelOrUpdateSql(
 				"update t_resume_job set "
 				+ " verify_state = ?, verify_time = ?, verify_user = ? "
@@ -421,7 +445,16 @@ public class JobService extends SimpleServiceImpl {
 				new Object[]{status, new Date(), getLoginUserId() , rjId},
 				new Type[]{StringType.INSTANCE, TimestampType.INSTANCE,
 						StringType.INSTANCE, StringType.INSTANCE});
-		ret.setSuccess(FormResult.SUCCESS);
+		
+		//更新面试次数
+		if("初试".equals(status)
+			|| "复试".equals(status)
+			|| "终试".equals(status)){
+			dao.executeDelOrUpdateSql(
+					"UPDATE t_resume_job SET mianshi_count = mianshi_count + 1 WHERE id = ?",
+					new Object[]{rjId},
+					new Type[]{StringType.INSTANCE});
+		}
 		return ret;
 	}
 	

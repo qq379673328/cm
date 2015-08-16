@@ -115,6 +115,7 @@ app.controller('MainCtrl', function($scope, $location, $http) {
 	//加载用户基本信息
 	$http.post("user/getLoginUserInfo", {}).success(function(data){
 		$scope.user = data;
+		window.LOGINUSER = data;
 	});
 	
 });
@@ -133,6 +134,10 @@ app.config([ '$routeProvider', function($routeProvider) {
 		templateUrl : fdRouterViewsBasepath + 'custom/views/custommgrlist.html',
 		controller : 'CustomMgrListCtrl'
 	})
+	.when('/custommgr/list/:who', {//客户管理-我的
+		templateUrl : fdRouterViewsBasepath + 'custom/views/custommgrlist.html',
+		controller : 'CustomMgrListCtrl'
+	})
 	.when('/custommgr/incustom', {//客户管理-录入客户
 		templateUrl : fdRouterViewsBasepath + 'custom/views/custommgrincustom.html',
 		controller : 'CustomMgrInCustomCtrl'
@@ -147,6 +152,10 @@ app.config([ '$routeProvider', function($routeProvider) {
 	})
 	
 	.when('/jobmgr/list', {//职位管理-列表页
+		templateUrl : fdRouterViewsBasepath + 'job/views/jobmgrlist.html',
+		controller : 'JobMgrListCtrl'
+	})
+	.when('/jobmgr/list/:who', {//职位管理-列表页-我的
 		templateUrl : fdRouterViewsBasepath + 'job/views/jobmgrlist.html',
 		controller : 'JobMgrListCtrl'
 	})
@@ -297,14 +306,13 @@ app.directive('coreBasedata', ["$http", function($http){
 	};
 	//入职时间
 	baseData.inyear = [];
-	var yearCount = 5;
+	var yearCount = 8;
 	var currentYear= new Date().getFullYear();
 	for(var i = 0; i < yearCount; i++){
 		baseData.inyear.push(["" + (currentYear - i) + "", "" + (currentYear - i) + "年"]);
 	}
 	
 	//获取所有码表
-	baseData = {};
 	$.ajax({
 		url: "getAllCodes",
 		async: false,
@@ -350,6 +358,7 @@ app.directive('coreBasedata', ["$http", function($http){
         	$scope.select = function(t){
         		$scope.bindModel = t.bindModel;
         	};
+        	
         }
     };
 }]);
@@ -403,6 +412,15 @@ app.directive('coreContractresumeselect', ["$http", function($http){
         		});
         	}, true);
         	
+        	//默认查询一次
+        	$http.post("invoice/getContractResume",
+    				{
+    			page: 1,
+    			rows: 100})
+    				.success(function(data){
+					$scope.items = data.rows;
+    		});
+        	
         }
     };
 }]);
@@ -420,7 +438,7 @@ app.directive('coreCustomcontractselect', ["$http", function($http){
         	var isInit = false;
         	//选择
         	$scope.ok = function(item){
-        		var val = item.custom_name + " - " + item.no;
+        		var val = item.custom_name + "(合同编号：" + item.no + ")";
         		$scope.finalval = val;
         		ngModel.$setViewValue({
         			customId: item.custom_id,
@@ -456,6 +474,12 @@ app.directive('coreCustomcontractselect', ["$http", function($http){
         		});
         	}, true);
         	
+        	//默认查询一次
+        	$http.post("invoice/getCustomContract",
+    				{page: 1,rows: 100})
+    				.success(function(data){
+					$scope.items = data.rows;
+    		});
         }
     };
 }]);
@@ -497,12 +521,23 @@ app.directive('coreCustomselect', ["$http", function($http){
         	$scope.$watch('customsearch', function(newValue, oldValue){
         		if(newValue == oldValue) return;
         		$http.post("custom/list",
-        				{companyName: newValue, page: 1, rows: 100, customStatus: "签约运作"})
+        				{
+        				companyName: newValue,
+        				page: 1, rows: 100,
+        				beyond:"my",
+        				customStatus: "签约运作"})
         				.success(function(data){
 						$scope.customs = data.rows;
         		});
         	}, true);
-        	
+        	//默认查询一次
+        	$http.post("custom/list",
+    				{
+        			page: 1, rows: 100, beyond:"my",
+        			customStatus: "签约运作"})
+    				.success(function(data){
+					$scope.customs = data.rows;
+    		});
         }
     };
 }]);
@@ -749,6 +784,11 @@ app.directive('coreTeamselect', ["$http", function($http){
         		});
         	}, true);
         	
+        	//默认查询一次
+        	$http.post("team/list",{page: 1, rows: 100}).success(function(data){
+    			$scope.teams = data.rows;
+    		});
+        	
         }
     };
 }]);
@@ -758,14 +798,58 @@ angular.module('datepicker', []).directive('datepicker',[function(){
         require : 'ngModel',
         link: function(scope, element, attrs, ngModelCtrl){
         	$(function(){
-                element.datepicker({
-                    dateFormat:'yy-mm-dd',
-                    onSelect:function (date) {
-                        scope.$apply(function () {
-                            ngModelCtrl.$setViewValue(date);
-                        });
-                    }
+        		var format = "yy-mm-dd";
+        		if(attrs.format){
+        			format = attrs.format;
+        		}
+        		
+        		var config = {
+        				dateFormat: format,
+                        changeMonth: true, 
+                        changeYear: true, 
+                        showButtonPanel: true,
+                        onSelect:function (date) {
+                            scope.$apply(function () {
+                                ngModelCtrl.$setViewValue(date);
+                            });
+                        }};
+        		
+        		if(format == "yy-mm"){
+        			config.closeText = "确定";
+        			config.onClose = function(){
+        				if(format == "yy-mm"){
+                    		var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+                    		var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+                    		$(this).datepicker('setDate', new Date(year, month, 1));
+                    		scope.$apply(function () {
+                    			if(month && month.length == 1){
+                    				month = "0" + month;
+                    			}
+                                ngModelCtrl.$setViewValue(year + '-' + month);
+                            });
+                    	}
+        			};
+        		}
+        		config.currentText = "今天";
+                element.datepicker(config);
+                
+                element.focus(function () {
+                	if(format == "yy-mm"){
+                		$(".ui-datepicker-calendar").hide();
+                	}else{
+                		$(".ui-datepicker-calendar").show();
+                	}
                 });
+                
+                //添加清空按钮
+                var $clear = $('<i class="fa fa-refresh hover"></i>')
+                	.click(function(){
+                		element.val("");
+                		scope.$apply(function () {
+                            ngModelCtrl.$setViewValue("");
+                        });
+                	});
+                element.after($clear);
             });
         }
     };
@@ -874,14 +958,14 @@ app.controller('CodeMgrCtrl',
 		}
 		if($scope.addCodeValue.length > 100){//值
 			$scope.formresult = {
-					success: false,
+					success: 0,
 					message: "长度不能大于100"
 			};
 			return;
 		}
 		if($scope.addCodeRank != undefined && isNaN($scope.addCodeRank)){//顺序
 			$scope.formresult = {
-					success: false,
+					success: 0,
 					message: "顺序必须为数字"
 			};
 			return;
@@ -1163,13 +1247,13 @@ app.controller('CustomMgrInCustomCtrl',
 				//担任职务
 				contactDuty: {required: true,maxlength: 100},
 				//座机号码
-				contactLandline: {maxlength: 100},
+				contactLandline: {required: true,maxlength: 100},
 				//手机号码
-				contactCellphone: {required: true,maxlength: 100},
+				contactCellphone: {maxlength: 100},
 				//fax传真
 				contactFax: {maxlength: 100},
 				//电子邮件
-				contactEmail: {required: true,maxlength: 100},
+				contactEmail: {required: true,email: true, maxlength: 100},
 				//qq
 				contactQq: {maxlength: 100},
 				//微信
@@ -1177,7 +1261,7 @@ app.controller('CustomMgrInCustomCtrl',
 				//公司地址
 				contactAddress: {maxlength: 200},
 				//网址
-				contactWebsite: {maxlength: 100},
+				contactWebsite: {required: true,maxlength: 100},
 				//公司介绍
 				companyProfile: {maxlength: 100},
 				//沟通记录
@@ -1193,11 +1277,23 @@ app.controller('CustomMgrListCtrl',
 				$rootScope, BaseInfoService) {
 	//菜单
 	$rootScope.menu = "custom";
+	$scope.search = {};
+
+	$scope.changeSelect = function(target){
+		$(target).siblings().removeClass("select");
+		$(target).addClass("select");
+	}
+	
+	//是否显示我的列表
+	var who = $routeParams.who;
+	if(who){
+		$scope.search.beyond = who;
+		$scope.changeSelect($("#beyond-my"));
+	}
 	
 	//分页查询
 	var initpage = 1,
 		initrows = 10;
-	$scope.search = {};
 	$scope.queryParams = {rows: initrows};
 	$scope.initParams = function(pageNotChange){
 		var iPage = initpage;
@@ -1254,11 +1350,6 @@ app.controller('CustomMgrListCtrl',
 			$scope.reload(true);
 		});
 	};
-	
-	$scope.changeSelect = function(target){
-		$(target).siblings().removeClass("select");
-		$(target).addClass("select");
-	}
 	
 });
 //客户管理-客户信息
@@ -1849,14 +1940,22 @@ app.controller('InvoiceMgrInInvoiceCtrl',
 	var invoiceId = $routeParams.id;
 	$scope.isReady = false;
 	
+	$scope.USER = LOGINUSER;
+	
 	if(invoiceId){//编辑
 		//请求发票信息
 		$http.post("invoice/getInvoiceViewById", {id: invoiceId}).success(function(data){
 			$scope.invoice = data.invoice;
+			$scope.applyUserDesc = data.applyUserDesc;
 			
 			$scope.invoice.cc = {
 				customId: data.invoice.customId,
 				contractNo: data.invoice.contractNo
+			};
+			
+			$scope.invoice.rd = {
+				resumeId: data.invoice.resumeId,
+				resumeDesc: data.invoice.resumeDesc
 			};
 			
 			$scope.isReady = true;
@@ -2130,11 +2229,23 @@ app.controller('JobMgrListCtrl',
 		function($scope, $http, $routeParams, ngTableParams,
 				$rootScope) {
 	$rootScope.menu = "job";
+	$scope.search = {};
+	
+	$scope.changeSelect = function(target){
+		$(target).siblings().removeClass("select");
+		$(target).addClass("select");
+	}
+	
+	//是否显示我的列表
+	var who = $routeParams.who;
+	if(who){
+		$scope.search.beyond = who;
+		$scope.changeSelect($("#beyond-my"));
+	}
 	
 	//分页查询
 	var initpage = 1,
 		initrows = 10;
-	$scope.search = {};
 	$scope.queryParams = {rows: initrows};
 	$scope.initParams = function(pageNotChange){
 		var iPage = initpage;
@@ -2191,11 +2302,6 @@ app.controller('JobMgrListCtrl',
 			$scope.reload(true);
 		});
 	};
-	
-	$scope.changeSelect = function(target){
-		$(target).siblings().removeClass("select");
-		$(target).addClass("select");
-	}
 	
 });
 //职位管理-职位信息
@@ -2647,9 +2753,9 @@ app.controller('ResumeMgrInResumeCtrl',
 				//婚姻状况
 				marrage: {required: true, maxlength: 20},
 				//手机号码
-				phone: {required: true, maxlength: 100},
+				phone: {required: true, telephone:true, maxlength: 100},
 				//电子邮箱
-				email: {required: true, maxlength: 100},
+				email: {required: true, email:true, maxlength: 100},
 				//目前年薪
 				yearPay: {required: true, number: true},
 				//工作状态
@@ -2669,7 +2775,7 @@ app.controller('ResumeMgrInResumeCtrl',
 				if(data.success == "1"){//成功
 					$scope.resume.id = data.data.id;
 					if(next){
-						$scope.show = "target";
+						$scope.show = "language";
 					}
 				}
 			});
@@ -2739,13 +2845,17 @@ app.controller('ResumeMgrInResumeCtrl',
 		if($("#resumeeditform-workhistory").isHappy({
 			fields: {
 				//工作时间-从
-				timeBegin: {required: true},
+				timeBegin: {required: true, date: true},
 				//工作时间-到
-				timeEnd: {required: true},
+				timeEnd: {date: true},
 				//公司名
 				company: {required: true, maxlength: 100},
 				//内容
-				content: {required: true, maxlength: 500}
+				content: {required: true, maxlength: 500},
+				//职位
+				zhiwei: {required: true, maxlength: 100},
+				//行业
+				hangye: {required: true, maxlength: 500}
 			}
 		})){
 			$scope.isrequest = true;
@@ -2761,11 +2871,14 @@ app.controller('ResumeMgrInResumeCtrl',
 						time_begin: item.timeBegin,
 						time_end: item.timeEnd,
 						content: item.content,
-						company: item.company
+						company: item.company,
+						zhiwei: item.zhiwei,
+						hangye: item.hangye
 					});
+					$("#hangye-tag").find("[name=hangye]").val("");
 					$scope.workhistory = {};
 					if(next){
-						$scope.show = "eduhistory";
+						$scope.show = "icon";
 					}
 				}
 			});
@@ -2787,9 +2900,9 @@ app.controller('ResumeMgrInResumeCtrl',
 		if($("#resumeeditform-eduhistory").isHappy({
 			fields: {
 				//培训时间-从
-				timeBegin: {required: true},
+				timeBegin: {required: true, date: true},
 				//培训时间-到
-				timeEnd: {required: true},
+				timeEnd: {date: true},
 				//培训机构
 				org: {required: true, maxlength: 100},
 				//课程
@@ -2814,7 +2927,7 @@ app.controller('ResumeMgrInResumeCtrl',
 					});
 					$scope.eduhistory = {};
 					if(next){
-						$scope.show = "language";
+						$scope.show = "target";
 					}
 					
 				}
@@ -2864,7 +2977,7 @@ app.controller('ResumeMgrInResumeCtrl',
 					});
 					$scope.language = {};
 					if(next){
-						$scope.show = "atta";
+						$scope.show = "target";
 					}
 				}
 			});
@@ -2895,8 +3008,11 @@ app.controller('ResumeMgrInResumeCtrl',
 				}).success(function(data){
 					$scope.formresult = data;
 					$scope.isrequest = false;
-					if(data.success == "1" && next){//成功
-						$scope.show = "atta";
+					if(data.success == "1"){//成功
+						var item = data.data;
+						if(next){
+							$scope.show = "atta";
+						}
 					}
 				});
 		}
@@ -2925,6 +3041,11 @@ app.controller('ResumeMgrListCtrl',
 		function($scope, $http, $routeParams, ngTableParams,
 				$rootScope) {
 	$rootScope.menu = "resume";
+	
+	$scope.changeSelect = function(target){
+		$(target).siblings().removeClass("select");
+		$(target).addClass("select");
+	}
 	
 	//分页查询
 	var initpage = 1,

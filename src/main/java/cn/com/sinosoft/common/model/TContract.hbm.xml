@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated 2015-7-25 14:48:25 by Hibernate Tools 3.2.2.GA -->
+<!-- Generated 2015-8-15 12:20:11 by Hibernate Tools 3.2.2.GA -->
 <hibernate-mapping>
     <class name="cn.com.sinosoft.common.model.TContract" table="t_contract" catalog="cm">
         <id name="id" type="string">
@@ -14,7 +14,7 @@
             </column>
         </property>
         <property name="no" type="string">
-            <column name="no" length="100" not-null="true">
+            <column name="no" length="100" not-null="true" unique="true">
                 <comment>&#229;&#144;&#136;&#229;&#144;&#140;&#231;&#188;&#150;&#229;&#143;&#183;</comment>
             </column>
         </property>

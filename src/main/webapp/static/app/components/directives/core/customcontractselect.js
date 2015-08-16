@@ -12,7 +12,7 @@ app.directive('coreCustomcontractselect', ["$http", function($http){
         	var isInit = false;
         	//选择
         	$scope.ok = function(item){
-        		var val = item.custom_name + " - " + item.no;
+        		var val = item.custom_name + "(合同编号：" + item.no + ")";
         		$scope.finalval = val;
         		ngModel.$setViewValue({
         			customId: item.custom_id,
@@ -48,6 +48,12 @@ app.directive('coreCustomcontractselect', ["$http", function($http){
         		});
         	}, true);
         	
+        	//默认查询一次
+        	$http.post("invoice/getCustomContract",
+    				{page: 1,rows: 100})
+    				.success(function(data){
+					$scope.items = data.rows;
+    		});
         }
     };
 }]);

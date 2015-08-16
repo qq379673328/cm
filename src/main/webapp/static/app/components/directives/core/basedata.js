@@ -4,14 +4,13 @@ app.directive('coreBasedata', ["$http", function($http){
 	};
 	//入职时间
 	baseData.inyear = [];
-	var yearCount = 5;
+	var yearCount = 8;
 	var currentYear= new Date().getFullYear();
 	for(var i = 0; i < yearCount; i++){
 		baseData.inyear.push(["" + (currentYear - i) + "", "" + (currentYear - i) + "年"]);
 	}
 	
 	//获取所有码表
-	baseData = {};
 	$.ajax({
 		url: "getAllCodes",
 		async: false,
@@ -57,6 +56,7 @@ app.directive('coreBasedata', ["$http", function($http){
         	$scope.select = function(t){
         		$scope.bindModel = t.bindModel;
         	};
+        	
         }
     };
 }]);

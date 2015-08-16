@@ -43,20 +43,23 @@ public class IndexService extends SimpleServiceImpl {
 		//我的职位-自己录入或者合作职位
 		ret.put("myjobs", dao.queryListBySql(
 				"select t.*,getDictName(t.team) teams_desc from t_job t " +
-					" where t.create_user = ? or ? IN ( "
+					/*" where (t.create_user = ? or ? IN ( "
 					+ " 	     SELECT u.id FROM  t_user u WHERE  "
 					+ " 	     (u.team IN ( SELECT m.user_id FROM t_job_team m WHERE m.job_id = t.id)) "
 					+ " 	     OR "
 					+ " 	     (u.id IN ( SELECT m.user_id FROM t_job_team m WHERE m.job_id = t.id)) "
-					+ "      )"
+					+ "      ) ) "*/
+					" where t.create_user = ? "
+					+ " and t.state = '运作' "
 					+ " order by t.create_time desc" +
 					" limit " + INDEX_COUNT,
-				new Object[]{userId, userId},
+				new Object[]{userId},
 				new Type[]{StringType.INSTANCE, StringType.INSTANCE}));
 		//我的客户-自己录入
 		ret.put("mycustoms", dao.queryListBySql(
 				"select t.*,getDictName(t.team) teams_desc from t_custom t " +
-					" where t.create_user = ? order by t.create_time desc" +
+					" where t.create_user = ? and t.state = '签约运作' "
+					+ " order by t.create_time desc" +
 					" limit " + INDEX_COUNT,
 				new Object[]{userId},
 				new Type[]{StringType.INSTANCE}));

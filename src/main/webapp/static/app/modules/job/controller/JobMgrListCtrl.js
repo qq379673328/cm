@@ -3,11 +3,23 @@ app.controller('JobMgrListCtrl',
 		function($scope, $http, $routeParams, ngTableParams,
 				$rootScope) {
 	$rootScope.menu = "job";
+	$scope.search = {};
+	
+	$scope.changeSelect = function(target){
+		$(target).siblings().removeClass("select");
+		$(target).addClass("select");
+	}
+	
+	//是否显示我的列表
+	var who = $routeParams.who;
+	if(who){
+		$scope.search.beyond = who;
+		$scope.changeSelect($("#beyond-my"));
+	}
 	
 	//分页查询
 	var initpage = 1,
 		initrows = 10;
-	$scope.search = {};
 	$scope.queryParams = {rows: initrows};
 	$scope.initParams = function(pageNotChange){
 		var iPage = initpage;
@@ -64,10 +76,5 @@ app.controller('JobMgrListCtrl',
 			$scope.reload(true);
 		});
 	};
-	
-	$scope.changeSelect = function(target){
-		$(target).siblings().removeClass("select");
-		$(target).addClass("select");
-	}
 	
 });

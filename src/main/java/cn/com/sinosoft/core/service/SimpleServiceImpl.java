@@ -403,4 +403,20 @@ public class SimpleServiceImpl{
 		return userUtil.getLoginUser().getId();
 	}
 	
+	/**
+	 * 是否为管理员
+	 * @return
+	 */
+	public boolean isAdmin(){
+		return userUtil.isAdmin();
+	}
+	
+	/**
+	 * 是否为顾问
+	 * @return
+	 */
+	public boolean isGuWen(){
+		return userUtil.isGuWen();
+	}
+	
 }

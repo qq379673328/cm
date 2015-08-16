@@ -148,10 +148,12 @@ public class PerformanceService extends SimpleServiceImpl {
 		sb.append("   GROUP BY uu.team) job_team ");
 		sb.append(" ON u.id = job_team.create_user ");
 		sb.append("  ");*/
+		
 		//sb.append(" -- 客户面试 ");
-		sb.append("  LEFT JOIN(SELECT create_user,COUNT(1) AS c FROM t_resume_job "
+		/*sb.append("  LEFT JOIN(SELECT create_user,COUNT(1) AS c FROM t_resume_job "
 				+ "WHERE  verify_state = '初试' or  verify_state = '复试' or  verify_state = '终试' or"
-				+ "  verify_state = 'offer' or verify_state = '入职' or verify_state = '离职'  ");
+				+ "  verify_state = 'offer' or verify_state = '入职' or verify_state = '离职'  ");*/
+		sb.append("  LEFT JOIN(SELECT create_user,sum(mianshi_count) AS c FROM t_resume_job " );
 		if(!StrUtils.isNull(params.get("createTimeStart"))){//创建日期-开始
 			sb.append(" AND " + SqlUtil.toDate(params.get("createTimeStart"), 1, 0) + " <= create_time ");
 		}
@@ -160,6 +162,7 @@ public class PerformanceService extends SimpleServiceImpl {
 		}
 		sb.append("   GROUP BY create_user) job_mianshi ");
 		sb.append(" ON u.id = job_mianshi.create_user ");
+		
 		//sb.append(" -- 确定offer ");
 		sb.append("  LEFT JOIN(SELECT create_user,COUNT(1) AS c FROM t_resume_job "
 				+ "WHERE  verify_state = 'offer' or verify_state = '入职' or verify_state = '离职'  ");

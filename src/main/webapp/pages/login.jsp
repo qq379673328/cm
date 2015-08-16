@@ -269,11 +269,11 @@ a:hover {
 					</div>
 					<ul class="login-form clearfix">
 						<li><span class="login-form-username"></span> <input
-							id="username" name="username" value="admin" type="text"
+							id="username" name="username" type="text"
 							autocomplete="off" class="input-text-style-3" placeholder="用户名"
 							></li>
 						<li><span class="login-form-password"></span> <input
-							id="password" name="password" value="11111111" type="password"
+							id="password" name="password" type="password"
 							autocomplete="off" class="input-text-style-3" placeholder="密码">
 						</li>
 						<li><input id="loginSubBtn" type="submit"

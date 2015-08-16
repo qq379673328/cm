@@ -49,13 +49,21 @@ public class InvoiceService extends SimpleServiceImpl {
 		List<Type> types = new ArrayList<Type>();
 		StringBuffer sb = new StringBuffer(
 				" SELECT t.*,getDictName(t.apply_user) apply_user_desc, "
-				+ " ( select c.custom_name from t_custom c where c.id = t.custom_id ) custom_name , "
+				+ " cus.custom_name custom_name , "
 				+ " getDictName(t.check_user) check_user_desc "
 				+ "  from t_invoice t left join t_user u on t.apply_user = u.id"
+				+ " left join t_custom cus on t.custom_id = cus.id "
 				+ " where 1=1 ");
 		
+		//非管理员只能查看自己的发票
+		if(!isAdmin()){
+			sb.append(" AND t.create_user = ? ");
+			values.add(getLoginUserId());
+			types.add(StringType.INSTANCE);
+		}
+		
 		if(!StrUtils.isNull(params.get("companyName"))){//客户名称
-			sb.append(" AND t.custom_name like ? ");
+			sb.append(" AND cus.custom_name like ? ");
 			values.add("%" + params.get("companyName") + "%");
 			types.add(StringType.INSTANCE);
 		}
@@ -98,10 +106,23 @@ public class InvoiceService extends SimpleServiceImpl {
 	 * @param id
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public Map<String, Object> getInvoiceViewById(String id) {
 		Map<String, Object> ret = new HashMap<String, Object>();
 		
 		TInvoice invoice = dao.queryById(id, TInvoice.class);
+		
+		if(invoice != null){
+			List<Map<String, String>> items = 
+					dao.queryListBySql("SELECT getDictName(?) applyuserdesc FROM DUAL",
+					new Object[]{invoice.getApplyUser()},
+					new Type[]{StringType.INSTANCE}
+					);
+			if(items.size() > 0){
+				ret.put("applyUserDesc", items.get(0).get("applyuserdesc"));
+			}
+		}
+		
 		ret.put("invoice", invoice);
 		
 		return ret;
@@ -119,6 +140,11 @@ public class InvoiceService extends SimpleServiceImpl {
 			ret.setSuccess(FormResult.ERROR);
 			ret.setMessage("只有录入职位并有候选人上岗的顾问可以申请开具发票");
 			return ret;
+		}
+		
+		//发票默认状态
+		if(StrUtils.isNull(invoice.getState())){
+			invoice.setState("申请中");
 		}
 		
 		if(StrUtils.isNull(invoice.getId())){//新增

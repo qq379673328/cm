@@ -26,19 +26,27 @@
 				<tr>
 					<td class="td-odd">客户来源：</td>
 					<td class="td-even">{{custom.source}}</td>
-					<td class="td-odd">联系人：</td>
-					<td class="td-even">{{custom.contactName}}</td>
+					<td class="td-odd">
+						<span ng-if="beyond=='my'">联系人：</span>
+					</td>
+					<td class="td-even">
+						<span ng-if="beyond=='my'">{{custom.contactName}}</span>
+					</td>
 				</tr>
-				<tr>
+				<tr  ng-if="beyond=='my'">
 					<td class="td-odd">联系方式：</td>
 					<td class="td-even">
 						座机：{{custom.contactLandline}} <br/>
 						手机：{{custom.contactCellphone}}
 					</td>
-					<td class="td-odd">电子邮件：</td>
-					<td class="td-even">{{custom.contactEmail}}</td>
+					<td class="td-odd">
+						电子邮件：
+					</td>
+					<td class="td-even">
+						{{custom.contactEmail}}
+					</td>
 				</tr>
-				<tr>
+				<tr ng-if="beyond=='my'">
 					<td class="td-odd">QQ：</td>
 					<td class="td-even">{{custom.contactQq}}</td>
 					<td class="td-odd">微信：</td>
@@ -123,7 +131,7 @@
 						{{contract.other_require}}
 					</td>
 				</tr>
-				<tr>
+				<tr ng-if="beyond=='my'">
 					<td class="td-odd">合同附件：</td>
 					<td colspan="3" class="td-even">
 						<div ng-repeat="atta in contractAttas">
