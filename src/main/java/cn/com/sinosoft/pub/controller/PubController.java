@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import javax.annotation.Resource;
 
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -63,6 +64,7 @@ public class PubController extends BaseController {
 	 */
 	@RequestMapping("edit")
 	@ResponseBody
+	@RequiresRoles("管理员")
 	public FormResult edit(TPub pub){
 		String userId = userUtil.getLoginUser().getId();
 		if(StrUtils.isNull(pub.getId())){//新增
@@ -87,6 +89,7 @@ public class PubController extends BaseController {
 	 */
 	@RequestMapping("del")
 	@ResponseBody
+	@RequiresRoles("管理员")
 	public FormResult del(String id){
 		return pubService.delById(id, "t_pub");
 	}
@@ -97,6 +100,7 @@ public class PubController extends BaseController {
 	 */
 	@RequestMapping("pubp")
 	@ResponseBody
+	@RequiresRoles("管理员")
 	public FormResult pub(String id){
 		return pubService.pub(id);
 	}
@@ -107,6 +111,7 @@ public class PubController extends BaseController {
 	 */
 	@RequestMapping("canclepub")
 	@ResponseBody
+	@RequiresRoles("管理员")
 	public FormResult canclepub(String id){
 		return pubService.canclepub(id);
 	}

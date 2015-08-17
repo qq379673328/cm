@@ -273,8 +273,9 @@ public class ResumeService extends SimpleServiceImpl {
 			ret.put("resumeComms", dao.queryListBySql(" select * from t_resume_communication t where t.resume_id = ? order by t.create_time desc ",
 					new Object[]{id},
 					new Type[]{StringType.INSTANCE}));
+			
 			//职位归属-本人？团队？
-			ret.put("beyond", getResumeType(id));
+			ret.put("beyond", isAdmin() ? "my" : getResumeType(id));
 		}
 		
 		return ret;

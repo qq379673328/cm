@@ -1,5 +1,5 @@
 package cn.com.sinosoft.common.model;
-// Generated 2015-8-15 12:20:10 by Hibernate Tools 3.2.2.GA
+// Generated 2015-8-18 0:35:05 by Hibernate Tools 3.2.2.GA
 
 
 import java.util.Date;
@@ -38,6 +38,7 @@ public class TUser  implements java.io.Serializable {
      private String lastUpdateUser;
      private Date lastUpdateTime;
      private String isDisabled;
+     private String icon;
 
     public TUser() {
     }
@@ -55,7 +56,7 @@ public class TUser  implements java.io.Serializable {
         this.lastUpdateTime = lastUpdateTime;
         this.isDisabled = isDisabled;
     }
-    public TUser(String id, String username, String password, String name, String sex, String duty, Date entryDate, String state, String idCard, String npPlace, String phone, String eduSchool, Date eduDate, String department, String team, String userType, String email, String msn, String education, String professional, Date positiveDate, Date leaveDate, String skills, String userCreate, Date createTime, String lastUpdateUser, Date lastUpdateTime, String isDisabled) {
+    public TUser(String id, String username, String password, String name, String sex, String duty, Date entryDate, String state, String idCard, String npPlace, String phone, String eduSchool, Date eduDate, String department, String team, String userType, String email, String msn, String education, String professional, Date positiveDate, Date leaveDate, String skills, String userCreate, Date createTime, String lastUpdateUser, Date lastUpdateTime, String isDisabled, String icon) {
        this.id = id;
        this.username = username;
        this.password = password;
@@ -84,6 +85,7 @@ public class TUser  implements java.io.Serializable {
        this.lastUpdateUser = lastUpdateUser;
        this.lastUpdateTime = lastUpdateTime;
        this.isDisabled = isDisabled;
+       this.icon = icon;
     }
    
     public String getId() {
@@ -281,6 +283,13 @@ public class TUser  implements java.io.Serializable {
     
     public void setIsDisabled(String isDisabled) {
         this.isDisabled = isDisabled;
+    }
+    public String getIcon() {
+        return this.icon;
+    }
+    
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
 
 

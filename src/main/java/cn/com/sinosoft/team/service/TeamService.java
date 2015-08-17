@@ -62,7 +62,7 @@ public class TeamService extends SimpleServiceImpl {
 				+ " t.np_place,t.phone,t.edu_school,t.edu_date,t.department,t.team, "
 				+ " getDictName(t.team) team_desc, "
 				+ " t.user_type, t.email, t.msn, t.education, t.professional,"
-				+ " t.positive_date,t.leave_date,t.skills "
+				+ " t.positive_date,t.leave_date,t.skills,t.icon "
 				+ " from t_user t where 1=1 ");
 		
 		if(!StrUtils.isNull(params.get("industry"))){//擅长行业

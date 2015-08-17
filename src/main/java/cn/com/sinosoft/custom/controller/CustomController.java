@@ -6,6 +6,8 @@ import java.util.UUID;
 
 import javax.annotation.Resource;
 
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -52,6 +54,7 @@ public class CustomController extends BaseController {
 	 */
 	@RequestMapping("getCustomById")
 	@ResponseBody
+	@RequiresRoles(logical = Logical.OR, value={"管理员", "顾问"})
 	public Object getCustomById(String id){
 		return customService.getCustomById(id);
 	}
@@ -72,6 +75,7 @@ public class CustomController extends BaseController {
 	 */
 	@RequestMapping("edit")
 	@ResponseBody
+	@RequiresRoles(logical = Logical.OR, value={"管理员", "顾问"})
 	public FormResult edit(TCustom custom, String commun, String attas){
 		return customService.edit(custom, commun, attas);
 	}
@@ -82,6 +86,7 @@ public class CustomController extends BaseController {
 	 */
 	@RequestMapping("del")
 	@ResponseBody
+	@RequiresRoles(logical = Logical.OR, value={"管理员", "顾问"})
 	public FormResult del(String id){
 		return customService.del(id);
 	}
@@ -92,6 +97,7 @@ public class CustomController extends BaseController {
 	 */
 	@RequestMapping("delCommun")
 	@ResponseBody
+	@RequiresRoles(logical = Logical.OR, value={"管理员", "顾问"})
 	public FormResult delCommun(String id){
 		return customService.delCommun(id);
 	}
@@ -102,6 +108,7 @@ public class CustomController extends BaseController {
 	 */
 	@RequestMapping("getCommuns")
 	@ResponseBody
+	@RequiresRoles(logical = Logical.OR, value={"管理员", "顾问"})
 	public Object getCommuns(String customId){
 		return customService.getCommuns(customId);
 	}
@@ -114,6 +121,7 @@ public class CustomController extends BaseController {
 	 */
 	@RequestMapping("addCommun")
 	@ResponseBody
+	@RequiresRoles(logical = Logical.OR, value={"管理员", "顾问"})
 	public Object addCommun(TCustomCommunication comm){
 		String userId = userUtil.getLoginUser().getId();
 		if(comm.getId() == null){//添加

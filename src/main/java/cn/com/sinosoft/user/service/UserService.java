@@ -383,4 +383,22 @@ public class UserService extends SimpleServiceImpl {
 		return ret;
 	}
 
+	/**
+	 * 用户更新头像
+	 * @param iconId
+	 * @return
+	 */
+	@Transactional
+	public FormResult saveIcon(String iconId) {
+		FormResult ret = new FormResult();
+		dao.executeDelOrUpdateSql(
+				"update t_user set icon = ? where id = ? ",
+				new Object[]{iconId, getLoginUserId()},
+				new Type[]{StringType.INSTANCE, StringType.INSTANCE});
+		ret.setMessage("更新头像成功");
+		ret.setSuccess(FormResult.SUCCESS);
+		ret.setData(iconId);
+		return ret;
+	}
+
 }

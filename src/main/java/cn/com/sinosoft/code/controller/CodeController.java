@@ -2,6 +2,7 @@ package cn.com.sinosoft.code.controller;
 
 import javax.annotation.Resource;
 
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -22,6 +23,7 @@ public class CodeController extends BaseController{
 	 */
 	@RequestMapping("getCodeTypes")
 	@ResponseBody
+	@RequiresRoles("管理员")
 	public Object getCodeTypes(){
 		return codeService.getCodeTypes();
 	}
@@ -31,6 +33,7 @@ public class CodeController extends BaseController{
 	 */
 	@RequestMapping("getCodesByType")
 	@ResponseBody
+	@RequiresRoles("管理员")
 	public Object getCodesByType(String codetype){
 		return codeService.getCodesByType(codetype);
 	}
@@ -42,6 +45,7 @@ public class CodeController extends BaseController{
 	 */
 	@RequestMapping("edit")
 	@ResponseBody
+	@RequiresRoles("管理员")
 	public Object editCode(TCode code){
 		return codeService.editCode(code);
 	}
@@ -53,6 +57,7 @@ public class CodeController extends BaseController{
 	 */
 	@RequestMapping("del")
 	@ResponseBody
+	@RequiresRoles("管理员")
 	public Object delCode(String codeId){
 		return codeService.delCode(codeId);
 	}

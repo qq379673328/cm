@@ -4,6 +4,8 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,6 +38,7 @@ public class JobController extends BaseController {
 	 */
 	@RequestMapping("list")
 	@ResponseBody
+	@RequiresRoles(logical = Logical.OR, value={"管理员", "顾问"})
 	public PagingResult getJobList(
 			@RequestParam Map<String ,String> params,
 			PageParam pageParams){
@@ -58,6 +61,7 @@ public class JobController extends BaseController {
 	 */
 	@RequestMapping("edit")
 	@ResponseBody
+	@RequiresRoles(logical = Logical.OR, value={"管理员", "顾问"})
 	public FormResult edit(TJob Job){
 		return jobService.edit(Job);
 	}
@@ -68,6 +72,7 @@ public class JobController extends BaseController {
 	 */
 	@RequestMapping("del")
 	@ResponseBody
+	@RequiresRoles(logical = Logical.OR, value={"管理员", "顾问"})
 	public FormResult del(String id){
 		return jobService.del(id);
 	}

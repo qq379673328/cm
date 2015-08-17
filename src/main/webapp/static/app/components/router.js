@@ -149,6 +149,11 @@ app.config([ '$routeProvider', function($routeProvider) {
 		controller : 'UserResetPwdCtrl'
 	})
 	
+	.when('/usermgr/uploadicon', {//上传头像-页面
+		templateUrl : fdRouterViewsBasepath + 'user/views/uploadicon.html',
+		controller : 'UserUploadIconCtrl'
+	})
+	
 	.when('/pubmgr/list', {//公告管理-列表页
 		templateUrl : fdRouterViewsBasepath + 'pub/views/pubmgrlist.html',
 		controller : 'PubMgrListCtrl'

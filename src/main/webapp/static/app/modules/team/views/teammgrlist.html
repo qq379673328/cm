@@ -66,8 +66,11 @@
 				<tr>
 					<td>
 						<div class="my-card" ng-repeat="item in $data">
-							<div class="icon fa fa-user fa-5x"></div>
-								
+							<div class="icon fa fa-user fa-5x" ng-if="!item.icon"></div>
+							<div class="icon" ng-if="item.icon">
+								<img style="width: 100px; height: 100px;"
+								 src="download/{{item.icon}}" />
+							</div>
 							<div class="card-line">姓名：{{item.name}}</div>
 							<div class="card-line">电话：{{item.phone}}</div>
 							<div class="card-line">邮箱：{{item.email}}</div>

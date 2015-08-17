@@ -4,6 +4,8 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,6 +34,7 @@ public class PerformanceController extends BaseController{
 	 */
 	@RequestMapping("list")
 	@ResponseBody
+	@RequiresRoles("管理员")
 	public PagingResult getPerformanceList(
 			@RequestParam Map<String ,String> params,
 			PageParam pageParams){

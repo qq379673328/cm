@@ -10,7 +10,8 @@
 	<div class="mytable">
 		<div class="title">
 			<span>
-				简历详情
+				简历详情 &nbsp;&nbsp;&nbsp;
+				(编号：{{resume.id}})
 			</span>
 			
 			<a ng-show="beyond=='my'" class="spe" href="#resumemgr/editresume/{{resume.id}}">编辑简历信息</a>
@@ -19,12 +20,15 @@
 		<table>
 			<tbody>
 				<tr>
-					<td class="td-odd">{{resume.name}}</td>
-					<td class="td-odd">简历编号：{{resume.id}}</td>
-				</tr>
-				<tr>
-					<td class="td-odd">更新时间：</td>
-					<td class="td-even">{{resume.lastUpdateTime | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+					<td class="td-odd" style="text-align: center;">
+						<div class="icon fa fa-user fa-5x" ng-if="!resume.headImage"></div>
+						<div class="icon" ng-if="resume.headImage">
+							<img style="width: 100px; height: 100px;" 
+								src="download/{{resume.headImage}}" />
+						</div>
+						<br/>
+						{{resume.name}}
+					</td>
 					<td class="td-odd">基本概况：</td>
 					<td class="td-even">
 						{{resume.education}} |
@@ -32,6 +36,12 @@
 						{{resume.birthcay}} |
 						{{resume.marrage}}
 					</td>
+				</tr>
+				<tr>
+					<td class="td-odd">更新时间：</td>
+					<td class="td-even">{{resume.lastUpdateTime | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+					<td></td>
+					<td></td>
 				</tr>
 				<tr>
 				</tr>

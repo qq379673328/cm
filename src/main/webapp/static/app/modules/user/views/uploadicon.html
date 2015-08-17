@@ -1,0 +1,61 @@
+<div class="navigation">
+	位置：
+	<a href="#">首页</a>
+	&gt;
+	上传头像
+</div>
+<div class="content">
+	<h2>上传头像</h2>
+	<hr/>
+	<div>
+		<div class="mytable">
+			<table>
+				<tbody>
+					<tr>
+						<td>个人头像</td>
+						<td>
+							<input core-fu type="file" name="files"
+							accept="image/gif, image/jpeg"
+							ng-model="upicondata" multiple />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<img style="width: 100px; height: 100px;"
+							 src="download/{{headImage}}" />
+						</td>
+						<td></td>
+					</tr>
+					<tr ng-show="upicondata.data.id">
+						<td colspan="2">
+							<img
+								id="icon_head" src="download/{{upicondata.data.id}}" />
+							<div id="preview-pane"
+							class="preview-pane"
+						 	style="width: 100px; height: 100px; float: left; margin-left: 10px;">
+					          <div 
+					          	class="preview-container"
+					          	style="width: 100px; height: 100px; overflow: hidden;">
+					          	<img id="icon_preview"
+								 	src="download/{{upicondata.data.id}}" />
+					          </div>
+					        </div>
+						</td>
+					</tr>
+					<tr ng-show="upicondata.data.id">
+						<td colspan="1">
+							<div class="btn btn-lblue" 
+								ng-show="!isrequest"
+								ng-click="saveIcon();">
+								更新头像
+							</div>
+						</td>
+						<td colspan="1">
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div core-formresult result="formresult"></div>
+	</div>
+</div>

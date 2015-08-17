@@ -841,6 +841,7 @@ hr {
 	width: 100px;
 	height: 100px;
 	float: left;
+	margin-right: 10px;
 }
 .my-card .info{
 	float: left;
@@ -860,4 +861,8 @@ hr {
 
 .ui-datepicker-calendar { 
     display: none; 
+}
+
+.jcrop-holder{
+	float: left;	
 }

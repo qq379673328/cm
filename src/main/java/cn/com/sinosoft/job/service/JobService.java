@@ -263,7 +263,7 @@ public class JobService extends SimpleServiceImpl {
 					new Type[]{StringType.INSTANCE}));
 			
 			//职位归属-本人？团队？
-			ret.put("beyond", getJobType(id));
+			ret.put("beyond", isAdmin() ? "my" : getJobType(id));
 			//职位推荐的处理状态
 			ret.put("jobrecstate", dao.queryListBySql(
 					" select j.verify_state,count(1) cou from t_resume_job j where j.job_id = ?"

@@ -42,6 +42,25 @@ var app = angular.module('app',['ngRoute', 'ngTable', 'datepicker'],
  * 处理公共ajax请求异常处理
  */
 var reloadPageFlag = false;
+app.factory('redirectInterceptor', ['$location', '$q', function($location, $q) {
+    return function(promise) {
+        promise.then(
+            function(response) {
+                if (typeof response.data === 'string') {
+                    if (response.data.indexOf instanceof Function &&
+                        response.data.indexOf('<html id="ng-app" ng-app="loginApp">') != -1) {
+                        window.location = "/";
+                    }
+                }
+                return response;
+            },
+            function(response) {
+                return $q.reject(response);
+            }
+        );
+        return promise;
+    };
+}]);
 app.factory('ajaxHandler', ['$q', '$rootScope', function($q, $rootScope) {
     var handler = {
         responseError: function(response) {
@@ -100,6 +119,7 @@ app.factory('ajaxHandler', ['$q', '$rootScope', function($q, $rootScope) {
     return handler;
 }]);
 app.config(['$httpProvider', function($httpProvider) {
+	$httpProvider.interceptors.push('redirectInterceptor');
     $httpProvider.interceptors.push('ajaxHandler');
 }]);
 
@@ -269,6 +289,11 @@ app.config([ '$routeProvider', function($routeProvider) {
 	.when('/usermgr/resetpwd', {//修改密码管理-列表页
 		templateUrl : fdRouterViewsBasepath + 'user/views/userresetpwd.html',
 		controller : 'UserResetPwdCtrl'
+	})
+	
+	.when('/usermgr/uploadicon', {//上传头像-页面
+		templateUrl : fdRouterViewsBasepath + 'user/views/uploadicon.html',
+		controller : 'UserUploadIconCtrl'
 	})
 	
 	.when('/pubmgr/list', {//公告管理-列表页
@@ -1149,6 +1174,7 @@ app.controller('ContractMgrViewContractCtrl',
 		$scope.contract = data.contract;
 		$scope.jobs = data.jobs;
 		$scope.contractAttas = data.attachs;
+		$scope.beyond = data.beyond;
 		$scope.isReady = true;
 	});
 	
@@ -1375,6 +1401,7 @@ app.controller('CustomMgrViewCustomCtrl',
 			}
 			$scope.contractAttas = data.contractAttas;
 			$scope.isReady = true;
+			$scope.contentInfo = "";
 		});
 	};
 	
@@ -1392,7 +1419,7 @@ app.controller('CustomMgrViewCustomCtrl',
 		})){
 			//请求客户信息
 			$http.post("custom/addCommun", 
-					{customId: $scope.custom.id, content: $scope.addContent})
+					{customId: $scope.custom.id, content: $scope.contentInfo})
 					.success(function(data){
 						$scope.reload();
 						$scope.formresult = data;
@@ -2994,8 +3021,63 @@ app.controller('ResumeMgrInResumeCtrl',
 		});
 	};
 	
+	//头像部分处理
+	// Create variables (in this scope) to hold the API and image size
+	  var jcrop_api,
+	  boundx,
+	  boundy,
+	  
+	  // Grab some information about the preview pane
+	  $preview = $('#preview-pane'),
+	  $pcnt = $('#preview-pane .preview-container'),
+	  $pimg = $('#preview-pane .preview-container img');
+	  
+	  function updatePreview(c){
+	    if (parseInt(c.w) > 0) {
+	      var rx = 100 / c.w;
+	      var ry = 100 / c.h;
+	      
+	      $scope.icon = c;
+	      
+	      $pimg.css({
+	        width: Math.round(rx * boundx) + 'px',
+	        height: Math.round(ry * boundy) + 'px',
+	        marginLeft: '-' + Math.round(rx * c.x) + 'px',
+	        marginTop: '-' + Math.round(ry * c.y) + 'px'
+	      });
+	    }
+	  };
+
+
+	//地址变化
+	$scope.$watch('upicondata.data.id', function(newValue, oldValue){
+		if(jcrop_api) jcrop_api.destroy();
+		setTimeout(function(){
+			$scope.icon = {};
+			$('#icon_head').Jcrop({
+				onChange: updatePreview,
+			    onSelect: updatePreview,
+			    width: 200,
+			    height: 200,
+			    boxWidth: 700,
+			    aspectRatio: 1
+			}, function(){
+				jcrop_api = this;
+				var bounds = this.getBounds();
+			    boundx = bounds[0];
+			    boundy = bounds[1];
+			});
+		}, 200);
+	}, true);
+	
 	//上传头像
 	$scope.saveIcon = function(next){
+		
+		if($scope.icon.x == undefined){//为选择
+			$scope.formresult = {success: 0, message: "请截取图片"};
+			return;
+		}
+		
 		if($("#resumeeditform-icon").isHappy({
 			fields: {
 				
@@ -3003,13 +3085,19 @@ app.controller('ResumeMgrInResumeCtrl',
 		})){
 			$scope.isrequest = true;
 			$http.post("resume/saveIcon", {
-				id: $scope.resume.id,
-				iconPath: $scope.iconPath
+				resumeId: $scope.resume.id,
+				iconId: $scope.upicondata.data.id,
+				x: parseInt($scope.icon.x),
+				y: parseInt($scope.icon.y),
+				w: parseInt($scope.icon.w),
+				h: parseInt($scope.icon.h)
 				}).success(function(data){
 					$scope.formresult = data;
 					$scope.isrequest = false;
 					if(data.success == "1"){//成功
 						var item = data.data;
+						$scope.resume.headImage = item + "?_=" + Math.random();
+						$scope.upicondata.data.id = null;
 						if(next){
 							$scope.show = "atta";
 						}
@@ -3534,6 +3622,93 @@ app.controller('UserResetPwdCtrl',function($scope, $http,
 				$scope.isrequest = false;
 			});
 		}
+	};
+	
+});
+//用户-更新信息
+app.controller('UserUploadIconCtrl',function($scope, $http,
+		BaseInfoService, $rootScope) {
+	
+	$rootScope.menu = "uploadicon";
+	
+	//加载用户基本信息
+	$http.post("user/getLoginUserInfo", {}).success(function(data){
+		$scope.headImage = data.icon;
+	});
+	
+	//头像部分处理
+	// Create variables (in this scope) to hold the API and image size
+	  var jcrop_api,
+	  boundx,
+	  boundy,
+	  
+	  // Grab some information about the preview pane
+	  $preview = $('#preview-pane'),
+	  $pcnt = $('#preview-pane .preview-container'),
+	  $pimg = $('#preview-pane .preview-container img');
+	  
+	  function updatePreview(c){
+	    if (parseInt(c.w) > 0) {
+	      var rx = 100 / c.w;
+	      var ry = 100 / c.h;
+	      
+	      $scope.icon = c;
+	      
+	      $pimg.css({
+	        width: Math.round(rx * boundx) + 'px',
+	        height: Math.round(ry * boundy) + 'px',
+	        marginLeft: '-' + Math.round(rx * c.x) + 'px',
+	        marginTop: '-' + Math.round(ry * c.y) + 'px'
+	      });
+	    }
+	  };
+
+
+	//地址变化
+	$scope.$watch('upicondata.data.id', function(newValue, oldValue){
+		if(jcrop_api) jcrop_api.destroy();
+		setTimeout(function(){
+			$scope.icon = {};
+			$('#icon_head').Jcrop({
+				onChange: updatePreview,
+			    onSelect: updatePreview,
+			    width: 200,
+			    height: 200,
+			    boxWidth: 700,
+			    aspectRatio: 1
+			}, function(){
+				jcrop_api = this;
+				var bounds = this.getBounds();
+			    boundx = bounds[0];
+			    boundy = bounds[1];
+			});
+		}, 200);
+	}, true);
+	
+	//上传头像
+	$scope.saveIcon = function(){
+		
+		if($scope.icon.x == undefined){//为选择
+			$scope.formresult = {success: 0, message: "请截取图片"};
+			return;
+		}
+		
+		$scope.isrequest = true;
+		$http.post("user/uploadicon", {
+			iconId: $scope.upicondata.data.id,
+			x: parseInt($scope.icon.x),
+			y: parseInt($scope.icon.y),
+			w: parseInt($scope.icon.w),
+			h: parseInt($scope.icon.h)
+			}).success(function(data){
+				$scope.formresult = data;
+				$scope.isrequest = false;
+				if(data.success == "1"){//成功
+					var item = data.data;
+					$scope.headImage = item + "?_=" + Math.random();
+					$scope.upicondata.data.id = null;
+				}
+			});
 	};
 	
 });

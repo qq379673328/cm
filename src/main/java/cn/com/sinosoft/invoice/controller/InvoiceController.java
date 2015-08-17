@@ -5,6 +5,8 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -43,6 +45,7 @@ public class InvoiceController extends BaseController{
 	 */
 	@RequestMapping("list")
 	@ResponseBody
+	@RequiresRoles(logical = Logical.OR, value={"管理员", "顾问"})
 	public PagingResult getInvoiceList(
 			@RequestParam Map<String ,String> params,
 			PageParam pageParams){
@@ -55,6 +58,7 @@ public class InvoiceController extends BaseController{
 	 */
 	@RequestMapping("getInvoiceViewById")
 	@ResponseBody
+	@RequiresRoles(logical = Logical.OR, value={"管理员", "顾问"})
 	public Object getInvoiceViewById(String id){
 		return invoiceService.getInvoiceViewById(id);
 	}
@@ -65,6 +69,7 @@ public class InvoiceController extends BaseController{
 	 */
 	@RequestMapping("edit")
 	@ResponseBody
+	@RequiresRoles(logical = Logical.OR, value={"管理员", "顾问"})
 	public FormResult edit(TInvoice invoice){
 		return invoiceService.edit(invoice);
 	}
@@ -75,6 +80,7 @@ public class InvoiceController extends BaseController{
 	 */
 	@RequestMapping("del")
 	@ResponseBody
+	@RequiresRoles(logical = Logical.OR, value={"管理员", "顾问"})
 	public FormResult del(String id){
 		return invoiceService.delById(id, "t_invoice");
 	}
@@ -85,6 +91,7 @@ public class InvoiceController extends BaseController{
 	 */
 	@RequestMapping("isCanInvoice")
 	@ResponseBody
+	@RequiresRoles(logical = Logical.OR, value={"管理员", "顾问"})
 	public Object isCanInvoice(){
 		Map<String, Object> ret = new HashMap<String, Object>();
 		ret.put("isCanInvoice", invoiceService.isCanInvoice());

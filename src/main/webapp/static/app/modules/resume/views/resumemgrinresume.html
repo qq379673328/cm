@@ -515,23 +515,51 @@
 		</table>
 		</form>
 	</div>
-	<!--
+	
 	<div class="mytable" ng-show="show=='icon'">
 		<form id="resumeeditform-icon" name="form">
 		<table>
 			<tbody>
 				<tr>
 					<td>个人头像</td>
+					<td>
+						<input core-fu type="file" name="files"
+						accept="image/gif, image/jpeg"
+						ng-model="upicondata" multiple />
+					</td>
 				</tr>
 				<tr>
+					<td>
+						<img style="width: 100px; height: 100px;"
+						 src="download/{{resume.headImage}}" />
+					</td>
+					<td></td>
+				</tr>
+				<tr ng-show="upicondata.data.id">
 					<td colspan="2">
+						<img
+							id="icon_head" src="download/{{upicondata.data.id}}" />
+						<div id="preview-pane"
+						class="preview-pane"
+					 	style="width: 100px; height: 100px; float: left; margin-left: 10px;">
+				          <div 
+				          	class="preview-container"
+				          	style="width: 100px; height: 100px; overflow: hidden;">
+				          	<img id="icon_preview"
+							 	src="download/{{upicondata.data.id}}" />
+				          </div>
+				        </div>
+					</td>
+				</tr>
+				<tr ng-show="upicondata.data.id">
+					<td colspan="1">
 						<div class="btn btn-lblue" 
 							ng-show="!isrequest"
 							ng-click="saveIcon();">
 							保存 个人头像
 						</div>
 					</td>
-					<td colspan="2">
+					<td colspan="1">
 						<div class="btn btn-lblue" 
 							ng-show="!isrequest"
 							ng-click="saveIcon(true);">
@@ -543,7 +571,7 @@
 		</table>
 		</form>
 	</div>
-  	-->
+  	
 	<div class="mytable" ng-show="show=='atta'">
 		<form id="resumeeditform-atta" name="form">
 		<table>

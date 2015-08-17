@@ -121,9 +121,36 @@ public class ContractService extends SimpleServiceImpl {
 					+ " where t.contract_id = ? order by a.upload_time desc",
 					new Object[]{id},
 					new Type[]{StringType.INSTANCE}));
-			
+			//合同归属-本人？他人？
+			ret.put("beyond", isAdmin() ? "my" : (isMyContract(id) ? "my" : "other"));
 		}
 		return ret;
+	}
+	
+	/**
+	 * 客户类型-自己
+	 */
+	public static final String CUSTOMTYPE_MY = "my";
+	/**
+	 * 客户类型-团队
+	 */
+	public static final String CUSTOMTYPE_TEAM = "team";
+	/**
+	 * 客户类型-其他
+	 */
+	public static final String CUSTOMTYPE_OTHER = "other";
+	
+	/**
+	 * 是否为自己创建的合同
+	 * @param customId
+	 * @return
+	 */
+	private boolean isMyContract(String contractId){
+		return dao.queryCountBySql(
+				" select count(1) "
+				+ " from t_contract t where id = ? and create_user = ? ",
+				new Object[]{contractId, getLoginUserId()},
+				new Type[]{StringType.INSTANCE, StringType.INSTANCE}) > 0 ? true : false;
 	}
 	
 	//验证客户是否有未结束的合同

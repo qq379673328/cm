@@ -13,8 +13,8 @@
 				基本信息
 			</span>
 			
-			<a
-			 ng-show="contract.state == '运作' || contract.state == '暂停'"
+			<a 
+			 ng-show="(contract.state == '运作' || contract.state == '暂停') && beyond == 'my'"
 			 class="spe" href="#contractmgr/editcontract/{{contract.id}}">编辑合同</a>
 			<span ng-show="contract.state == '终止'">-合同已终止、不可编辑</span>
 			 

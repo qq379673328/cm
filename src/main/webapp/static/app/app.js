@@ -42,6 +42,25 @@ var app = angular.module('app',['ngRoute', 'ngTable', 'datepicker'],
  * 处理公共ajax请求异常处理
  */
 var reloadPageFlag = false;
+app.factory('redirectInterceptor', ['$location', '$q', function($location, $q) {
+    return function(promise) {
+        promise.then(
+            function(response) {
+                if (typeof response.data === 'string') {
+                    if (response.data.indexOf instanceof Function &&
+                        response.data.indexOf('<html id="ng-app" ng-app="loginApp">') != -1) {
+                        window.location = "/";
+                    }
+                }
+                return response;
+            },
+            function(response) {
+                return $q.reject(response);
+            }
+        );
+        return promise;
+    };
+}]);
 app.factory('ajaxHandler', ['$q', '$rootScope', function($q, $rootScope) {
     var handler = {
         responseError: function(response) {
@@ -100,6 +119,7 @@ app.factory('ajaxHandler', ['$q', '$rootScope', function($q, $rootScope) {
     return handler;
 }]);
 app.config(['$httpProvider', function($httpProvider) {
+	$httpProvider.interceptors.push('redirectInterceptor');
     $httpProvider.interceptors.push('ajaxHandler');
 }]);
 

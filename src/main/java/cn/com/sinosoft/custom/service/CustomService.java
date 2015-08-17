@@ -144,7 +144,8 @@ public class CustomService extends SimpleServiceImpl {
 	public Object getCustomById(String id) {
 		Map<String, Object> ret = new HashMap<String, Object>();
 		if(StrUtils.isNull(id) 
-				|| !getCustomType(id).equals(CUSTOMTYPE_MY)//非本人发布-无权编辑
+				||(!getCustomType(id).equals(CUSTOMTYPE_MY) && !isAdmin())
+				//非本人发布-无权编辑
 				){
 			return ret;
 		}
@@ -421,7 +422,7 @@ public class CustomService extends SimpleServiceImpl {
 				new Object[]{id},
 				new Type[]{StringType.INSTANCE}));
 		//客户归属-本人？团队？
-		ret.put("beyond", getCustomType(id));
+		ret.put("beyond", isAdmin() ? "my" : getCustomType(id));
 		
 		return ret;
 	}

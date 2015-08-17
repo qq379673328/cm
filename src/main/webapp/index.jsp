@@ -18,6 +18,7 @@
 <link rel="stylesheet" type="text/css" href="css/main.css" />
 <link rel="stylesheet" type="text/css" href="static/app/bower_components/jquery-ui/themes/base/jquery-ui.min.css" />
 <link rel="stylesheet" type="text/css" href="static/app/bower_components/ng-table/ng-table.css" />
+<link rel="stylesheet" type="text/css" href="static/app/components/3rd/jquery_ext/jquery.Jcrop.min.css" />
 
 </head>
 <body>
@@ -31,6 +32,11 @@ onmouseup="document.selection.empty()" -->
 	<div class="main" ng-controller="MainCtrl">
 		<div class="top">
 			<div class="word">客户管理系统</div>
+			<div class="photo fa fa-user fa-5x" ng-if="!user.icon"></div>
+			<div class="photo" ng-if="user.icon">
+				<img style="width: 50px; height: 50px;"
+				 src="download/{{user.icon}}" />
+			</div>
 			<div>
 				<span>{{ user.name }}</span>
 				<br/>
@@ -39,9 +45,6 @@ onmouseup="document.selection.empty()" -->
 			<div>
 				<span><a href="logout"><i class="fa fa-power-off"></i>退出</a></span>
 			</div>
-			<!-- <div class="photo">
-				<img width="50px" height="50px" alt="员工图片" src="">
-			</div> -->
 		</div>
 		<div class="right">
 			<div class="body">
@@ -55,16 +58,43 @@ onmouseup="document.selection.empty()" -->
 			
 			<div class="lv1"><i class="fa fa-list"></i>&nbsp;业务管理</div>
 			
-			<div ng-class="{true: 'select'}[$root.menu=='custom']" class="lv2" ng-click="to('custommgr/list');"><i class="fa fa-caret-right"></i>&nbsp;客户管理</div>
-			<div ng-class="{true: 'select'}[$root.menu=='job']" class="lv2" ng-click="to('jobmgr/list');"><i class="fa fa-caret-right"></i>&nbsp;职位管理</div>
-			<div ng-class="{true: 'select'}[$root.menu=='resume']" class="lv2" ng-click="to('resumemgr/list');"><i class="fa fa-caret-right"></i>&nbsp;简历管理</div>
-			<div ng-class="{true: 'select'}[$root.menu=='contract']" class="lv2" ng-click="to('contractmgr/list');"><i class="fa fa-caret-right"></i>&nbsp;合同管理</div>
-			<div ng-class="{true: 'select'}[$root.menu=='invoice']" class="lv2" ng-click="to('invoicemgr/list');"><i class="fa fa-caret-right"></i>&nbsp;发票管理</div>
+			<div 
+				ng-if="user.userType == '管理员' || user.userType == '顾问' "
+			 	ng-class="{true: 'select'}[$root.menu=='custom']"
+			  	class="lv2" ng-click="to('custommgr/list');">
+			  	<i class="fa fa-caret-right"></i>&nbsp;客户管理</div>
+			<div 
+				ng-if="user.userType == '管理员' || user.userType == '顾问' "
+				ng-class="{true: 'select'}[$root.menu=='job']"
+			 	class="lv2" ng-click="to('jobmgr/list');">
+			 	<i class="fa fa-caret-right"></i>&nbsp;职位管理</div>
+			<div 
+				ng-if="user.userType == '管理员' || user.userType == '助理' "
+				ng-class="{true: 'select'}[$root.menu=='resume']"
+				class="lv2" ng-click="to('resumemgr/list');">
+				<i class="fa fa-caret-right"></i>&nbsp;简历管理</div>
+			<div 
+				ng-if="user.userType == '管理员' || user.userType == '顾问' "
+				ng-class="{true: 'select'}[$root.menu=='contract']"
+				class="lv2" ng-click="to('contractmgr/list');">
+				<i class="fa fa-caret-right"></i>&nbsp;合同管理</div>
+			<div 
+				ng-if="user.userType == '管理员' || user.userType == '顾问' "
+				ng-class="{true: 'select'}[$root.menu=='invoice']"
+				class="lv2" ng-click="to('invoicemgr/list');">
+				<i class="fa fa-caret-right"></i>&nbsp;发票管理</div>
 			
 			<div class="lv1"><i class="fa fa-comments"></i>&nbsp;团队管理</div>
 			
-			<div ng-class="{true: 'select'}[$root.menu=='performance']" class="lv2" ng-click="to('performancemgr/list');"><i class="fa fa-caret-right"></i>&nbsp;绩效管理	</div>
-			<div ng-class="{true: 'select'}[$root.menu=='team']" class="lv2" ng-click="to('teammgr/list');"><i class="fa fa-caret-right"></i>&nbsp;团队管理</div>
+			<div
+				ng-if="user.userType == '管理员'"
+				ng-class="{true: 'select'}[$root.menu=='performance']"
+				class="lv2" ng-click="to('performancemgr/list');">
+				<i class="fa fa-caret-right"></i>&nbsp;绩效管理</div>
+			<div 
+				ng-class="{true: 'select'}[$root.menu=='team']"
+				class="lv2" ng-click="to('teammgr/list');">
+				<i class="fa fa-caret-right"></i>&nbsp;团队管理</div>
 			
 			<div class="lv1"><i class="fa fa-edit"></i>&nbsp;系统管理</div>
 			
@@ -72,7 +102,14 @@ onmouseup="document.selection.empty()" -->
 				 ng-class="{true: 'select'}[$root.menu=='user']"
 				  class="lv2" ng-click="to('usermgr/list');">
 				  <i class="fa fa-caret-right"></i>&nbsp;用户管理</div>
-			<div ng-class="{true: 'select'}[$root.menu=='resetpwd']" class="lv2" ng-click="to('usermgr/resetpwd');"><i class="fa fa-caret-right"></i>&nbsp;修改密码</div>
+			<div 
+				ng-class="{true: 'select'}[$root.menu=='resetpwd']"
+			 	class="lv2" ng-click="to('usermgr/resetpwd');">
+			 	<i class="fa fa-caret-right"></i>&nbsp;修改密码</div>
+			<div 
+				ng-class="{true: 'select'}[$root.menu=='uploadicon']"
+			 	class="lv2" ng-click="to('usermgr/uploadicon');">
+			 	<i class="fa fa-caret-right"></i>&nbsp;上传头像</div>
 			<div ng-if="user.userType == '管理员'"
 				 ng-class="{true: 'select'}[$root.menu=='codemgr']" 
 				 class="lv2" 
@@ -117,6 +154,7 @@ onmouseup="document.selection.empty()" -->
 	<!-- jq -->
 	<script type="text/javascript" src="static/app/bower_components/jquery/dist/jquery.min.js"></script>
 	<script type="text/javascript" src="static/app/components/3rd/jquery_ext/jquery.ishappy.js"></script>
+	<script type="text/javascript" src="static/app/components/3rd/jquery_ext/jquery.Jcrop.min.js"></script>
 	<script type="text/javascript" src="static/app/bower_components/jquery-ui/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="static/app/bower_components/jquery-ui/ui/i18n/datepicker-zh-CN.js"></script>
 	<script type="text/javascript" src="static/app/bower_components/jquery-file-upload/jquery.fileupload.js"></script>

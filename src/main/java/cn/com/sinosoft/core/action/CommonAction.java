@@ -29,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import cn.com.sinosoft.common.model.TAttachment;
+import cn.com.sinosoft.common.model.TUser;
 import cn.com.sinosoft.common.util.Excel.Table2Excel;
 import cn.com.sinosoft.core.service.CommonService;
 import cn.com.sinosoft.core.service.model.FormResult;
@@ -105,7 +106,9 @@ public class CommonAction extends BaseController {
 	@RequestMapping("getLoginUser")
 	@ResponseBody
 	public Object getLoginUser(){
-		return userUtil.getLoginUser();
+		TUser user = userUtil.getLoginUser();
+		user.setPassword(null);
+		return user;
 	}
 	
 	/**
@@ -210,6 +213,17 @@ public class CommonAction extends BaseController {
 	@ResponseBody
 	public Object getAllCodes(){
 		return commonService.getAllCodes();
+	}
+	
+	/**
+	 * 到登陆页面
+	 * @return
+	 */
+	@RequestMapping("toLogin")
+	@ResponseBody
+	public ModelAndView toLogin(HttpServletResponse response){
+		response.setStatus(401);
+		return new ModelAndView("pages/login");
 	}
 	
 }

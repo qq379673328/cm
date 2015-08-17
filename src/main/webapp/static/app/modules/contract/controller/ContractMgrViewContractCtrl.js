@@ -13,6 +13,7 @@ app.controller('ContractMgrViewContractCtrl',
 		$scope.contract = data.contract;
 		$scope.jobs = data.jobs;
 		$scope.contractAttas = data.attachs;
+		$scope.beyond = data.beyond;
 		$scope.isReady = true;
 	});
 	

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated 2015-8-15 12:20:11 by Hibernate Tools 3.2.2.GA -->
+<!-- Generated 2015-8-18 0:35:09 by Hibernate Tools 3.2.2.GA -->
 <hibernate-mapping>
     <class name="cn.com.sinosoft.common.model.TResumeWorkhistory" table="t_resume_workhistory" catalog="cm">
         <id name="id" type="string">

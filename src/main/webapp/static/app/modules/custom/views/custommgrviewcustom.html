@@ -204,7 +204,7 @@
 	</div>
 	<hr />
 	
-	<div class="mytable" ng-if="beyond=='my'">
+	<div class="mytable" ng-show="beyond=='my'">
 		<div class="title">
 			<span>
 				添加沟通记录
@@ -215,7 +215,7 @@
 				<tr>
 					<td>
 						<form id="addCommForm">
-							<textarea name="addContent" ng-model="addContent" class="textarea"></textarea>
+							<textarea name="addContent" ng-model="contentInfo" class="textarea"></textarea>
 						</form>
 					</td>
 				</tr>

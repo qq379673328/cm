@@ -21,6 +21,7 @@ app.controller('CustomMgrViewCustomCtrl',
 			}
 			$scope.contractAttas = data.contractAttas;
 			$scope.isReady = true;
+			$scope.contentInfo = "";
 		});
 	};
 	
@@ -38,7 +39,7 @@ app.controller('CustomMgrViewCustomCtrl',
 		})){
 			//请求客户信息
 			$http.post("custom/addCommun", 
-					{customId: $scope.custom.id, content: $scope.addContent})
+					{customId: $scope.custom.id, content: $scope.contentInfo})
 					.success(function(data){
 						$scope.reload();
 						$scope.formresult = data;

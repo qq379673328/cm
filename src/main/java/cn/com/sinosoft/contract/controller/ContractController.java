@@ -4,6 +4,8 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,6 +37,7 @@ public class ContractController extends BaseController {
 	 */
 	@RequestMapping("list")
 	@ResponseBody
+	@RequiresRoles(logical = Logical.OR, value={"管理员", "顾问"})
 	public PagingResult getcontractList(
 			@RequestParam Map<String ,String> params,
 			PageParam pageParams){
@@ -47,6 +50,7 @@ public class ContractController extends BaseController {
 	 */
 	@RequestMapping("getContractViewById")
 	@ResponseBody
+	@RequiresRoles(logical = Logical.OR, value={"管理员", "顾问"})
 	public Object getContractViewById(String id){
 		return contractService.getContractViewById(id);
 	}
@@ -57,6 +61,7 @@ public class ContractController extends BaseController {
 	 */
 	@RequestMapping("edit")
 	@ResponseBody
+	@RequiresRoles(logical = Logical.OR, value={"管理员", "顾问"})
 	public FormResult edit(TContract contract, String attas, boolean isUpdate){
 		return contractService.edit(contract, attas, isUpdate);
 	}

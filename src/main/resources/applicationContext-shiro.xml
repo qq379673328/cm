@@ -26,7 +26,8 @@
 	<!-- Shiro的Web过滤器 -->
 	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
 		<property name="securityManager" ref="securityManager" />
-		<property name="loginUrl" value="/pages/login.jsp" />
+		<!-- <property name="loginUrl" value="/pages/login.jsp" /> -->
+		<property name="loginUrl" value="/toLogin" />
 		<!-- <property name="successUrl" value="/" /> -->
 		<!-- 未授权跳转 -->
 		<property name="unauthorizedUrl" value="/unauthorized" />
@@ -51,6 +52,7 @@
 				/index.jsp = anon
 				/unauthorized.jsp = anon
 				/unauthorized = anon
+				/toLogin = anon
 				/**/*.html = anon
 				/login = anon
 				/logout = logout
@@ -74,7 +76,8 @@
 		class="org.apache.shiro.web.filter.authc.FormAuthenticationFilter">
 		<property name="usernameParam" value="username" />
 		<property name="passwordParam" value="password" />
-		<property name="loginUrl" value="/login.jsp" />
+		<!-- <property name="loginUrl" value="/login.jsp" /> -->
+		<property name="loginUrl" value="/toLogin" />
 	</bean>
 	<!-- 缓存管理器 使用Ehcache实现 -->
     <bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">

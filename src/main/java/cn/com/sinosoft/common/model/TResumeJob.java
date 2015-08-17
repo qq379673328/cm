@@ -1,5 +1,5 @@
 package cn.com.sinosoft.common.model;
-// Generated 2015-8-15 12:20:10 by Hibernate Tools 3.2.2.GA
+// Generated 2015-8-18 0:35:05 by Hibernate Tools 3.2.2.GA
 
 
 import java.util.Date;
@@ -21,6 +21,7 @@ public class TResumeJob  implements java.io.Serializable {
      private Date verifyTime;
      private String recomUser;
      private String verifyUser;
+     private String mianshiCount;
 
     public TResumeJob() {
     }
@@ -32,7 +33,7 @@ public class TResumeJob  implements java.io.Serializable {
         this.jobId = jobId;
         this.createUser = createUser;
     }
-    public TResumeJob(String id, String resumeId, String jobId, String verifyState, String recomState, Date createTime, String createUser, Date recomTime, Date verifyTime, String recomUser, String verifyUser) {
+    public TResumeJob(String id, String resumeId, String jobId, String verifyState, String recomState, Date createTime, String createUser, Date recomTime, Date verifyTime, String recomUser, String verifyUser, String mianshiCount) {
        this.id = id;
        this.resumeId = resumeId;
        this.jobId = jobId;
@@ -44,6 +45,7 @@ public class TResumeJob  implements java.io.Serializable {
        this.verifyTime = verifyTime;
        this.recomUser = recomUser;
        this.verifyUser = verifyUser;
+       this.mianshiCount = mianshiCount;
     }
    
     public String getId() {
@@ -122,6 +124,13 @@ public class TResumeJob  implements java.io.Serializable {
     
     public void setVerifyUser(String verifyUser) {
         this.verifyUser = verifyUser;
+    }
+    public String getMianshiCount() {
+        return this.mianshiCount;
+    }
+    
+    public void setMianshiCount(String mianshiCount) {
+        this.mianshiCount = mianshiCount;
     }
 
 
