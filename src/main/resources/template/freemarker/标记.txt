@@ -1,0 +1,30 @@
+title 标题
+tjzw 推荐职位
+tjsj 推荐时间
+name 姓名
+sex 性别
+age 年龄
+marrage 婚否
+workplace 工作地点
+money_current 目前薪资
+money_target 期望薪资
+jybj 教育背景
+	jybj-time 时间
+	jybj-school 学校
+	jybj-zhuanye 专业
+	jybj-xueli 学历
+gzpj 工作评价
+	gzpj-content 内容
+gzjl 工作经历
+	gzjl_time 时间段
+	gzjl_danwei 工作单位
+	gzjl_zhiwu 职务
+	gzjl_zhize 工作职责
+		content 内容
+cyxm 参与项目
+	cyxm_name 项目名
+	cyxm_zhiwu 职务
+	cyxm_jianjie 项目简介
+	cyxm_zhize 项目职责
+		content 内容
+	

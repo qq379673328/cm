@@ -231,6 +231,9 @@
 					<td>{{item.recom_user_desc}}</td>
 					<td ng-show="beyond=='my'">
 						<a class="btn btn-small btn-success"
+							href="resume/export/{{item.jid}}"
+							>导出简历</a>
+						<a class="btn btn-small btn-success"
 							ng-click="item.prepareHandle = !item.prepareHandle"
 							>操作</a>
 						<a 

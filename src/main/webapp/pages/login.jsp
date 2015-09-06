@@ -46,11 +46,38 @@ a:hover {
 }
 
 .title {
-	width: 749px;
 	height: 182px;
 	margin: 0 auto;
 }
-
+.title-top{
+	color: #fff;
+	font-size: 18px;
+	background-color: #496C9E;
+	height: 40px;
+	line-height: 40px;
+	padding-left: 40px;
+}
+.title-logo{
+	width: 100px;
+	height: 50px;
+	background: url(images/logo-hx.jpg) no-repeat;
+}
+.title-topinfo{
+	color: #fff;
+	font-size: 24px;
+	background-color: #3d73b1;
+	height: 100px;
+	text-align: center;
+	margin-top: 80px;
+	width: 400px;
+	margin: 80px auto;
+}
+.title-topinfo div{
+	float: left;
+    height: 50px;
+    line-height: 50px;
+    margin-right: 20px;
+}
 .denglright {
 	float: left;
 }
@@ -241,7 +268,7 @@ a:hover {
 	width: 100%;
 	height: 39px;
 	background: #2762a6;
-	position: absolute;
+	position: fixed;
 	bottom: 0;
 }
 
@@ -256,10 +283,22 @@ a:hover {
 <body>
 	<!--login-->
 	<div class="login">
-		<div class="title"></div>
+		<div class="title">
+			<div class="title-top">欢迎登录和信锐博信息管理平台</div>
+			<div class="title-topinfo">
+				<div>
+					<div>
+						<img class="title-logo" src="images/logo-hx.jpg" />
+					</div>
+					<div>
+						<span>信息管理平台</span>
+					</div>
+				</div>
+			</div>
+		</div>
 		<div class="login-inner">
 			<div class="denglright">
-				<img src="images/loginleft.jpg" width="275" height="299" />
+				<img src="images/cp.jpg" width="275" height="299" />
 			</div>
 			<div class="denglleft">
 				<h2>用户登录</h2>
@@ -282,7 +321,11 @@ a:hover {
 				</form>
 			</div>
 		</div>
-		<div class="footer"></div>
+		<div class="footer">
+			<p>
+				版权所有 和信锐博(北京)咨询管理公司
+			</p>
+		</div>
 	</div>
 </body>
 </html>

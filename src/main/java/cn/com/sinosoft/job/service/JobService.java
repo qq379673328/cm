@@ -187,7 +187,7 @@ public class JobService extends SimpleServiceImpl {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public Object getJobViewById(String id) {
+	public Map<String, Object> getJobViewById(String id) {
 		Map<String, Object> ret = new HashMap<String, Object>();
 		if(StrUtils.isNull(id)){
 			return ret;
