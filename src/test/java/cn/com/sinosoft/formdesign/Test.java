@@ -16,7 +16,7 @@ public class Test {
 	public static void main(String[] args) {
 		try {
 			Template tem = getTemplage();
-			File outFile = new File("d://temp//简历.doc");
+			File outFile = new File("d://temp//简历333.doc");
 			Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outFile)));
 			tem.process(getData(), writer);
 		} catch (Exception e) {
@@ -30,6 +30,7 @@ public class Test {
 		Configuration con = new Configuration();
 		con.setDefaultEncoding("utf-8");
 		con.setClassForTemplateLoading(Test.class, "/template/freemarker");
+		con.setClassicCompatible(true);
 		Template tem = con.getTemplate("test.xml");
 		return tem;
 	}

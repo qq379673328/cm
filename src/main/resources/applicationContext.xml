@@ -53,7 +53,7 @@
 		<property name="hibernateProperties">
 			<value>
 				hibernate.dialect=org.hibernate.dialect.MySQL5Dialect
-				hibernate.show_sql=true
+				hibernate.show_sql=false
 				org.hibernate.SQL=trace
 				org.hibernate.type=trace
 				hiberate.connection.release_mode=after_transaction

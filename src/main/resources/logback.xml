@@ -66,7 +66,7 @@
 	<logger name="net.sf.ehcache" level="ERROR"/>
 	<logger name="org.apache.shiro" level="ERROR"/>
 	
-	<root level="info">
+	<root level="error">
 		<appender-ref ref="all.info" level="debug" />
 		<appender-ref ref="all.error" level="error"/>
 		<appender-ref ref="stdout" level="debug" />

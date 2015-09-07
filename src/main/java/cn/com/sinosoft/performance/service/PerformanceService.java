@@ -153,7 +153,7 @@ public class PerformanceService extends SimpleServiceImpl {
 		/*sb.append("  LEFT JOIN(SELECT create_user,COUNT(1) AS c FROM t_resume_job "
 				+ "WHERE  verify_state = '初试' or  verify_state = '复试' or  verify_state = '终试' or"
 				+ "  verify_state = 'offer' or verify_state = '入职' or verify_state = '离职'  ");*/
-		sb.append("  LEFT JOIN(SELECT create_user,sum(mianshi_count) AS c FROM t_resume_job " );
+		sb.append("  LEFT JOIN(SELECT create_user,sum(mianshi_count) AS c FROM t_resume_job WHERE 1=1 " );
 		if(!StrUtils.isNull(params.get("createTimeStart"))){//创建日期-开始
 			sb.append(" AND " + SqlUtil.toDate(params.get("createTimeStart"), 1, 0) + " <= create_time ");
 		}

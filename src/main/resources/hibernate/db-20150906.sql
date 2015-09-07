@@ -1,3 +1,5 @@
+SET GLOBAL log_bin_trust_function_creators = 1;
+
 /*
 SQLyog Ultimate v11.24 (32 bit)
 MySQL - 5.6.24-enterprise-commercial-advanced-log : Database - cm

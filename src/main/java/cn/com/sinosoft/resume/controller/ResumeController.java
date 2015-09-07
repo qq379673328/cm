@@ -3,7 +3,6 @@ package cn.com.sinosoft.resume.controller;
 import java.awt.image.BufferedImage;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
@@ -37,18 +36,17 @@ import cn.com.sinosoft.common.model.TResumeTarget;
 import cn.com.sinosoft.common.model.TResumeWorkhistory;
 import cn.com.sinosoft.common.model.TUser;
 import cn.com.sinosoft.common.util.StrUtils;
-import cn.com.sinosoft.common.util.Excel.Table2Excel;
 import cn.com.sinosoft.core.action.BaseController;
 import cn.com.sinosoft.core.service.CommonService;
 import cn.com.sinosoft.core.service.model.FormResult;
 import cn.com.sinosoft.core.service.model.PageParam;
 import cn.com.sinosoft.core.service.model.PagingResult;
 import cn.com.sinosoft.core.util.UserUtil;
-import cn.com.sinosoft.formdesign.Test;
 import cn.com.sinosoft.job.service.JobService;
 import cn.com.sinosoft.resume.service.ResumeService;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
+import freemarker.template.Version;
 
 /**
  * 简历管理
@@ -347,30 +345,27 @@ public class ResumeController extends BaseController {
 	}
 	
 	/**
-	 * 导出简单excel
+	 * 导出word
 	 *
 	 * 
 	 * @param response
-	 * @param tableJson
-	 * @param title
 	 * @author <a href="mailto:nytclizy@gmail.com">李志勇</a>
 	 */
 	@RequestMapping("export/{id}")
-	public void exportExcel(HttpServletResponse response,
+	public void exportWord(HttpServletResponse response,
 			@PathVariable("id")String id){
 		try {
-			
 			TResumeJob resumtJob = resumeService.queryById(id, TResumeJob.class);
 			
 			Map<String, Object> resumeData = resumeService.getResumeViewById(resumtJob.getResumeId());
 			Map<String, Object> jobData = jobService.getJobViewById(resumtJob.getJobId());
-			response.setContentType("application/vnd.ms-excel");
+			response.setContentType("application/msword");
 			
 			TJob job = (TJob)jobData.get("job");
 			TResume resume = (TResume)resumeData.get("resume");
 			
 			String title = resume.getName() + "-" + job.getName() + "-合信锐博-" +
-			 new SimpleDateFormat("yyyyMMdd").format(new Date());
+				new SimpleDateFormat("yyyyMMdd").format(new Date());
 			title = URLEncoder.encode(title,"GB2312"); 
 			title = URLDecoder.decode(title, "ISO8859_1"); 
 			response.setHeader("Content-disposition", "attachment;filename=" + title + ".doc"); 
@@ -379,17 +374,27 @@ public class ResumeController extends BaseController {
 			Writer writer = new BufferedWriter(
 					new OutputStreamWriter(ouputStream));
 			tem.process(getData(resumeData, jobData, resumtJob), writer);
+			
+			/*StringWriter sw = new StringWriter();
+			tem.process(getData(resumeData, jobData, resumtJob), sw);
+			System.out.println(sw.toString());*/
+			
 			ouputStream.flush();
 			ouputStream.close();
+			writer.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
+	Template template = null;
 	private Template getTemplage() throws Exception{
-		Configuration con = new Configuration();
+		if(template != null){
+			return template;
+		}
+		Configuration con = new Configuration(new Version("2.3.23"));
 		con.setDefaultEncoding("utf-8");
-		con.setClassForTemplateLoading(Test.class, "/template/freemarker");
+		con.setClassForTemplateLoading(ResumeController.class, "/template/freemarker");
 		con.setClassicCompatible(true);
 		Template tem = con.getTemplate("test.xml");
 		return tem;
@@ -464,4 +469,5 @@ public class ResumeController extends BaseController {
 			return obj;
 		}
 	}
+	
 }
